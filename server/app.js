@@ -7,6 +7,9 @@ var logger = require("morgan");
 var indexRouter = require("./routes/index");
 var pingRouter = require("./routes/ping");
 
+// connect to mongo
+require('./config');
+
 var app = express();
 
 app.use(logger("dev"));
