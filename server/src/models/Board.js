@@ -20,6 +20,6 @@ const BoardSchema = new Schema({
         type: Date,
         default: Date.now()
     }
-})
+});
 
-module.exports = Board = mongoose.model('board', BoardSchema);
+module.exports = mongoose.model('board', BoardSchema);

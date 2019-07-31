@@ -15,5 +15,11 @@ module.exports = {
         req.checkBody('password', 'No password provided').exists().notEmpty();
 
         validationHandler(req, res, next);
+    },
+
+    addBoard: (req, res, next) => {
+        req.checkBody('title', 'No title provided').exists().notEmpty();
+
+        validationHandler(req, res, next);
     }
 };
