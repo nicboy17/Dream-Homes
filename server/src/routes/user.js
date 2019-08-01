@@ -34,7 +34,7 @@ router.post('/:username/posts', [upload.single('image'), UserValidation.addPost,
         if (!user) {
             res.status(400).json({ success: false, message: 'no user found' });
         } else {
-            const post = await Post.create({ ...req.body, image: req.file ? req.file.location : 'https://team-pineapple.s3.ca-central-1.amazonaws.com/KennyMcCormick.png' });
+            const post = await Post.create({ ...req.body, user: user._id, image: req.file ? req.file.location : 'https://team-pineapple.s3.ca-central-1.amazonaws.com/KennyMcCormick.png' });
             res.status(201).json({ success: true, post });
         }
     } catch(err) {
@@ -70,5 +70,22 @@ router.post('/:username/board', [UserValidation.addBoard, async (req, res) => {
         res.status(400).json({ success: false, message: err.errmsg });
     }
 }]);
+
+
+// @route    GET users/:username
+// @desc     Get user profile with all their posts and boards
+// @access   Public
+router.get('/:username', async (req, res) => {
+    try {
+        const user = await User.findOne({ username: req.params.username }).select('-password').populate('boards').populate('posts').lean();
+        if (!user) {
+            return res.status(404).json({ msg: 'User not found' });
+        } else {
+            return res.json({ user });
+        }
+    } catch (err) {
+        return res.status(400).json({ success: false, message: err });
+    }
+});
 
 module.exports = router;
