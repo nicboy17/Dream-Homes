@@ -85,7 +85,6 @@ describe('User Routes', () => {
         });
     });
 
-
     describe('Update profile', () => {
         //need abs path to file
         it.skip('Should return vaild', () => {
@@ -110,7 +109,7 @@ describe('User Routes', () => {
                 });
         }).timeout(10000);
     });
-
+  
     describe('Create User Board', () => {
         it('Should return valid', () => {
             return request
@@ -143,6 +142,46 @@ describe('User Routes', () => {
                 .send({
                     'title': '',
                 })
+                .expect(422)
+                .then((res) => {
+                    expect(res.body.success).to.be.false;
+                });
+        });
+    });
+  
+    describe('Create User Post', () => {
+        it('Should return valid', () => {
+            return request
+                .post('/users/temp/posts')
+                .field('title', 'test post')
+                .field('description', 'testing posts')
+                .field('link', 'test')
+                .field('tags', '[]')
+                .expect(201)
+                .then((res) => {
+                    expect(res.body.success).to.be.true;
+                    expect(res.body.post.title).to.be.equal('test post');
+                });
+        });
+
+        it('Should return no user', () => {
+            return request
+                .post('/users/test/posts')
+                .field('title', 'test post')
+                .field('description', 'testing posts')
+                .field('link', 'test')
+                .field('tags', '[]')
+                .expect(400)
+                .then((res) => {
+                    expect(res.body.success).to.be.false;
+                });
+        });
+
+        it('Should return invalid', () => {
+            return request
+                .post('/users/temp/posts')
+                .field('title', 'test post')
+                .field('link', 'test')
                 .expect(422)
                 .then((res) => {
                     expect(res.body.success).to.be.false;

@@ -14,14 +14,14 @@ const PostSchema = new Schema({
     description: {
         type: String
     },
-    destination: {
+    link: {
         type: String
     },
     tags: {
         type: [String]
     },
-    images: {
-        type: [String],
+    image: {
+        type: String,
         required: true
     },
     date: {

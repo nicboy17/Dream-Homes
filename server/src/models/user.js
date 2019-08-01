@@ -40,6 +40,12 @@ user.virtual('boards', {
     foreignField: 'user'
 });
 
+user.virtual('posts', {
+    ref: 'posts',
+    localField: '_id',
+    foreignField: 'user'
+});
+
 user.pre('save', function (next) {
     let user = this;
 

@@ -17,9 +17,21 @@ module.exports = {
         validationHandler(req, res, next);
     },
 
+    addPost: (req, res, next) => {
+        req.checkBody('board', 'No board provided').optional();
+        req.checkBody('title', 'No title provided').exists().notEmpty();
+        req.checkBody('description', 'No description provided').exists().notEmpty();
+        req.checkBody('link', 'No link provided').exists().notEmpty();
+        req.checkBody('tags', 'No tags provided').exists();
+
+        validationHandler(req, res, next);
+    },
+
     updateUser : (req, res, next) => {
         req.checkParams('username', 'no username provided').exists().notEmpty();
         req.checkBody('name', 'no name provided').optional();
+      
+        validationHandler(req, res, next);
     },
   
     addBoard: (req, res, next) => {
