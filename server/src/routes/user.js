@@ -1,6 +1,5 @@
 const express = require('express');
 const router = express.Router();
-const ObjectID = require('mongodb').ObjectID;
 
 const UserValidation = require('./validate/user');
 const { User, Board, Post } = require('../models');
@@ -35,7 +34,7 @@ router.post('/:username/posts', [upload.single('image'), UserValidation.addPost,
         if (!user) {
             res.status(400).json({ success: false, message: 'no user found' });
         } else {
-            const post = await Post.create({ ...req.body, image: req.file ? req.file.location : 'https://team-pineapple.s3.ca-central-1.amazonaws.com/KennyMcCormick.png' });
+            const post = await Post.create({ ...req.body, user: user._id, image: req.file ? req.file.location : 'https://team-pineapple.s3.ca-central-1.amazonaws.com/KennyMcCormick.png' });
             res.status(201).json({ success: true, post });
         }
     } catch(err) {
@@ -78,16 +77,14 @@ router.post('/:username/board', [UserValidation.addBoard, async (req, res) => {
 // @access   Public
 router.get('/:username', async (req, res) => {
     try {
-        const user = await User.findOne({ username: req.params.username }).select('-password');
+        const user = await User.findOne({ username: req.params.username }).select('-password').populate('boards').populate('posts').lean();
         if (!user) {
             return res.status(404).json({ msg: 'User not found' });
         } else {
-            const boards = await Board.find({ user: new ObjectID(user._id) });
-            const posts = await Post.find({ user: new ObjectID(user._id) });
-            return res.json({ user, boards, posts });
+            return res.json({ user });
         }
     } catch (err) {
-        return res.status(400).json({ success: false, message: err.errmsg });
+        return res.status(400).json({ success: false, message: err });
     }
 });
 

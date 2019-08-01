@@ -4,7 +4,8 @@ const Schema = mongoose.Schema;
 const BoardSchema = new Schema({
     user: {
         type: Schema.Types.ObjectId,
-        ref: 'users'
+        ref: 'users',
+        required: true
     },
     title: {
         type: String,
@@ -22,4 +23,4 @@ const BoardSchema = new Schema({
     }
 });
 
-module.exports = mongoose.model('board', BoardSchema);
+module.exports = mongoose.model('boards', BoardSchema, 'boards');
