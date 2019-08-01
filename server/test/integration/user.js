@@ -85,6 +85,32 @@ describe('User Routes', () => {
         });
     });
 
+
+    describe('Update profile', () => {
+        //need abs path to file
+        it.skip('Should return vaild', () => {
+            return request
+                .put('/users/temp')
+                .attach('image', '/Users/nick/Desktop/team-pineapple/server/test/utils/test-data/kenny.png')
+                .expect(200)
+                .then((res) => {
+                    expect(res.body.user.profile).to.be.not.empty;
+                    expect(res.body.success).to.be.true;
+                });
+        }).timeout(10000);
+
+        it('Should return vaild (no image)', () => {
+            return request
+                .put('/users/temp')
+                .field('name', 'test')
+                .expect(200)
+                .then((res) => {
+                    expect(res.body.user.name).to.be.equal('test');
+                    expect(res.body.success).to.be.true;
+                });
+        }).timeout(10000);
+    });
+
     describe('Create User Board', () => {
         it('Should return valid', () => {
             return request

@@ -17,6 +17,11 @@ module.exports = {
         validationHandler(req, res, next);
     },
 
+    updateUser : (req, res, next) => {
+        req.checkParams('username', 'no username provided').exists().notEmpty();
+        req.checkBody('name', 'no name provided').optional();
+    },
+  
     addBoard: (req, res, next) => {
         req.checkBody('title', 'No title provided').exists().notEmpty();
 
