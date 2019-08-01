@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+const ObjectID = require('mongodb').ObjectID;
 
 const UserValidation = require('./validate/user');
 const { User, Board, Post } = require('../models');
@@ -70,5 +71,24 @@ router.post('/:username/board', [UserValidation.addBoard, async (req, res) => {
         res.status(400).json({ success: false, message: err.errmsg });
     }
 }]);
+
+
+// @route    GET users/:username
+// @desc     Get user profile with all their posts and boards
+// @access   Public
+router.get('/:username', async (req, res) => {
+    try {
+        const user = await User.findOne({ username: req.params.username }).select('-password');
+        if (!user) {
+            return res.status(404).json({ msg: 'User not found' });
+        } else {
+            const boards = await Board.find({ user: new ObjectID(user._id) });
+            const posts = await Post.find({ user: new ObjectID(user._id) });
+            return res.json({ user, boards, posts });
+        }
+    } catch (err) {
+        return res.status(400).json({ success: false, message: err.errmsg });
+    }
+});
 
 module.exports = router;
