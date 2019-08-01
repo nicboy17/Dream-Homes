@@ -162,7 +162,7 @@ const SignUp = () => {
                         <TextField label='Confirm Password' type='password' className={style.input} onChange={handleChangeConfPass}/>
                     </div>
                     <button className={style.signupbutton} onClick={postInfo}>Sign Up!</button>
-                    <p className={style.footer}>Already a Member? <Link to='/' className={style.login}>Log In!</Link></p>
+                    <p className={style.footer}>Already a Member? <Link to='/login' className={style.login}>Log In!</Link></p>
                 </div>
             </div>
         </div>

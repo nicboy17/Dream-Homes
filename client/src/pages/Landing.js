@@ -24,7 +24,7 @@ class LandingPage extends Component {
     return (
       <div>
         <BrowserRouter>
-          <Route exact path='/' component={LogIn}/>
+          <Route exact path='/login' component={LogIn}/>
           <Route exact path='/signup' component={SignUp}/>
           <Route path='/profile' component={Profile}/>
         </BrowserRouter>        
