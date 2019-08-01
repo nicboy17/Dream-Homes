@@ -9,11 +9,11 @@ const initialState = {
 
 export default (state = initialState, action) => {
     switch (action.type) {
-        case LOGIN_USER_SUCCESS:
-            return { ...state };
-        case LOGIN_USER_ERROR:
-            return { ...state };
-        default:
-            return state;
+    case LOGIN_USER_SUCCESS:
+        return { ...state };
+    case LOGIN_USER_ERROR:
+        return { ...state };
+    default:
+        return state;
     }
 };
