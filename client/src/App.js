@@ -3,7 +3,7 @@ import { MuiThemeProvider } from "@material-ui/core";
 import { BrowserRouter, Route } from "react-router-dom";
 
 import { theme } from "./themes/theme";
-import LandingPage from "./pages/Landing";
+import Landing from "./pages/Landing.js";
 
 import "./App.css";
 
@@ -14,6 +14,7 @@ function App() {
   return (
     <MuiThemeProvider theme={theme}>
       <BrowserRouter>
+        <Route path="/login" component={Landing} />
         <Route path = "/profile/:username/post/create" component = {PostDialog}/>
         <Route path = "/profile/:username/board/create" component = {BoardDialog}/>
         <Route path="/" component={LandingPage} />
