@@ -27,8 +27,17 @@ const useStyles = makeStyles(theme => ({
         paddingLeft: '15px'
     },
     headerBottomBorder: {
-        minHeight: '20px',
+        minHeight: '5px',
         backgroundImage: 'linear-gradient(lightgrey, white)'
+    },
+    headerContainer: {
+        position: 'fixed',
+        background: 'white',
+        zIndex: '10',
+    },
+    placeholderHeader: {
+        minHeight: '20vh',
+        height: '20vh',
     },
     subHeader: {
         minHeight: '30vh',
@@ -126,26 +135,31 @@ const Profile = () => {
     let [activePanel, toggle] = useState('board')
     return (
         <div>
-            <div className={style.header}>
-                <div>
-                    <h3>Dream Home</h3>
+            <div className={style.headerContainer}>
+                <div className={style.header}>
+                    <div>
+                        <h3>Dream Home</h3>
+                    </div>
+                    <div>
+                    </div>
+                    <div>
+                        <input className={style.headerSearch} placeholder="Search"></input>
+                    </div>
+                    <div>
+                        <h5>Home</h5>
+                    </div>
+                    <div>
+                        <h5>Following</h5>
+                    </div>
+                    <div>
+                    </div>
+                    <img className={style.cornerIcon} src={face} alt='' />
                 </div>
-                <div>
+                <div className={style.headerBottomBorder}>
                 </div>
-                <div>
-                    <input className={style.headerSearch} placeholder="Search"></input>
-                </div>
-                <div>
-                    <h5>Home</h5>
-                </div>
-                <div>
-                    <h5>Following</h5>
-                </div>
-                <div>
-                </div>
-                <img className={style.cornerIcon} src={face} alt='' />
             </div>
-            <div className={style.headerBottomBorder}>
+            <div className={style.placeholderHeader}>
+                placeholder
             </div>
             <div className={style.subHeader}>
                 <div className={style.nameContainer}>

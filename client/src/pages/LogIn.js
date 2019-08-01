@@ -1,7 +1,8 @@
-import React from 'react';
+import React, {useState} from 'react';
 import { makeStyles } from '@material-ui/styles';
 import {Paper, TextField} from "@material-ui/core";
 import {Link} from 'react-router-dom'
+import axios from 'axios';
 
 const useStyles = makeStyles(theme => ({
     container: {
@@ -106,6 +107,28 @@ const useStyles = makeStyles(theme => ({
 
 const LogIn = () => {
     const style = useStyles()
+    let [email, postEmail] = useState('')
+    let [pass, postPass] = useState('')
+
+    const handleChangePass = (e) => {
+        postPass(pass = e.target.value)
+    }
+    
+    const handleChangeEmail = (e) => {
+        postEmail(email = e.target.value)
+    }
+
+    const postInfo = (e) => {
+        e.preventDefault()
+        axios.post('', email, pass)
+        .then(response => {
+            console.log(response)
+        })
+        .catch(error => {
+            console.log(error)
+        })
+    }
+
     return (
         <div>
             <div className={style.container}>
@@ -132,13 +155,13 @@ const LogIn = () => {
                 <div className={style.modal}>
                     <h1 className={style.welcome}>Welcome!</h1>
                     <div className={style.emailContainer}>
-                        <TextField label='E-mail' className={style.inputemail}/>
+                        <TextField label='E-mail' className={style.inputemail} onChange={handleChangeEmail}/>
                     </div>
                     <div className={style.passContainer}>
-                        <TextField label='Password' type="password" className={style.inputpass}/>
+                        <TextField label='Password' type="password" className={style.inputpass} onChange={handleChangePass}/>
                     </div>
                     <p className={style.forgotpass}>Forgot your password?</p>
-                    <button className={style.loginbutton}>Login</button>
+                    <button className={style.loginbutton} onClick={postInfo}>Login</button>
                     <p className={style.footer}>Don't have an account? <Link to='/signup' className={style.signup}>Sign Up!</Link></p>
                 </div>
             </div>
