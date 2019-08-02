@@ -94,6 +94,7 @@ class PostDialog extends React.Component {
         } else {
             try {
                 const formData = new FormData();
+                formData.append('board', this.state.selectedBoard._id);
                 formData.append('title', title);
                 formData.append('tags', tags);
                 formData.append('description', description);
