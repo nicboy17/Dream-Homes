@@ -5,6 +5,7 @@ import {Card, Typography} from '@material-ui/core';
 import CardMedia from '@material-ui/core/CardMedia';
 import CardActionArea from '@material-ui/core/CardActionArea';
 import house from './house.png'
+import {Link} from 'react-router-dom'
 
 const useStyles = makeStyles(theme => ({
     header: {
@@ -172,8 +173,8 @@ const Profile = () => {
                 <div>
                 </div>
                 <div>
-                    <button className={style.createBoard}>Create Board</button>
-                    <button className={style.createPost}>Create Post</button>
+                    <Link to='/profile/:username/board/create'><button className={style.createBoard}>Create Board</button></Link>
+                    <Link to='/profile/:username/post/create'><button className={style.createPost}>Create Post</button></Link>
                 </div>
             </div>
             <div style={{display: activePanel === 'board' ? 'grid' : 'none'}}>
