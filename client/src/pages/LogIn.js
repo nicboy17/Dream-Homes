@@ -119,7 +119,7 @@ const LogIn = () => {
     };
 
     const postInfo = () => {
-        axios.post('/users/login', email, pass)
+        axios.post('/users/login', {username: email, password: pass})
             .then(response => {
                 console.log(response);
             })
