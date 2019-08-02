@@ -122,9 +122,12 @@ class PostDialog extends React.Component {
     };
 
     render() {
-        if (!Boolean(this.state.boards)) {
-            return <CircularProgress color='secondary' />;
-        }
+        // for now lets leave this commented out, 
+        // because the post dialog will never actually render with this, as we only get
+        // errors from our post requests atm.
+        // if (!Boolean(this.state.boards)) {
+        //     return <CircularProgress color='secondary' />;
+        // }
         return (
                 <Dialog
                     open={true}
