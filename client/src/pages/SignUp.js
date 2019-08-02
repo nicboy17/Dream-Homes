@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import { makeStyles } from '@material-ui/styles';
-import {Paper, TextField} from "@material-ui/core";
-import {Link} from 'react-router-dom'
+import {Paper, TextField} from '@material-ui/core';
+import {Link} from 'react-router-dom';
 import axios from 'axios';
 
 const useStyles = makeStyles({
@@ -62,7 +62,6 @@ const useStyles = makeStyles({
         backgroundColor: 'white',
         padding: '10px 50px 10px 50px',
         margin: '0 auto',
-        display: 'block',
         marginTop: '20px',
         borderRadius: '50px',
         fontWeight: 'bold',
@@ -88,41 +87,40 @@ const useStyles = makeStyles({
             cursor: 'pointer',
         }
     }
-})
+});
 
 const SignUp = () => {
-    const style = useStyles()
-    let [user, postUser] = useState('')
-    let [email, postEmail] = useState('')
-    let [pass, postPass] = useState('')
-    let [confPass, postConfPass] = useState('')
+    const style = useStyles();
+    let [user, postUser] = useState('');
+    let [email, postEmail] = useState('');
+    let [pass, postPass] = useState('');
+    let [confPass, postConfPass] = useState('');
 
     const handleChangeUser = (e) => {
-        postUser(user = e.target.value)
-    }
+        postUser(user = e.target.value);
+    };
     
     const handleChangePass = (e) => {
-        postPass(pass = e.target.value)
-    }
+        postPass(pass = e.target.value);
+    };
     
     const handleChangeEmail = (e) => {
-        postEmail(email = e.target.value)
-    }
+        postEmail(email = e.target.value);
+    };
     
     const handleChangeConfPass = (e) => {
-        postConfPass(confPass = e.target.value)
-    }
+        postConfPass(confPass = e.target.value);
+    };
 
-    const postInfo = (e) => {
-        e.preventDefault()
-        axios.post('', user, email, pass, confPass)
-        .then(response => {
-            console.log(response)
-        })
-        .catch(error => {
-            console.log(error)
-        })
-    }
+    const postInfo = () => {
+        axios.post('/users/register', {user, email, password: pass, confPass})
+            .then(response => {
+                console.log(response);
+            })
+            .catch(error => {
+                console.log(error);
+            });
+    };
 
     return (
         <div>
@@ -161,12 +159,12 @@ const SignUp = () => {
                     <div className={style.inputContainer}>
                         <TextField label='Confirm Password' type='password' className={style.input} onChange={handleChangeConfPass}/>
                     </div>
-                    <button className={style.signupbutton} onClick={postInfo}>Sign Up!</button>
-                    <p className={style.footer}>Already a Member? <Link to='/login' className={style.login}>Log In!</Link></p>
+                    <button className={style.signupbutton} onClick={postInfo}><Link to='/profile/:username'>Sign Up!</Link></button>
+                    <p className={style.footer}>Already a Member? <Link to='/' className={style.login}>Log In!</Link></p>
                 </div>
             </div>
         </div>
-    )
-}
+    );
+};
 
 export default SignUp;

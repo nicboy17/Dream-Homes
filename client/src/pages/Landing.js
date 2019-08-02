@@ -7,7 +7,9 @@ import { Route, BrowserRouter } from "react-router-dom";
 import LogIn from './LogIn.js'
 import SignUp from './SignUp.js'
 import Profile from './Profile.js'
-import Ping from "./Ping";
+// import Ping from "./Ping";
+import PostDialog from '../components/Dialog/PostDialog/PostDialog';
+import BoardDialog from '../components/Dialog/BoardDialog/BoardDialog';
 
 const landinPageStyle = theme => ({
   landingContainer: {
@@ -24,9 +26,11 @@ class LandingPage extends Component {
     return (
       <div>
         <BrowserRouter>
-          <Route exact path='/login' component={LogIn}/>
+          <Route exact path='/' component={LogIn}/>
           <Route exact path='/signup' component={SignUp}/>
-          <Route path='/profile' component={Profile}/>
+          <Route path='/profile/:username' component={Profile}/>
+          <Route exact path = "/profile/:username/post/create" component = {PostDialog}/>
+          <Route exact path = "/profile/:username/board/create" component = {BoardDialog}/>
         </BrowserRouter>        
       </div>
     );
