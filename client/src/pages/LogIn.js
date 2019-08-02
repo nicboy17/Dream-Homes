@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import { makeStyles } from '@material-ui/styles';
-import {Paper, TextField} from "@material-ui/core";
-import {Link} from 'react-router-dom'
+import {Paper, TextField} from '@material-ui/core';
+import {Link} from 'react-router-dom';
 import axios from 'axios';
 
 const useStyles = makeStyles(theme => ({
@@ -103,31 +103,30 @@ const useStyles = makeStyles(theme => ({
             cursor: 'pointer',
         }
     }
-}))
+}));
 
 const LogIn = () => {
-    const style = useStyles()
-    let [email, postEmail] = useState('')
-    let [pass, postPass] = useState('')
+    const style = useStyles();
+    let [email, postEmail] = useState('');
+    let [pass, postPass] = useState('');
 
     const handleChangePass = (e) => {
-        postPass(pass = e.target.value)
-    }
+        postPass(pass = e.target.value);
+    };
     
     const handleChangeEmail = (e) => {
-        postEmail(email = e.target.value)
-    }
+        postEmail(email = e.target.value);
+    };
 
-    const postInfo = (e) => {
-        e.preventDefault()
-        axios.post('', email, pass)
-        .then(response => {
-            console.log(response)
-        })
-        .catch(error => {
-            console.log(error)
-        })
-    }
+    const postInfo = () => {
+        axios.post('/users/login', {username: email, password: pass})
+            .then(response => {
+                console.log(response);
+            })
+            .catch(error => {
+                console.log(error);
+            });
+    };
 
     return (
         <div>
@@ -166,7 +165,7 @@ const LogIn = () => {
                 </div>
             </div>
         </div>
-    )
-}
+    );
+};
 
 export default LogIn;
