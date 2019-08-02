@@ -13,10 +13,10 @@ import axios from 'axios';
 class EditPicUserDialog extends Component {
     state = {
         smallText: '',
-        userNameError: false,
-        username:''
+        nameError: false,
+        name: ''
     };
-    //Fetch Username and Picture from UserDB
+    //Fetch Name and Picture from UserDB
     componentDidMount = async () => {
         try {
             const username = this.props.location.pathname.split('/')[2];
@@ -26,7 +26,8 @@ class EditPicUserDialog extends Component {
                 return this.setState({
                     user: res.data.user,
                     profile: res.data.user.profile,
-                    username: res.data.user.username
+                    username: res.data.user.username,
+                    name: res.data.user.name
                 });
             }
         } catch (err) {
@@ -56,7 +57,7 @@ class EditPicUserDialog extends Component {
 
     onChangeText = e => {
         this.setState({
-            username: e.target.value.replace(/\s/g, '').replace(/[^a-zA-Z0-9 ]/g, '')
+            name: e.target.value.replace(/[^a-zA-Z0-9 ]/g, '')
         });
     };
 
@@ -73,25 +74,23 @@ class EditPicUserDialog extends Component {
     };
 
     onCloseClicked = () => {
-        const username = this.props.location.pathname.split('/')[2];
-        this.props.history.push(`/profile/${username}`);
+        this.props.history.push(`/profile/${this.state.username}`);
     };
 
     onSavePress = async () => {
-        if (this.state.username.length < 3 || this.state.username.length > 12) {
+        if (this.state.name.length < 3 || this.state.name.length > 25) {
             this.setState({
-                smallText: 'Username must at least 3 to 25 characters long',
-                userNameError: true
+                smallText: 'Name must at least 3 to 25 characters long',
+                nameError: true
             });
         } else {
             try {
                 const formData = new FormData();
-                formData.append('Hey', 'test');
                 if (this.state.imageFile) {
                     formData.append('image', this.state.imageFile);
                 }
-                if (this.state.user.username !== this.state.username) {
-                    formData.append('username', this.state.username);
+                if (this.state.user.name !== this.state.name) {
+                    formData.append('name', this.state.name);
                 }
 
                 let res = await axios({
@@ -119,45 +118,49 @@ class EditPicUserDialog extends Component {
                 fullWidth
                 onClose={this.handleClose}
                 aria-labelledby='form-dialog-title'
+                onClick={() => this.onCloseClicked()}
+                stop
             >
-                <CloseIcon onClick={() => this.onCloseClicked()} />
-                <DialogTitle style={{ textAlign: 'center' }} id='form-dialog-title'>
-                    Edit avatar/username
-                </DialogTitle>
-                <DialogContent
-                    style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}
-                >
-                    <Avatar
-                        style={{ height: 100, width: 100, margin: 10 }}
-                        src={this.state.profile || require('../../../assets/icon_profile.svg')}
-                        onClick={() => this.handleFileUpload()}
-                    />
-                    <input
-                        id='selectImage'
-                        hidden
-                        type='file'
-                        accept='image/png,image/jpeg'
-                        onChange={e => this.onChangeImage(e)}
-                    />
+                <div onClick = {e => e.stopPropagation()}>
+                    <CloseIcon onClick={() => this.onCloseClicked()} />
+                    <DialogTitle style={{ textAlign: 'center' }} id='form-dialog-title'>
+                        Edit avatar/username
+                    </DialogTitle>
+                    <DialogContent
+                        style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}
+                    >
+                        <Avatar
+                            style={{ height: 100, width: 100, margin: 10 }}
+                            src={this.state.profile || require('../../../assets/icon_profile.svg')}
+                            onClick={() => this.handleFileUpload()}
+                        />
+                        <input
+                            id='selectImage'
+                            hidden
+                            type='file'
+                            accept='image/png,image/jpeg'
+                            onChange={e => this.onChangeImage(e)}
+                        />
 
-                    <TextField
-                        autoFocus
-                        margin='dense'
-                        id='username'
-                        type='username'
-                        label='Username'
-                        fullWidth
-                        onChange={e => this.onChangeText(e)}
-                        value={this.state.username}
-                        helperText={this.state.smallText}
-                        error={this.state.userNameError}
-                    />
-                </DialogContent>
-                <DialogActions>
-                    <Button onClick={this.onSavePress} color='primary'>
-                        Save
-                    </Button>
-                </DialogActions>
+                        <TextField
+                            autoFocus
+                            margin='dense'
+                            id='name'
+                            type='name'
+                            label='Name'
+                            fullWidth
+                            onChange={e => this.onChangeText(e)}
+                            value={this.state.name}
+                            helperText={this.state.smallText}
+                            error={this.state.nameError}
+                        />
+                    </DialogContent>
+                    <DialogActions>
+                        <Button onClick={this.onSavePress} color='primary'>
+                            Save
+                        </Button>
+                    </DialogActions>
+                </div>
             </Dialog>
         );
     }
