@@ -99,12 +99,14 @@ const useStyles = makeStyles(theme => ({
     }
 }));
 
-const Profile = () => {
+const Profile = ({ location }) => {
     const style = useStyles();
     let [activePanel, toggle] = useState('board');
+
+    const username = location.pathname.split('/')[2];
     return (
         <div>
-            <Navbar/>
+            <Navbar />
             <div className={style.subHeader}>
                 <div className={style.nameContainer}>
                     <img src={face} alt='' className={style.subHeaderIcon} />
@@ -115,10 +117,10 @@ const Profile = () => {
                 </div>
                 <div />
                 <div>
-                    <Link to='/profile/:username/board/create'>
+                    <Link to={`/profile/${username}/board/create`}>
                         <button className={style.createBoard}>Create Board</button>
                     </Link>
-                    <Link to='/profile/:username/post/create'>
+                    <Link to={`/profile/${username}/post/create`}>
                         <button className={style.createPost}>Create Post</button>
                     </Link>
                 </div>
