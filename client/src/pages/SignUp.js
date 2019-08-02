@@ -113,7 +113,7 @@ const SignUp = () => {
     };
 
     const postInfo = () => {
-        axios.post('/users/register', {user, email, password: pass})
+        axios.post('/users/register', {user, email, password: pass, confPass})
             .then(response => {
                 console.log(response);
             })
