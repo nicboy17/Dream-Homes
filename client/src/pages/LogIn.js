@@ -161,7 +161,7 @@ const LogIn = () => {
                         <TextField label='Password' type="password" className={style.inputpass} onChange={handleChangePass}/>
                     </div>
                     <p className={style.forgotpass}>Forgot your password?</p>
-                    <Link to='/profile/:username'><button className={style.loginbutton} onClick={postInfo}>Login</button></Link>
+                    <button className={style.loginbutton} onClick={postInfo}><Link to='/profile/:username'>Login</Link></button>
                     <p className={style.footer}>Don't have an account? <Link to='/signup' className={style.signup}>Sign Up!</Link></p>
                 </div>
             </div>

@@ -161,7 +161,7 @@ const SignUp = () => {
                     <div className={style.inputContainer}>
                         <TextField label='Confirm Password' type='password' className={style.input} onChange={handleChangeConfPass}/>
                     </div>
-                    <Link to='/profile/:username'><button className={style.signupbutton} onClick={postInfo}>Sign Up!</button></Link>
+                    <button className={style.signupbutton} onClick={postInfo}><Link to='/profile/:username'>Sign Up!</Link></button>
                     <p className={style.footer}>Already a Member? <Link to='/' className={style.login}>Log In!</Link></p>
                 </div>
             </div>
