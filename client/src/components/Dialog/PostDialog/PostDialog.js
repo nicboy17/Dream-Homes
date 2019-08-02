@@ -116,48 +116,54 @@ class PostDialog extends React.Component {
         }
     };
 
+    onCloseClick = () => {
+        const username = this.props.location.pathname.split('/')[2];
+        this.props.history.push(`/profile/${username}`);
+    };
+
     render() {
         if (!Boolean(this.state.boards)) {
             return <CircularProgress color='secondary' />;
         }
         return (
-            <>
-                <Dialog open={true} onClose={this.handleClose} aria-labelledby='form-dialog-title'>
-                    <DialogTitle style={{ textAlign: 'center' }} id='form-dialog-title'>
-                        Create a post
-                    </DialogTitle>
-                    <DialogContent>
-                        <BoardList
-                            boards={this.state.boards}
-                            handleSelect={this.handleSelectChange}
-                            value={this.state.selectedBoard}
-                        />
-                        <FormContent
-                            onChangeText={this.onChangeText}
-                            titleError={this.state.titleError}
-                            tagError={this.state.tagError}
-                            onSubmitPress={this.onSubmitPress}
-                            tag={this.state.tag}
-                            title={this.state.title}
-                            description={this.state.description}
-                            destination={this.state.destination}
-                        />
-                        {this.renderTags()}
-                    </DialogContent>
-                    <DialogContent>
-                        <FileUploader
-                            onUploadImages={this.onUploadImages}
-                            files={this.state.files}
-                        />
-                    </DialogContent>
-                    <DialogContent />
-                    <DialogActions>
-                        <Button onClick={this.onCreatePress} color='primary'>
-                            Create
-                        </Button>
-                    </DialogActions>
+                <Dialog
+                    open={true}
+                    onClose={this.handleClose}
+                    aria-labelledby='form-dialog-title'
+                    onClick={() => this.onCloseClick()}
+                  
+                >
+                    <div onClick={e => e.stopPropagation()}>
+                        <DialogTitle style={{ textAlign: 'center' }} id='form-dialog-title'>
+                            Create a post
+                        </DialogTitle>
+                        <DialogContent>
+                            <FormContent
+                                onChangeText={this.onChangeText}
+                                titleError={this.state.titleError}
+                                tagError={this.state.tagError}
+                                onSubmitPress={this.onSubmitPress}
+                                tag={this.state.tag}
+                                title={this.state.title}
+                                description={this.state.description}
+                                destination={this.state.destination}
+                            />
+                            {this.renderTags()}
+                        </DialogContent>
+                        <DialogContent>
+                            <FileUploader
+                                onUploadImages={this.onUploadImages}
+                                files={this.state.files}
+                            />
+                        </DialogContent>
+                        <DialogContent />
+                        <DialogActions>
+                            <Button onClick={this.onCreatePress} color='primary'>
+                                Create
+                            </Button>
+                        </DialogActions>
+                    </div>
                 </Dialog>
-            </>
         );
     }
 }
