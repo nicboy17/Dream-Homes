@@ -24,7 +24,7 @@ class BoardDialog extends Component {
                 nameError: true
             });
         } else {
-            this.props.history.push('/');
+            this.props.history.push('/profile/:username');
         }
     };
 

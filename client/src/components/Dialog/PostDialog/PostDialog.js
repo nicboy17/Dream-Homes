@@ -73,7 +73,7 @@ class PostDialog extends React.Component {
             this.setState({ titleError: 'Title must be greater than 3 characters' });
         } else {
             this.setState({ titleError: '' });
-            this.props.history.push('/');
+            this.props.history.push('/profile/:username');
         }
     };
 
