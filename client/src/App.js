@@ -8,13 +8,13 @@ import Landing from './pages/Landing.js';
 import './App.css';
 
 function App() {
-  return (
-    <MuiThemeProvider theme={theme}>
-      <BrowserRouter>
-        <Route path="/" component={Landing} />
-      </BrowserRouter>
-    </MuiThemeProvider>
-  );
+    return (
+        <MuiThemeProvider theme={theme}>
+            <BrowserRouter>
+                <Route path="/" component={Landing} />
+            </BrowserRouter>
+        </MuiThemeProvider>
+    );
 }
 
 export default App;
