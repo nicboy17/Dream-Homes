@@ -4,7 +4,11 @@
   "private": true,
   "scripts": {
     "start": "node ./bin/www",
-    "dev": "nodemon ./bin/www"
+    "dev": "nodemon ./bin/www",
+    "lint": "eslint src/**/*.js",
+    "lint:fix": "eslint src/**/*.js --fix",
+    "unit": "./node_modules/.bin/mocha ./test/unit --exit",
+    "integration": "./node_modules/.bin/mocha ./test/integration --exit"
   },
   "dependencies": {
     "aws-sdk": "^2.503.0",
