@@ -15,7 +15,7 @@ module.exports = function () {
                 }
             });
         } else {
-            res.json({ success: false, message: 'No token provided' });
+            res.status(401).json({ success: false, message: 'No token provided' });
         }
     };
 };
