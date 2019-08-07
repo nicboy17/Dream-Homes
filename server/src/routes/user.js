@@ -101,7 +101,7 @@ router.post('/:username/posts', [upload.single('image'), UserValidation.addPost,
 router.put('/board/:id', async (req,res) => {
     try {
         const board = await Board.findById(req.params.id);
-        if(board.user.toString() !== req.decoded.users._id.toString()) {
+        if(board.user.toString() !== req.decoded._id.toString()) {
             return res.status(404).json({msg: 'You do not have the authorization to add to this board'});
         }
         // Check to see if there is a board with that id
