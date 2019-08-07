@@ -98,11 +98,11 @@ router.post('/:username/posts', [upload.single('image'), UserValidation.addPost,
 // @route    PUT users/interest/:username
 // @desc     Update user with interest
 // @access   Private
-router.put('/interest/:username', async (req,res) => {
+router.put('/:username/interest', async (req,res) => {
     try {
         let user = await User.findOne({username: req.params.username}); 
         if(user._id.toString() !== req.decoded._id.toString()) {
-            return res.status(404).json({msg: 'You do not have the authorization to do this'});
+            return res.status(401).json({msg: 'You do not have the authorization to do this'});
         }
         if(!user) {
             return res.status(404).json({msg: 'User not found'});
