@@ -1,25 +1,25 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import { makeStyles } from '@material-ui/styles';
-import {Paper, TextField} from '@material-ui/core';
-import {Link} from 'react-router-dom';
+import { Paper, TextField } from '@material-ui/core';
+import { Link} from 'react-router-dom';
 import axios from 'axios';
 
 const useStyles = makeStyles(theme => ({
     container: {
         display: 'grid',
         justifyItems: 'center',
-        zIndex: '0',
+        zIndex: '0'
     },
     grid: {
         display: 'grid',
         gridTemplateColumns: '1fr 1fr 1fr 1fr',
         gridGap: '15px',
-        justifyItems: 'center',
+        justifyItems: 'center'
     },
     card: {
         height: '55vh',
         width: '18vw',
-        background: 'yellow',
+        background: 'yellow'
     },
     signin: {
         backgroundColor: 'rgba(0, 0, 0, 0.7)',
@@ -31,38 +31,38 @@ const useStyles = makeStyles(theme => ({
         width: '100vw',
         display: 'grid',
         justifyContent: 'center',
-        alignItems: 'center',
+        alignItems: 'center'
     },
     modal: {
         backgroundColor: 'white',
         width: '35vw',
         height: '80vh',
         borderRadius: '15px',
-        textAlign: 'center',
+        textAlign: 'center'
     },
     welcome: {
-        paddingTop: '20px',
+        paddingTop: '20px'
     },
     emailContainer: {
         height: '13vh',
-        minWidth: '22vw',
+        minWidth: '22vw'
     },
     passContainer: {
         height: '13vh',
-        minWidth: '22vw',
+        minWidth: '22vw'
     },
     inputemail: {
         width: '22vw',
         '& label': {
             fontWeight: 'bold',
-            color: 'black',
+            color: 'black'
         }
     },
     inputpass: {
         width: '22vw',
         '& label': {
             fontWeight: 'bold',
-            color: 'black',
+            color: 'black'
         }
     },
     forgotpass: {
@@ -72,7 +72,7 @@ const useStyles = makeStyles(theme => ({
         color: 'grey',
         '&:hover': {
             color: 'blue',
-            cursor: 'pointer',
+            cursor: 'pointer'
         }
     },
     loginbutton: {
@@ -85,14 +85,14 @@ const useStyles = makeStyles(theme => ({
         '&:hover': {
             backgroundColor: 'lightblue',
             color: 'white',
-            cursor: 'pointer',
+            cursor: 'pointer'
         }
     },
     footer: {
         borderTop: '1px solid lightgrey',
         paddingTop: '20px',
         marginTop: '58px',
-        fontSize: '14px',
+        fontSize: '14px'
     },
     signup: {
         textDecoration: 'none',
@@ -100,68 +100,84 @@ const useStyles = makeStyles(theme => ({
         fontWeight: 'bold',
         '&:hover': {
             color: 'blue',
-            cursor: 'pointer',
+            cursor: 'pointer'
         }
     }
 }));
 
-const LogIn = () => {
+const LogIn = ({history}) => {
     const style = useStyles();
-    let [email, postEmail] = useState('');
-    let [pass, postPass] = useState('');
+    const [formData, setFormData] = useState({
+        username: '',
+        password: ''
+    });
 
-    const handleChangePass = (e) => {
-        postPass(pass = e.target.value);
-    };
-    
-    const handleChangeEmail = (e) => {
-        postEmail(email = e.target.value);
-    };
+    const { username, password } = formData;
 
-    const postInfo = () => {
-        axios.post('/users/login', {username: email, password: pass})
-            .then(response => {
-                console.log(response);
-            })
-            .catch(error => {
-                console.log(error);
-            });
+    const onChangeText = e => setFormData({ ...formData, [e.target.name]: e.target.value });
+
+    const postInfo = async () => {
+        try {
+            const body = {
+                username,
+                password
+            };
+            const config = {
+                'Content-Type': 'application.json'
+            };
+            let res = await axios.post('/users/login', body, config);
+            if (res.data.success === true) {
+                history.push(`/profile/${username}`);
+            }
+        } catch (err) {
+            console.log('Something went wrong with logging in');
+        }
     };
 
     return (
         <div>
             <div className={style.container}>
                 <div className={style.grid}>
-                    <Paper className={style.card}>
-                    </Paper>
-                    <Paper className={style.card}>
-                    </Paper>
-                    <Paper className={style.card}>
-                    </Paper>
-                    <Paper className={style.card}>
-                    </Paper>
-                    <Paper className={style.card}>
-                    </Paper>
-                    <Paper className={style.card}>
-                    </Paper>
-                    <Paper className={style.card}>
-                    </Paper>
-                    <Paper className={style.card}>
-                    </Paper>
+                    <Paper className={style.card} />
+                    <Paper className={style.card} />
+                    <Paper className={style.card} />
+                    <Paper className={style.card} />
+                    <Paper className={style.card} />
+                    <Paper className={style.card} />
+                    <Paper className={style.card} />
+                    <Paper className={style.card} />
                 </div>
             </div>
             <div className={style.signin}>
                 <div className={style.modal}>
                     <h1 className={style.welcome}>Welcome!</h1>
                     <div className={style.emailContainer}>
-                        <TextField label='E-mail' className={style.inputemail} onChange={handleChangeEmail}/>
+                        <TextField
+                            label='Username'
+                            name='username'
+                            className={style.inputemail}
+                            onChange={e => onChangeText(e)}
+                        />
                     </div>
                     <div className={style.passContainer}>
-                        <TextField label='Password' type="password" className={style.inputpass} onChange={handleChangePass}/>
+                        <TextField
+                            label='Password'
+                            type='password'
+                            name='password'
+                            className={style.inputpass}
+                            onChange={e => onChangeText(e)}
+                        />
                     </div>
                     <p className={style.forgotpass}>Forgot your password?</p>
-                    <button className={style.loginbutton} onClick={postInfo}><Link to='/profile/:username'>Login</Link></button>
-                    <p className={style.footer}>Don't have an account? <Link to='/signup' className={style.signup}>Sign Up!</Link></p>
+                    <button className={style.loginbutton} onClick={postInfo}>
+                        Login
+                    </button>
+                    <p className={style.footer}>
+                        Don't have an account?{' '}
+                        <Link to='/signup' className={style.signup}>
+                            Sign Up!
+                        </Link>
+                    </p>
                 </div>
             </div>
         </div>

@@ -1,25 +1,25 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import { makeStyles } from '@material-ui/styles';
-import {Paper, TextField} from '@material-ui/core';
-import {Link} from 'react-router-dom';
+import { Paper, TextField } from '@material-ui/core';
+import { Link } from 'react-router-dom';
 import axios from 'axios';
 
 const useStyles = makeStyles({
     container: {
         display: 'grid',
         justifyItems: 'center',
-        zIndex: '0',
+        zIndex: '0'
     },
     grid: {
         display: 'grid',
         gridTemplateColumns: '1fr 1fr 1fr 1fr',
         gridGap: '15px',
-        justifyItems: 'center',
+        justifyItems: 'center'
     },
     card: {
         height: '55vh',
         width: '18vw',
-        background: 'yellow',
+        background: 'yellow'
     },
     signin: {
         backgroundColor: 'rgba(0, 0, 0, 0.7)',
@@ -31,31 +31,31 @@ const useStyles = makeStyles({
         width: '100vw',
         display: 'grid',
         justifyContent: 'center',
-        alignItems: 'center',
+        alignItems: 'center'
     },
     modal: {
         backgroundColor: 'white',
         width: '35vw',
         height: '90vh',
         borderRadius: '15px',
-        textAlign: 'center',
+        textAlign: 'center'
     },
     inputContainer: {
         height: '13vh',
         minWidth: '22vw',
         padding: '0',
-        margin: '0',
+        margin: '0'
     },
     input: {
         width: '22vw',
         marginTop: '10px',
         '& label': {
             fontWeight: 'bold',
-            color: 'black',
+            color: 'black'
         }
     },
     welcome: {
-        marginBottom: '0',
+        marginBottom: '0'
     },
     signupbutton: {
         border: '1px solid lightgrey',
@@ -69,14 +69,14 @@ const useStyles = makeStyles({
         '&:hover': {
             backgroundColor: 'lightblue',
             color: 'white',
-            cursor: 'pointer',
+            cursor: 'pointer'
         }
     },
     footer: {
         borderTop: '1px solid lightgrey',
         paddingTop: '20px',
         marginTop: '35px',
-        fontSize: '14px',
+        fontSize: '14px'
     },
     login: {
         fontWeight: 'bold',
@@ -84,83 +84,119 @@ const useStyles = makeStyles({
         color: 'black',
         '&:hover': {
             color: 'blue',
-            cursor: 'pointer',
+            cursor: 'pointer'
         }
     }
 });
 
-const SignUp = () => {
+const SignUp = ({ history }) => {
     const style = useStyles();
-    let [user, postUser] = useState('');
-    let [email, postEmail] = useState('');
-    let [pass, postPass] = useState('');
-    let [confPass, postConfPass] = useState('');
+    const [formData, setFormData] = useState({
+        username: '',
+        email: '',
+        password: '',
+        password2: '',
+        passwordError: ''
+    });
+    const { email, username, password, password2, passwordError } = formData;
 
-    const handleChangeUser = (e) => {
-        postUser(user = e.target.value);
-    };
-    
-    const handleChangePass = (e) => {
-        postPass(pass = e.target.value);
-    };
-    
-    const handleChangeEmail = (e) => {
-        postEmail(email = e.target.value);
-    };
-    
-    const handleChangeConfPass = (e) => {
-        postConfPass(confPass = e.target.value);
-    };
+    const onChangeText = e => setFormData({ ...formData, [e.target.name]: e.target.value });
 
-    const postInfo = () => {
-        axios.post('/users/register', {user, email, password: pass, confPass})
-            .then(response => {
-                console.log(response);
-            })
-            .catch(error => {
-                console.log(error);
+    const postInfo = async () => {
+        if (password !== password2) {
+            setFormData({ ...formData, passwordError: 'Passwords do not match' });
+        }
+        if (!password.match(/(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])[A-Za-zd$@!%*?&].{8,}/)) {
+            setFormData({
+                ...formData,
+                passwordError:
+                    'Password must contain at least 8 characters and one Lower Case and one Upper Case and 3 Numbers'
             });
+        } else {
+            try {
+                const body = {
+                    username,
+                    name: username,
+                    email,
+                    password
+                };
+                const config = {
+                    'Content-Type': 'application/json'
+                };
+                await axios.post('/users/register', body, config);
+                history.push(`/profile/${username}`);
+            } catch (err) {
+                console.log('Something went wrong with the registration');
+            }
+        }
     };
 
     return (
         <div>
             <div className={style.container}>
                 <div className={style.grid}>
-                    <Paper className={style.card}>
-                    </Paper>
-                    <Paper className={style.card}>
-                    </Paper>
-                    <Paper className={style.card}>
-                    </Paper>
-                    <Paper className={style.card}>
-                    </Paper>
-                    <Paper className={style.card}>
-                    </Paper>
-                    <Paper className={style.card}>
-                    </Paper>
-                    <Paper className={style.card}>
-                    </Paper>
-                    <Paper className={style.card}>
-                    </Paper>
+                    <Paper className={style.card} />
+                    <Paper className={style.card} />
+                    <Paper className={style.card} />
+                    <Paper className={style.card} />
+                    <Paper className={style.card} />
+                    <Paper className={style.card} />
+                    <Paper className={style.card} />
+                    <Paper className={style.card} />
                 </div>
             </div>
             <div className={style.signin}>
                 <div className={style.modal}>
                     <h1 className={style.welcome}>Welcome!</h1>
                     <div className={style.inputContainer}>
-                        <TextField label='Username' className={style.input} onChange={handleChangeUser}/>
+                        <TextField
+                            label='Username'
+                            name='username'
+                            className={style.input}
+                            value={username}
+                            onChange={e => onChangeText(e)}
+                        />
                     </div>
                     <div className={style.inputContainer}>
-                        <TextField label='E-mail' className={style.input} onChange={handleChangeEmail}/>
+                        <TextField
+                            label='E-mail'
+                            name='email'
+                            className={style.input}
+                            value={email}
+                            onChange={e => onChangeText(e)}
+                        />
                     </div>
                     <div className={style.inputContainer}>
-                        <TextField label='Password' type='password' className={style.input} onChange={handleChangePass}/>
+                        <TextField
+                            label='Password'
+                            name='password'
+                            type='password'
+                            className={style.input}
+                            value={password}
+                            onChange={e => onChangeText(e)}
+                            error={Boolean(passwordError)}
+                            helperText={passwordError}
+                        />
                     </div>
                     <div className={style.inputContainer}>
-                        <TextField label='Confirm Password' type='password' className={style.input} onChange={handleChangeConfPass}/>
+                        <TextField
+                            label='Confirm Password'
+                            name='password2'
+                            type='password'
+                            className={style.input}
+                            value={password2}
+                            onChange={e => onChangeText(e)}
+                        />
                     </div>
-                    <button className={style.signupbutton} onClick={postInfo}><Link to='/profile/:username'>Sign Up!</Link></button>
-                    <p className={style.footer}>Already a Member? <Link to='/' className={style.login}>Log In!</Link></p>
+                    <button className={style.signupbutton} onClick={postInfo}>
+                        Sign Up!
+                    </button>
+                    <p className={style.footer}>
+                        Already a Member?{' '}
+                        <Link to='/' className={style.login}>
+                            Log In!
+                        </Link>
+                    </p>
                 </div>
             </div>
         </div>
