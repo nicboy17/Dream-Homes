@@ -11,6 +11,7 @@ import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
 import Typography from '@material-ui/core/Typography';
 import Interests from './Interests';
+import axios from 'axios'
 
 const styles = theme => ({
     root: {
@@ -58,8 +59,22 @@ class QuizDialog extends React.Component {
         this.setState({selected});
     }
 
-    handleConfirm() {
-        console.log(this.state.selected);
+    async handleConfirm() {
+        const username = this.props.location.pathname.split('/')[2]; //this might need to be changed
+        try {
+            const body = {
+                interests: this.state.selected
+            }
+            const config = {
+                'Content-Type': 'application/json'
+            }
+            const res = await axios.put(`users/${username}/interests`, body, config)
+            if (res.data.success) {
+                return this.props.history.push('/'); //this might need to be changed
+            }
+        } catch(err) {
+            console.log(err)
+        }
         this.setState({'open': false});
     }
 
