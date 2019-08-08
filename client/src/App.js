@@ -19,14 +19,13 @@ function App() {
         <MuiThemeProvider theme={theme}>
             <BrowserRouter>
                 <Switch>
-                    <Route exact path='/login' component={LogIn} />
+                    <Route exact path='/' component={LogIn} />
                     <Route exact path='/signup' component={SignUp} />
                 </Switch>
                 <Route exact path='/interest-quiz' component={InterestQuizDialog} />
                 <Route path='/profile/:username' component={Profile} />
                 <Route path='/profile/:username/post/create' component={PostDialog} />
                 <Route path='/profile/:username/board/create' component={BoardDialog} />
-                <Route component = {NotFound} />
             </BrowserRouter>
         </MuiThemeProvider>
     );

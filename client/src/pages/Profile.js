@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { makeStyles } from '@material-ui/styles';
 import face from './face.jpg';
 import { Card, Typography } from '@material-ui/core';
@@ -101,9 +101,19 @@ const useStyles = makeStyles(theme => ({
 
 const Profile = ({ location }) => {
     const style = useStyles();
-    let [activePanel, toggle] = useState('board');
-
     const username = location.pathname.split('/')[2];
+    
+    let [activePanel, toggle] = useState('board');
+    let [boards, setBoards] = useState(['board1','board2','board3'])
+    let [posts, setPosts] = useState(['post1','post2'])
+    
+    useEffect(() => {
+        fetch(`users/${username}`)
+        .then(response => response.json())
+        .then(data => setBoards((boards = data['user']['boards'])))
+        .then(data => setPosts((posts = data['user']['posts'])))
+    })
+
     return (
         <div>
             <Navbar />
@@ -145,50 +155,21 @@ const Profile = ({ location }) => {
                 </div>
                 <div className={style.activePanel}>
                     <div className={style.gridContainer}>
-                        <Card className={style.card}>
-                            <CardActionArea className={style.card}>
-                                <CardMedia className={style.cardImg} image={house} />
-                                <Typography variant='h6' className={style.cardHeader}>
-                                    House
-                                </Typography>
-                                <Typography variant='p' className={style.cardHeader}>
-                                    80 posts
-                                </Typography>
-                            </CardActionArea>
-                        </Card>
-                        <Card className={style.card}>
-                            <CardActionArea className={style.card}>
-                                <CardMedia className={style.cardImg} image={house} />
-                                <Typography variant='h6' className={style.cardHeader}>
-                                    House
-                                </Typography>
-                                <Typography variant='p' className={style.cardHeader}>
-                                    80 posts
-                                </Typography>
-                            </CardActionArea>
-                        </Card>
-                        <Card className={style.card}>
-                            <CardActionArea className={style.card}>
-                                <CardMedia className={style.cardImg} image={house} />
-                                <Typography variant='h6' className={style.cardHeader}>
-                                    House
-                                </Typography>
-                                <Typography variant='p' className={style.cardHeader}>
-                                    80 posts
-                                </Typography>
-                            </CardActionArea>
-                        </Card>
-                        <Card className={style.card}>
-                            <CardActionArea className={style.card}>
-                                <CardMedia className={style.cardImg} image={house} />
-                                <Typography variant='h6' className={style.cardHeader}>
-                                    House
-                                </Typography>
-                                <Typography variant='p' className={style.cardHeader}>
-                                    80 posts
-                                </Typography>
-                            </CardActionArea>
-                        </Card>
+                            {
+                                boards.map((board, i) => {
+                                    return <Card className={style.card}>
+                                    <CardActionArea className={style.card}>
+                                        <CardMedia className={style.cardImg} image={house} />
+                                        <Typography variant='h6' className={style.cardHeader}>
+                                            {board}
+                                        </Typography>
+                                        <Typography variant='p' className={style.cardHeader}>
+                                            80 posts
+                                        </Typography>
+                                    </CardActionArea>
+                                </Card>
+                                })
+                            }
                     </div>
                 </div>
             </div>
@@ -212,17 +193,21 @@ const Profile = ({ location }) => {
                 </div>
                 <div className={style.activePanel}>
                     <div className={style.gridContainer}>
-                        <Card className={style.card}>
-                            <CardActionArea className={style.card}>
-                                <CardMedia className={style.cardImg} image={house} />
-                                <Typography variant='h6' className={style.cardHeader}>
-                                    House
-                                </Typography>
-                                <Typography variant='p' className={style.cardHeader}>
-                                    80 posts
-                                </Typography>
-                            </CardActionArea>
-                        </Card>
+                            {
+                                posts.map((post, i) => {
+                                    return <Card className={style.card}>
+                                    <CardActionArea className={style.card}>
+                                        <CardMedia className={style.cardImg} image={house} />
+                                        <Typography variant='h6' className={style.cardHeader}>
+                                            {post}
+                                        </Typography>
+                                        <Typography variant='p' className={style.cardHeader}>
+                                            80 posts
+                                        </Typography>
+                                    </CardActionArea>
+                                </Card>
+                                })
+                            }
                     </div>
                 </div>
             </div>
