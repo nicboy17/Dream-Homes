@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 
-const { User, Board, Post } = require('../models');
+const { User, Post } = require('../models');
 
 const token = require('../middleware/token');
 
@@ -11,42 +11,30 @@ const _ = require('lodash');
 router.use(token());
 
 // @route    GET users/posts
-// @desc     Get all posts based on user's interest or filter
+// @desc     Get all posts based on user's interests or filter
 // @access   Private
 router.get('/', async (req, res) => {
-    const {search_filter = '', easy_filters = ''} = req.query;
+    const { search_filter = '', easy_filters = '' } = req.query;
     try {
-        const promises = [
-            Post.find({}, (err, post) => {
-                if (err) {
-                    res.status(500).send('Server Error');
-                }
-                return post;
-            }).sort({ date: -1 }),
-            User.findOne({ username: req.decoded.username })
-        ];
-        let result = await Promise.all(promises);
-        let posts = result[0];
-        const user = result[1];
-        // Filter based on search_filter 
-        if(search_filter){
-            posts = _.filter(posts, post => post.tags.includes(search_filter.trim()));
-            // Further filtering with easy_filters
-            if(easy_filters) {
-                let easyArr = easy_filters.split(',');
-                posts = _.filter(posts, post => {
-                    return !_.isEmpty(_.intersection(post.tags, easyArr));
-                });
-            }
+        let query;
+        let searchTags = [];
+
+        if (search_filter) {
+            searchTags = [...searchTags, search_filter];
         }
-        // Filter based on user's interest
-        else if (user.interest) {
-            posts = _.filter(posts, post => {
-                return !_.isEmpty(_.intersection(post.tags, user.interest));
-            });
+        if (easy_filters) {
+            searchTags = [...searchTags, ...easy_filters.split(',')];
         }
 
-        res.json(posts);
+        if (_.isEmpty(searchTags)) {
+            const user = await User.findById(req.decoded._id);
+            searchTags = [...searchTags, ...user.interests];
+            query = { tags: { $in: user.interests } };
+        } else {
+            query = { tags: { $all: searchTags } };
+        }
+        const posts = await Post.find(query);
+        res.send(posts);
     } catch (err) {
         res.status(500).send('Something went wrong with the server');
     }
