@@ -59,7 +59,6 @@ class QuizDialog extends React.Component {
     }
 
     handleConfirm() {
-        console.log(this.state.selected);
         this.setState({'open': false});
     }
 

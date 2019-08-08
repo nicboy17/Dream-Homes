@@ -7,7 +7,6 @@ import { theme } from './themes/theme';
 import LogIn from './pages/Landing';
 import SignUp from './pages/SignUp.js';
 import Profile from './pages/Profile.js';
-import NotFound from './pages/NotFound.js';
 
 import PostDialog from './components/Dialog/PostDialog/PostDialog';
 import BoardDialog from './components/Dialog/BoardDialog/BoardDialog';
@@ -22,7 +21,7 @@ function App() {
                     <Route exact path='/' component={LogIn} />
                     <Route exact path='/signup' component={SignUp} />
                 </Switch>
-                <Route exact path='/interest-quiz' component={InterestQuizDialog} />
+                <Route exact path='/profile/:username/interest-quiz' component={InterestQuizDialog} />
                 <Route path='/profile/:username' component={Profile} />
                 <Route path='/profile/:username/post/create' component={PostDialog} />
                 <Route path='/profile/:username/board/create' component={BoardDialog} />

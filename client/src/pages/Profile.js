@@ -7,6 +7,7 @@ import CardActionArea from '@material-ui/core/CardActionArea';
 import house from './house.png';
 import { Link } from 'react-router-dom';
 import Navbar from '../components/Navbar/Navbar';
+
 const useStyles = makeStyles(theme => ({
     subHeader: {
         minHeight: '30vh',
