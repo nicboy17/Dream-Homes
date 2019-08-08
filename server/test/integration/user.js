@@ -62,7 +62,7 @@ describe('User Routes', () => {
                 .then((res) => {
                     expect(res.body.success).to.be.false;
                 });
-        }).timeout(4000);
+        });
     });
 
     describe('Login', () => {
