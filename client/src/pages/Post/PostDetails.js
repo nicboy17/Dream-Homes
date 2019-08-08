@@ -2,7 +2,7 @@ import React from 'react';
 import { makeStyles } from '@material-ui/styles';
 import { Typography, Grid } from '@material-ui/core';
 import Avatar from '@material-ui/core/Avatar';
-import face from '../../pages/face.jpg';
+import face from '../../assets/face.jpg';
 
 const useStyles = makeStyles(theme => ({
     author: {
@@ -22,13 +22,13 @@ const useStyles = makeStyles(theme => ({
         fontSize: 10,
         marginBottom: '1rem',
         fontStyle: 'oblique'
-    },
+    }
 }));
 
-const PostDetails = ({post}) => {
+const PostDetails = ({ post }) => {
     const classes = useStyles();
 
-    return(
+    return (
         <div>
             <Grid container direction="row" justify="flex-start" alignItems="center" spacing={4} className={classes.author}>
                 <Avatar src={face} component={'div'} className={classes.avatar} />

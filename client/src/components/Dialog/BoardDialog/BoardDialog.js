@@ -8,11 +8,14 @@ import TextField from '@material-ui/core/TextField';
 import axios from 'axios';
 
 class BoardDialog extends Component {
-    state = {
-        name: '',
-        smallText: 'for example <<living room>>',
-        nameError: false
-    };
+    constructor (props) {
+        super(props);
+        this.state = {
+            name: '',
+            smallText: 'for example <<living room>>',
+            nameError: false
+        };
+    }
 
     onChangeText = e => {
         this.setState({ name: e.target.value });
@@ -34,7 +37,7 @@ class BoardDialog extends Component {
                 const config = {
                     'Content-Type': 'application/json'
                 };
-                let res = await axios.post(`/users/${username}/board`, body, config);
+                const res = await axios.post(`/users/${username}/board`, body, config);
                 if (res.data.success) {
                     return this.props.history.push('/');
                 }
@@ -52,7 +55,7 @@ class BoardDialog extends Component {
         this.props.history.push(`/profile/${username}`);
     };
 
-    render() {
+    render () {
         return (
             <Dialog
                 open={true}

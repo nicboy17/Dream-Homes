@@ -30,14 +30,14 @@ const useStyles = makeStyles(theme => ({
         margin: '0 auto',
         position: 'relative',
         textAlign: 'center',
-        color: 'white',
+        color: 'white'
     }
 }));
 
-const Posts = ({posts}) => {
+const Posts = ({ posts }) => {
     const classes = useStyles();
 
-    const images = posts.map((post, i) =>{
+    const images = posts.map((post, i) => {
         return (
             <div className={classes.imageContainer} key={i}>
                 <img src={post.image} alt={post.image.title} className={classes.image}/>
@@ -46,11 +46,11 @@ const Posts = ({posts}) => {
         );
     });
 
-    return(
+    return (
         <div className={classes.root}>
             <Masonry
                 className={classes.masonry}
-                options={{'fitWidth': true, 'columnWidth': 1}}
+                options={{ fitWidth: true, columnWidth: 1 }}
                 disableImagesLoaded={false}
                 updateOnEachImageLoad={false}
                 imagesLoadedOptions={{}}

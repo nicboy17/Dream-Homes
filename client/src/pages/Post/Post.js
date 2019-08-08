@@ -7,13 +7,13 @@ import PostDetails from './PostDetails';
 const useStyles = makeStyles(theme => ({
     info: {
         padding: '3rem 0 1rem 3rem',
-        width: '55%',
+        width: '55%'
     },
     title: {
         padding: '1rem 0 1rem 0',
         fontWeight: 'bold'
     },
-    image : {
+    image: {
         height: '60vh',
         width: 'auto',
         float: 'right',
@@ -21,10 +21,10 @@ const useStyles = makeStyles(theme => ({
     }
 }));
 
-const Post = ({post, boards, handleSelectBoard, handleSave, value}) => {
+const Post = ({ post, boards, handleSelectBoard, handleSave, value }) => {
     const classes = useStyles();
 
-    return(
+    return (
         <Grid container direction="row" justify="center">
             <Grid item xs={6}>
                 <img src={post.image} alt={post.title} className={classes.image}/>

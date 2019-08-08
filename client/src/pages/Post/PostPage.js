@@ -9,10 +9,10 @@ import Divider from '@material-ui/core/Divider';
 
 const styles = theme => ({
     post: {
-        marginBottom: theme.spacing(4),
+        marginBottom: theme.spacing(4)
     },
     more: {
-        marginTop: theme.spacing(4),
+        marginTop: theme.spacing(4)
     }
 });
 
@@ -27,22 +27,24 @@ class PostPage extends React.Component {
         this.save = this.save.bind(this);
     }
 
-    handleChange(e) {
+    handleChange (e) {
         const name = e.target.name;
         const value = e.target.value;
 
-        this.setState({[name]: value});
+        this.setState({ [name]: value });
     }
 
-    save(e) {
+    save (e) {
         e.preventDefault();
         console.log(this.state.board);
     }
 
-    render() {
+    render () {
+        // eslint-disable-next-line react/prop-types
         const { classes } = this.props;
 
-        if(!this.props.post(this.props.match.params.id)) {
+        // eslint-disable-next-line react/prop-types
+        if (!this.props.post(this.props.match.params.id)) {
             return (
                 <div>
                     <h1>No Post found</h1>
@@ -50,7 +52,7 @@ class PostPage extends React.Component {
             );
         }
 
-        return(
+        return (
             <div>
                 <Navbar/>
                 <div className={classes.post}>
@@ -72,12 +74,12 @@ class PostPage extends React.Component {
 const mapStateToProps = state => ({
     userStore: state.UserStore,
     post: (id) => {
-        return state.PostStore.posts.find((post) => {return id === post._id;});
+        return state.PostStore.posts.find((post) => { return id === post._id; });
     },
     morePosts: state.PostStore.morePosts
 });
 
-function mapDispatchToProps(dispatch) {
+function mapDispatchToProps (dispatch) {
     return bindActionCreators(
         {
 

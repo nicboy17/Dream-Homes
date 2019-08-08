@@ -5,14 +5,14 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import { Chip } from '@material-ui/core';
-import CircularProgress from '@material-ui/core/CircularProgress';
+// import CircularProgress from '@material-ui/core/CircularProgress';
 
 import _ from 'lodash';
 import axios from 'axios';
 
 import FormContent from './FormContent';
 import FileUploader from './FileUploader';
-import BoardList from './BoardList';
+// import BoardList from './BoardList';
 
 class PostDialog extends React.Component {
     state = {
@@ -30,7 +30,7 @@ class PostDialog extends React.Component {
     componentDidMount = async () => {
         try {
             const username = this.props.location.pathname.split('/')[2];
-            let res = await axios.get(`/users/${username}`);
+            const res = await axios.get(`/users/${username}`);
             if (res.data.user.boards) {
                 return this.setState({ boards: res.data.user.boards });
             }
@@ -43,7 +43,7 @@ class PostDialog extends React.Component {
         this.setState({ [e.target.id]: e.target.value });
     };
 
-    //Board
+    // Board
     handleSelectChange = e => {
         this.setState({ selectedBoard: e.target.value });
         console.log(this.state.selectedBoard);
@@ -63,6 +63,7 @@ class PostDialog extends React.Component {
             }
         }
     };
+
     renderTags = () => {
         return (
             <>
@@ -79,7 +80,7 @@ class PostDialog extends React.Component {
 
     // File pond , handle image upload
     onUploadImages = fileItems => {
-        let filterFiles = fileItems.filter(
+        const filterFiles = fileItems.filter(
             fileItem => fileItem.file.type.toString() === 'image/jpeg'
         );
         this.setState({ files: filterFiles.map(filterFile => filterFile.file) });
@@ -121,52 +122,52 @@ class PostDialog extends React.Component {
         this.props.history.push(`/profile/${username}`);
     };
 
-    render() {
-        // for now lets leave this commented out, 
+    render () {
+        // for now lets leave this commented out,
         // because the post dialog will never actually render with this, as we only get
         // errors from our post requests atm.
         // if (!Boolean(this.state.boards)) {
         //     return <CircularProgress color='secondary' />;
         // }
         return (
-                <Dialog
-                    open={true}
-                    onClose={this.handleClose}
-                    aria-labelledby='form-dialog-title'
-                    onClick={() => this.onCloseClick()}
-                  
-                >
-                    <div onClick={e => e.stopPropagation()}>
-                        <DialogTitle style={{ textAlign: 'center' }} id='form-dialog-title'>
+            <Dialog
+                open={true}
+                onClose={this.handleClose}
+                aria-labelledby='form-dialog-title'
+                onClick={() => this.onCloseClick()}
+
+            >
+                <div onClick={e => e.stopPropagation()}>
+                    <DialogTitle style={{ textAlign: 'center' }} id='form-dialog-title'>
                             Create a post
-                        </DialogTitle>
-                        <DialogContent>
-                            <FormContent
-                                onChangeText={this.onChangeText}
-                                titleError={this.state.titleError}
-                                tagError={this.state.tagError}
-                                onSubmitPress={this.onSubmitPress}
-                                tag={this.state.tag}
-                                title={this.state.title}
-                                description={this.state.description}
-                                destination={this.state.destination}
-                            />
-                            {this.renderTags()}
-                        </DialogContent>
-                        <DialogContent>
-                            <FileUploader
-                                onUploadImages={this.onUploadImages}
-                                files={this.state.files}
-                            />
-                        </DialogContent>
-                        <DialogContent />
-                        <DialogActions>
-                            <Button onClick={this.onCreatePress} color='primary'>
+                    </DialogTitle>
+                    <DialogContent>
+                        <FormContent
+                            onChangeText={this.onChangeText}
+                            titleError={this.state.titleError}
+                            tagError={this.state.tagError}
+                            onSubmitPress={this.onSubmitPress}
+                            tag={this.state.tag}
+                            title={this.state.title}
+                            description={this.state.description}
+                            destination={this.state.destination}
+                        />
+                        {this.renderTags()}
+                    </DialogContent>
+                    <DialogContent>
+                        <FileUploader
+                            onUploadImages={this.onUploadImages}
+                            files={this.state.files}
+                        />
+                    </DialogContent>
+                    <DialogContent />
+                    <DialogActions>
+                        <Button onClick={this.onCreatePress} color='primary'>
                                 Create
-                            </Button>
-                        </DialogActions>
-                    </div>
-                </Dialog>
+                        </Button>
+                    </DialogActions>
+                </div>
+            </Dialog>
         );
     }
 }

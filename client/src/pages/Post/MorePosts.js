@@ -10,10 +10,10 @@ const useStyles = makeStyles(theme => ({
     }
 }));
 
-const MorePosts = ({posts}) => {
+const MorePosts = ({ posts }) => {
     const classes = useStyles();
 
-    return(
+    return (
         <div>
             <Grid container direction="row" justify="center" alignItems="center">
                 <Typography variant="h5" component="h5" className={classes.title}>More Like this</Typography>
