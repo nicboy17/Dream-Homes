@@ -122,22 +122,22 @@ const Profile = ({ location }) => {
     
     let [activePanel, toggle] = useState('board');
     let [boards, setBoards] = useState([
-        {
-            "_id": "5d4c50381de1e451e8c1760f",
-            "posts": [],
-            "date": "2019-08-08T14:20:51.333Z",
-            "title": "test board1",
-            "user": "5d4c3fcb1de1e451e8c1760d",
-            "__v": 0
-        },
-        {
-            "_id": "5d4c50651de1e451e8c17610",
-            "posts": [],
-            "date": "2019-08-08T14:20:51.333Z",
-            "title": "test board2",
-            "user": "5d4c3fcb1de1e451e8c1760d",
-            "__v": 0
-        }
+        // {
+        //     "_id": "5d4c50381de1e451e8c1760f",
+        //     "posts": [],
+        //     "date": "2019-08-08T14:20:51.333Z",
+        //     "title": "test board1",
+        //     "user": "5d4c3fcb1de1e451e8c1760d",
+        //     "__v": 0
+        // },
+        // {
+        //     "_id": "5d4c50651de1e451e8c17610",
+        //     "posts": [],
+        //     "date": "2019-08-08T14:20:51.333Z",
+        //     "title": "test board2",
+        //     "user": "5d4c3fcb1de1e451e8c1760d",
+        //     "__v": 0
+        // }
     ])
     let [posts, setPosts] = useState([
         {
@@ -463,18 +463,16 @@ const Profile = ({ location }) => {
                         <div />
                     </div>
                     <div className={style.activePanel}>
-                        <div className={style.gridContainer}>
+                        <div className={style.postContainer}>
                                 {
                                     posts.map((post, i) => {
-                                            return <Card className={style.card}>
-                                                        <CardActionArea className={style.card}>
-                                                            <CardMedia className={style.cardImg} image={house} />
-                                                            <Typography variant='h6' className={style.cardHeader}>
-                                                                {post}
-                                                            </Typography>
-                                                            <Typography variant='p' className={style.cardHeader}>
-                                                                80 posts
-                                                            </Typography>
+                                            return <Card className={style.post}>
+                                                        <CardActionArea className={style.post}>
+                                                            <CardMedia className={style.postImg} image={post['image']}>
+                                                                <p className={style.postLink}>
+                                                                    {post['link']}
+                                                                </p>
+                                                            </CardMedia>
                                                         </CardActionArea>
                                                     </Card>
                                     })
