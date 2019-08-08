@@ -23,7 +23,7 @@ function App () {
                     <Route exact path='/' component={LogIn} />
                     <Route exact path='/signup' component={SignUp} />
                 </Switch>
-                <Route path='profile/:username/interest-quiz' component={InterestQuizDialog} />
+                <Route path='/interest-quiz' component={InterestQuizDialog} />
                 <Route path='/profile/:username' component={Profile} />
                 <Route path='/profile/:username/post/create' component={PostDialog} />
                 <Route path='/profile/:username/board/create' component={BoardDialog} />
