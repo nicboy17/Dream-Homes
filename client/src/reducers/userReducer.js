@@ -5,6 +5,7 @@ import {
 
 const initialState = {
     authenticated: false,
+    boards: [{title:'1', _id: '1234'},{title:'2', _id:'567'},{title:'3', _id: '8910'}]
 };
 
 export default (state = initialState, action) => {
