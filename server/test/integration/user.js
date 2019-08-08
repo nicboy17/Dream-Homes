@@ -40,20 +40,29 @@ describe('User Routes', () => {
                 });
         });
 
-        it('Should return duplicate', () => {
+        it('Should return duplicate',  async() => {
+            await request
+                .post('/users/register')
+                .send({
+                    'name': 'temp',
+                    'username': 'temp',
+                    'email': 'temp@gmail.com',
+                    'password': 'Password1'
+                });
+
             return request
                 .post('/users/register')
                 .send({
                     'name': 'temp',
                     'username': 'temp',
                     'email': 'temp@gmail.com',
-                    'password': 'Password1',
+                    'password': 'Password1'
                 })
                 .expect(400)
                 .then((res) => {
                     expect(res.body.success).to.be.false;
                 });
-        });
+        }).timeout(4000);
     });
 
     describe('Login', () => {
