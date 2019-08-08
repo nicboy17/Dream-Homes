@@ -60,7 +60,7 @@ class QuizDialog extends React.Component {
     }
 
     async handleConfirm() {
-        const username = this.props.location.pathname.split('/')[2]; //this might need to be changed
+        const username = this.props.location.pathname.split('/')[2];
         try {
             const body = {
                 interests: this.state.selected
@@ -70,7 +70,7 @@ class QuizDialog extends React.Component {
             }
             const res = await axios.put(`users/${username}/interests`, body, config)
             if (res.data.success) {
-                return this.props.history.push('/'); //this might need to be changed
+                return this.props.history.push(`/profile/:${username}`);
             }
         } catch(err) {
             console.log(err)
