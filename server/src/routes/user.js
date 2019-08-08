@@ -95,10 +95,10 @@ router.post('/:username/posts', [upload.single('image'), UserValidation.addPost,
     }
 }]);
 
-// @route    PUT users/interest/:username
-// @desc     Update user with interest
+// @route    PUT users/:username/interests
+// @desc     Update user with interests
 // @access   Private
-router.put('/:username/interest', async (req,res) => {
+router.put('/:username/interests', async (req,res) => {
     try {
         let user = await User.findOne({username: req.params.username}); 
         if(user._id.toString() !== req.decoded._id.toString()) {
@@ -107,7 +107,7 @@ router.put('/:username/interest', async (req,res) => {
         if(!user) {
             return res.status(404).json({msg: 'User not found'});
         }
-        user.interest = (req.body.interest);
+        user.interests = (req.body.interests);
         await user.save();
         res.json(user);
     } catch (err) {
