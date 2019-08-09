@@ -194,7 +194,7 @@ const Profile = ({ location }) => {
                             boards.length === 0
                                 ? <h2>You haven't added any boards yet.</h2>
                                 : boards.map((board, i) => {
-                                    return <Card className={style.card}>
+                                    return <Card key={board['title']} className={style.card}>
                                         <CardActionArea className={style.card}>
                                             <CardMedia className={style.cardImg} image={house} />
                                             <Typography variant='h6' className={style.cardHeader}>
@@ -234,7 +234,7 @@ const Profile = ({ location }) => {
                             posts.length === 0
                                 ? <h2>You haven't added any posts yet.</h2>
                                 : posts.map((post, i) => {
-                                    return <Card className={style.post}>
+                                    return <Card key={post['title']} className={style.post}>
                                         <CardActionArea className={style.post}>
                                             <CardMedia className={style.postImg} image={post['image']}>
                                                 <p className={style.postLink}>
