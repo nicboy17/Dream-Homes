@@ -60,23 +60,23 @@ const interests = [
     { image: frontyard, title: 'Front yard' },
     { image: backyard, title: 'Back Yard' },
     { image: decor, title: 'House decor' },
-    { image: garden, title: 'Garden' },
+    { image: garden, title: 'Garden' }
 ];
 
-const Interests = ({handleChange, selected}) => {
+const Interests = ({ handleChange, selected }) => {
     const classes = useStyles();
 
-    return(
+    return (
         <div className={classes.root}>
             <GridList cols={4} spacing={20}>
                 {interests.map((interest, i) => (
-                    <GridListTile key={i} classes={{tile:classes.image}} onClick={()=> handleChange(interest.title)} >
+                    <GridListTile key={i} classes={{ tile: classes.image }} onClick={() => handleChange(interest.title)} >
                         <img src={interest.image} alt={interest.title} className={classes.image} />
                         <p className={classes.title}>{interest.title}</p>
                         {
-                            selected.includes(interest.title) ?
-                                <Chip className={classes.check} component={'div'}
-                                    classes={{colorPrimary: '#f5f5f5', label:classes.label, labelSmall: classes.label}}
+                            selected.includes(interest.title)
+                                ? <Chip className={classes.check} component={'div'}
+                                    classes={{ colorPrimary: '#f5f5f5', label: classes.label, labelSmall: classes.label }}
                                     avatar={<DoneIcon className={classes.select} />} size="small"/>
                                 : <div />
                         }
