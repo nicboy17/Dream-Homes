@@ -88,6 +88,12 @@ const useStyles = makeStyles(theme => ({
         justifyItems: 'center',
         gridGap: '20px'
     },
+    gridContainer1: {
+        display: 'grid',
+        gridTemplateColumns: '1fr',
+        justifyItems: 'center',
+        gridGap: '20px'
+    },
     card: {
         paddingBottom: '1vh',
         height: '40vh',
@@ -102,6 +108,12 @@ const useStyles = makeStyles(theme => ({
     postContainer: {
         display: 'grid',
         gridTemplateColumns: '1fr 1fr 1fr 1fr 1fr',
+        justifyItems: 'center',
+        gridGap: '10px'
+    },
+    postContainer1: {
+        display: 'grid',
+        gridTemplateColumns: '1fr',
         justifyItems: 'center',
         gridGap: '10px'
     },
@@ -123,123 +135,18 @@ const Profile = ({ location }) => {
     
     let [activePanel, toggle] = useState('board');
     let [boards, setBoards] = useState([
-        {
-            "_id": "5d4c50381de1e451e8c1760f",
-            "posts": [],
-            "date": "2019-08-08T14:20:51.333Z",
-            "title": "test board1",
-            "user": "5d4c3fcb1de1e451e8c1760d",
-            "__v": 0
-        },
-        {
-            "_id": "5d4c50651de1e451e8c17610",
-            "posts": [],
-            "date": "2019-08-08T14:20:51.333Z",
-            "title": "test board2",
-            "user": "5d4c3fcb1de1e451e8c1760d",
-            "__v": 0
-        }
+       
     ])
     let [posts, setPosts] = useState([
-        {
-            "_id": "5d4c55cacf7d2046c003baf0",
-            "tags": [
-                "['']"
-            ],
-            "title": "test post",
-            "description": "tesing posts",
-            "link": "test",
-            "user": "5d4c3fcb1de1e451e8c1760d",
-            "image": "https://team-pineapple.s3.ca-central-1.amazonaws.com/1565283786119.jpg",
-            "date": "2019-08-08T17:03:06.912Z",
-            "__v": 0
-        },
-        {
-            "_id": "5d4c5659cf7d2046c003baf1",
-            "tags": [
-                "['']"
-            ],
-            "title": "test post1",
-            "description": "tesing posts",
-            "link": "test",
-            "user": "5d4c3fcb1de1e451e8c1760d",
-            "image": "https://team-pineapple.s3.ca-central-1.amazonaws.com/1565283929383.jpg",
-            "date": "2019-08-08T17:05:29.657Z",
-            "__v": 0
-        },
-        {
-            "_id": "5d4c55cacf7d2046c003baf0",
-            "tags": [
-                "['']"
-            ],
-            "title": "test post",
-            "description": "tesing posts",
-            "link": "test",
-            "user": "5d4c3fcb1de1e451e8c1760d",
-            "image": "https://team-pineapple.s3.ca-central-1.amazonaws.com/1565283786119.jpg",
-            "date": "2019-08-08T17:03:06.912Z",
-            "__v": 0
-        },
-        {
-            "_id": "5d4c55cacf7d2046c003baf0",
-            "tags": [
-                "['']"
-            ],
-            "title": "test post",
-            "description": "tesing posts",
-            "link": "test",
-            "user": "5d4c3fcb1de1e451e8c1760d",
-            "image": "https://team-pineapple.s3.ca-central-1.amazonaws.com/1565283786119.jpg",
-            "date": "2019-08-08T17:03:06.912Z",
-            "__v": 0
-        },
-        {
-            "_id": "5d4c55cacf7d2046c003baf0",
-            "tags": [
-                "['']"
-            ],
-            "title": "test post",
-            "description": "tesing posts",
-            "link": "test",
-            "user": "5d4c3fcb1de1e451e8c1760d",
-            "image": "https://team-pineapple.s3.ca-central-1.amazonaws.com/1565283786119.jpg",
-            "date": "2019-08-08T17:03:06.912Z",
-            "__v": 0
-        },
-        {
-            "_id": "5d4c55cacf7d2046c003baf0",
-            "tags": [
-                "['']"
-            ],
-            "title": "test post",
-            "description": "tesing posts",
-            "link": "test",
-            "user": "5d4c3fcb1de1e451e8c1760d",
-            "image": "https://team-pineapple.s3.ca-central-1.amazonaws.com/1565283786119.jpg",
-            "date": "2019-08-08T17:03:06.912Z",
-            "__v": 0
-        },
-        {
-            "_id": "5d4c55cacf7d2046c003baf0",
-            "tags": [
-                "['']"
-            ],
-            "title": "test post",
-            "description": "tesing posts",
-            "link": "test",
-            "user": "5d4c3fcb1de1e451e8c1760d",
-            "image": "https://team-pineapple.s3.ca-central-1.amazonaws.com/1565283786119.jpg",
-            "date": "2019-08-08T17:03:06.912Z",
-            "__v": 0
-        },
+
     ])
     
-    // useEffect(() => {
-    //     fetch(`users/${username}`)
-    //     .then(response => response.json())
-    //     .then(data => setBoards((boards = data['user']['boards'])))
-    //     .then(data => setPosts((posts = data['user']['posts'])))
-    // })
+    useEffect(() => {
+        fetch(`users/${username}`)
+        .then(response => response.json())
+        .then(data => setBoards((boards = data['user']['boards'])))
+        .then(data => setPosts((posts = data['user']['posts'])))
+    })
     
         return (
             <div>
@@ -281,10 +188,10 @@ const Profile = ({ location }) => {
                         <div />
                     </div>
                     <div className={style.activePanel}>
-                        <div className={style.gridContainer}>
+                        <div className={boards.length === 0 ? style.gridContainer1 : style.gridContainer}>
                                 {
                                     boards.length === 0 
-                                    ? <h1>Nothing is here</h1>
+                                    ? <h2>You haven't added any boards yet.</h2>
                                     : boards.map((board, i) => {
                                             return <Card className={style.card}>
                                                         <CardActionArea className={style.card}>
@@ -321,10 +228,10 @@ const Profile = ({ location }) => {
                         <div />
                     </div>
                     <div className={style.activePanel}>
-                        <div className={style.postContainer}>
+                        <div className={posts.length === 0 ? style.postContainer1 : style.postContainer}>
                                 {
                                     posts.length === 0 
-                                    ? <h1>Nothing is here</h1>
+                                    ? <h2>You haven't added any posts yet.</h2>
                                     : posts.map((post, i) => {
                                             return <Card className={style.post}>
                                                         <CardActionArea className={style.post}>
