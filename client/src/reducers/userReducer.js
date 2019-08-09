@@ -15,7 +15,7 @@ export default (state = initialState, action) => {
     case LOGIN_USER_SUCCESS:
         return { authenticated: true, user: response.user, token: response.token };
     case LOGIN_USER_ERROR:
-        return { ...state, ...response };
+        return { ...state, authenticated: false };
     default:
         return state;
     }

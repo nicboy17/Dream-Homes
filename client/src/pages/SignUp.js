@@ -107,6 +107,8 @@ const SignUp = ({ history }) => {
         if (password !== password2) {
             setFormData({ ...formData, passwordError: 'Passwords do not match' });
         }
+
+        // TODO: Fix Signup (fix password validation as well)
         if (!password.match(/(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])[A-Za-zd$@!%*?&].{8,}/)) {
             setFormData({
                 ...formData,

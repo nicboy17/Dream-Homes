@@ -5,8 +5,12 @@ import { Card, Typography } from '@material-ui/core';
 import CardMedia from '@material-ui/core/CardMedia';
 import CardActionArea from '@material-ui/core/CardActionArea';
 import house from '../assets/house.png';
-import { Link } from 'react-router-dom';
+import { Link, Route } from 'react-router-dom';
 import Navbar from '../components/Navbar/Navbar';
+import InterestQuizDialog from '../components/Dialog/InterestQuizDialog/QuizDialog';
+import PostDialog from '../components/Dialog/PostDialog/PostDialog';
+import BoardDialog from '../components/Dialog/BoardDialog/BoardDialog';
+
 const useStyles = makeStyles(theme => ({
     subHeader: {
         minHeight: '30vh',
@@ -108,6 +112,9 @@ const Profile = ({ location }) => {
     return (
         <div>
             <Navbar />
+            <Route path='/profile/:username/interest-quiz' component={InterestQuizDialog} />
+            <Route path='/profile/:username/post/create' component={PostDialog} />
+            <Route path='/profile/:username/board/create' component={BoardDialog} />
             <div className={style.subHeader}>
                 <div className={style.nameContainer}>
                     <img src={face} alt='' className={style.subHeaderIcon} />

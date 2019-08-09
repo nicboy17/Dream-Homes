@@ -8,7 +8,7 @@ module.exports = function () {
         if (token) {
             jwt.verify(token, secret, function (err, decoded) {
                 if (err) {
-                    res.json({ success: false, message: 'Token invalid' });
+                    res.status(403).json({ success: false, message: 'Token invalid' });
                 } else {
                     req.decoded = decoded;
                     next();
