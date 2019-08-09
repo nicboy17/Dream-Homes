@@ -9,10 +9,6 @@ import Home from './pages/Home';
 import SignUp from './pages/SignUp.js';
 import Profile from './pages/Profile.js';
 
-import PostDialog from './components/Dialog/PostDialog/PostDialog';
-import BoardDialog from './components/Dialog/BoardDialog/BoardDialog';
-import InterestQuizDialog from './components/Dialog/InterestQuizDialog/QuizDialog';
-import './App.css';
 import NotFound from './pages/NotFound.js';
 import PostPage from './pages/Post/PostPage';
 
