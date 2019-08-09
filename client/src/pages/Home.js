@@ -2,7 +2,6 @@ import React from 'react';
 import { withStyles } from '@material-ui/styles';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
-import { Paper } from '@material-ui/core';
 import { Route } from 'react-router-dom';
 import Login from '../components/Dialog/Login/Login';
 
@@ -45,16 +44,6 @@ class Home extends React.Component {
 
         return (
             <div className={classes.container}>
-                <div className={classes.grid}>
-                    <Paper className={classes.card} />
-                    <Paper className={classes.card} />
-                    <Paper className={classes.card} />
-                    <Paper className={classes.card} />
-                    <Paper className={classes.card} />
-                    <Paper className={classes.card} />
-                    <Paper className={classes.card} />
-                    <Paper className={classes.card} />
-                </div>
                 <Route path={'/login'} component={Login} />
             </div>
         );
