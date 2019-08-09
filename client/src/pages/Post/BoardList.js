@@ -17,12 +17,12 @@ const useStyles = makeStyles(theme => ({
         display: 'inline-block',
         minWidth: 'calc(100% - 100px)',
         margin: '0.3rem 0 0 1rem',
-        '&:before':{
+        '&:before': {
             display: 'none'
         },
-        '&:after':{
+        '&:after': {
             display: 'none'
-        },
+        }
     },
     save: {
         display: 'inline-block',
@@ -31,6 +31,7 @@ const useStyles = makeStyles(theme => ({
     }
 }));
 
+// eslint-disable-next-line react/prop-types
 const BoardList = ({ boards, handleSelect, value, handleSave }) => {
     const classes = useStyles();
 

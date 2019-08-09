@@ -11,23 +11,24 @@ import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
 import Typography from '@material-ui/core/Typography';
 import Interests from './Interests';
+import axios from 'axios';
 
 const styles = theme => ({
     root: {
         textAlign: 'center',
         marginTop: theme.spacing(2),
-        marginBottom: theme.spacing(2),
+        marginBottom: theme.spacing(2)
     },
     closeButton: {
         position: 'absolute',
         right: theme.spacing(1),
         top: theme.spacing(1),
-        color: theme.palette.grey[500],
+        color: theme.palette.grey[500]
     },
     button: {
         margin: '1rem auto'
     },
-    title : {
+    title: {
         fontWeight: 'bold',
         fontSize: 26
     }
@@ -46,24 +47,39 @@ class QuizDialog extends React.Component {
         this.handleConfirm = this.handleConfirm.bind(this);
     }
 
-    handleChange(interest) {
-        let selected = this.state.selected;
-        let index = selected.indexOf(interest);
+    handleChange (interest) {
+        const selected = this.state.selected;
+        const index = selected.indexOf(interest);
 
         if (index !== -1) {
             selected.splice(index, 1);
-        } else if(selected.length <= 6) {
+        } else if (selected.length <= 6) {
             selected.push(interest);
         }
-        this.setState({selected});
+        this.setState({ selected });
     }
 
-    handleConfirm() {
-        this.setState({'open': false});
+    async handleConfirm () {
+        const username = this.props.location.pathname.split('/')[2];
+        try {
+            const body = {
+                interests: this.state.selected
+            };
+            const config = {
+                'Content-Type': 'application/json'
+            };
+            const res = await axios.put(`users/${username}/interests`, body, config);
+            if (res.data.success) {
+                return this.props.history.push(`/profile/:${username}`);
+            }
+        } catch (err) {
+            console.log(err);
+        }
+        this.setState({ open: false });
     }
 
     handleClose = () => {
-        this.setState({'open': false});
+        this.setState({ open: false });
     };
 
     DialogTitle = withStyles(styles)(props => {
@@ -85,8 +101,8 @@ class QuizDialog extends React.Component {
             paddingLeft: theme.spacing(8),
             paddingRight: theme.spacing(8),
             paddingTop: theme.spacing(2),
-            paddingBottom: theme.spacing(2),
-        },
+            paddingBottom: theme.spacing(2)
+        }
     }))(MuiDialogContent);
 
     DialogActions = withStyles(theme => ({
@@ -94,10 +110,10 @@ class QuizDialog extends React.Component {
             margin: 0,
             padding: theme.spacing(1),
             marginBottom: '2rem'
-        },
+        }
     }))(MuiDialogActions);
 
-    render() {
+    render () {
         const { classes } = this.props;
 
         return (
@@ -122,10 +138,10 @@ const mapStateToProps = state => ({
     userStore: state.UserStore
 });
 
-function mapDispatchToProps(dispatch) {
+function mapDispatchToProps (dispatch) {
     return bindActionCreators(
         {
-            //back-end integration with redux-saga
+            // back-end integration with redux-saga
         },
         dispatch
     );

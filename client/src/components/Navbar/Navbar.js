@@ -1,6 +1,6 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/styles';
-import face from '../../pages/face.jpg';
+import face from '../../assets/face.jpg';
 
 const useStyles = makeStyles(theme => ({
     header: {

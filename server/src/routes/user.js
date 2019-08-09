@@ -16,7 +16,7 @@ router.post('/register', [UserValidation.register, async (req, res) => {
 }]);
 
 router.post('/login', [UserValidation.login, async (req, res) => {
-    const user = await User.findOne({ username: req.body.username }).exec();
+    const user = await User.findOne({ email: req.body.email }).exec();
     if (!user) {
         res.status(400).json({ success: false, message: 'Could not authenticate' });
     } else {

@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { makeStyles } from '@material-ui/styles';
-import face from './face.jpg';
+import face from '../assets/face.jpg';
 import { Card, Typography } from '@material-ui/core';
 import CardMedia from '@material-ui/core/CardMedia';
 import CardActionArea from '@material-ui/core/CardActionArea';
-import house from './house.png';
+import house from '../assets/house.png';
 import { Link } from 'react-router-dom';
 import Navbar from '../components/Navbar/Navbar';
 
@@ -129,6 +129,7 @@ const useStyles = makeStyles(theme => ({
     },
 }));
 
+// eslint-disable-next-line react/prop-types
 const Profile = ({ location }) => {
     const style = useStyles();
     const username = location.pathname.split('/')[2];
