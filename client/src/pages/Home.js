@@ -2,7 +2,6 @@ import React from 'react';
 import { withStyles } from '@material-ui/styles';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
-import { Paper } from '@material-ui/core';
 import { Route } from 'react-router-dom';
 import Login from '../components/Dialog/Login/Login';
 
