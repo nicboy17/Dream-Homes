@@ -45,16 +45,6 @@ class Home extends React.Component {
 
         return (
             <div className={classes.container}>
-                <div className={classes.grid}>
-                    <Paper className={classes.card} />
-                    <Paper className={classes.card} />
-                    <Paper className={classes.card} />
-                    <Paper className={classes.card} />
-                    <Paper className={classes.card} />
-                    <Paper className={classes.card} />
-                    <Paper className={classes.card} />
-                    <Paper className={classes.card} />
-                </div>
                 <Route path={'/login'} component={Login} />
             </div>
         );

@@ -17,12 +17,11 @@ function App () {
         <MuiThemeProvider theme={theme}>
             <BrowserRouter>
                 <Switch>
-                    <Route path='/' component={Home} />
                     <Route path='/post/:id' component={PostPage} />
                     <Route path='/profile/:username' component={Profile} />
                     <Route exact path='/signup' component={SignUp} />
-                    <Route path='/' component={NotFound} />
                 </Switch>
+                <Route path='/' component={Home} />
             </BrowserRouter>
         </MuiThemeProvider>
     );
