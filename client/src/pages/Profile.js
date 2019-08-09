@@ -192,7 +192,7 @@ const Profile = ({ location }) => {
                     <div className={boards.length === 0 ? style.gridContainer1 : style.gridContainer}>
                         {
                             boards.length === 0
-                                ? <h2>You haven't added any boards yet.</h2>
+                                ? <h2>You have not added any boards yet.</h2>
                                 : boards.map((board, i) => {
                                     return <Card key={board['title']} className={style.card}>
                                         <CardActionArea className={style.card}>
@@ -232,7 +232,7 @@ const Profile = ({ location }) => {
                     <div className={posts.length === 0 ? style.postContainer1 : style.postContainer}>
                         {
                             posts.length === 0
-                                ? <h2>You haven't added any posts yet.</h2>
+                                ? <h2>You have not added any posts yet.</h2>
                                 : posts.map((post, i) => {
                                     return <Card key={post['title']} className={style.post}>
                                         <CardActionArea className={style.post}>
