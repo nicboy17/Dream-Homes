@@ -119,137 +119,137 @@ const useStyles = makeStyles(theme => ({
     },
     postImg: {
         width: '16vw',
-        minHeight: '50vh',
+        minHeight: '50vh'
     },
     postLink: {
         fontSize: '16px',
         textAlign: 'center',
         padding: '0',
-        margin: '0',
-    },
+        margin: '0'
+    }
 }));
 
 // eslint-disable-next-line react/prop-types
 const Profile = ({ location }) => {
     const style = useStyles();
     const username = location.pathname.split('/')[2];
-    
+
     let [activePanel, toggle] = useState('board');
     let [boards, setBoards] = useState([
-       
-    ])
+
+    ]);
     let [posts, setPosts] = useState([
 
-    ])
-    
+    ]);
+
     useEffect(() => {
         fetch(`users/${username}`)
-        .then(response => response.json())
-        .then(data => setBoards((boards = data['user']['boards'])))
-        .then(data => setPosts((posts = data['user']['posts'])))
-    })
-    
-        return (
-            <div>
-                <Navbar />
-                <div className={style.subHeader}>
-                    <div className={style.nameContainer}>
-                        <img src={face} alt='' className={style.subHeaderIcon} />
-                        <div>
-                            <h3 className={style.profileName}>{username}</h3>
-                            <h5 className={style.profileFollowers}>134 Followers | 280 Following</h5>
-                        </div>
+            .then(response => response.json())
+            .then(data => setBoards((boards = data['user']['boards'])))
+            .then(data => setPosts((posts = data['user']['posts'])));
+    });
+
+    return (
+        <div>
+            <Navbar />
+            <div className={style.subHeader}>
+                <div className={style.nameContainer}>
+                    <img src={face} alt='' className={style.subHeaderIcon} />
+                    <div>
+                        <h3 className={style.profileName}>{username}</h3>
+                        <h5 className={style.profileFollowers}>134 Followers | 280 Following</h5>
+                    </div>
+                </div>
+                <div />
+                <div>
+                    <Link to={`/profile/${username}/board/create`}>
+                        <button className={style.createBoard}>Create Board</button>
+                    </Link>
+                    <Link to={`/profile/${username}/post/create`}>
+                        <button className={style.createPost}>Create Post</button>
+                    </Link>
+                </div>
+            </div>
+            <div style={{ display: activePanel === 'board' ? 'grid' : 'none' }}>
+                <div className={style.tabSection}>
+                    <div>
+                        <button
+                            className={style.activeTab}
+                            onClick={() => toggle((activePanel = 'board'))}
+                        >
+                                Boards
+                        </button>
+                        <button
+                            className={style.tab}
+                            onClick={() => toggle((activePanel = 'post'))}
+                        >
+                                My Posts
+                        </button>
                     </div>
                     <div />
-                    <div>
-                        <Link to={`/profile/${username}/board/create`}>
-                            <button className={style.createBoard}>Create Board</button>
-                        </Link>
-                        <Link to={`/profile/${username}/post/create`}>
-                            <button className={style.createPost}>Create Post</button>
-                        </Link>
-                    </div>
                 </div>
-                <div style={{ display: activePanel === 'board' ? 'grid' : 'none' }}>
-                    <div className={style.tabSection}>
-                        <div>
-                            <button
-                                className={style.activeTab}
-                                onClick={() => toggle((activePanel = 'board'))}
-                            >
-                                Boards
-                            </button>
-                            <button
-                                className={style.tab}
-                                onClick={() => toggle((activePanel = 'post'))}
-                            >
-                                My Posts
-                            </button>
-                        </div>
-                        <div />
-                    </div>
-                    <div className={style.activePanel}>
-                        <div className={boards.length === 0 ? style.gridContainer1 : style.gridContainer}>
-                                {
-                                    boards.length === 0 
-                                    ? <h2>You haven't added any boards yet.</h2>
-                                    : boards.map((board, i) => {
-                                            return <Card className={style.card}>
-                                                        <CardActionArea className={style.card}>
-                                                            <CardMedia className={style.cardImg} image={house} />
-                                                            <Typography variant='h6' className={style.cardHeader}>
-                                                                {board['title']}
-                                                            </Typography>
-                                                            <Typography variant='p' className={style.cardHeader}>
-                                                                {board['posts'].length} posts
-                                                            </Typography>
-                                                        </CardActionArea>
-                                                    </Card>
-                                    })
-                                }
-                        </div>
-                    </div>
-                </div>
-                <div style={{ display: activePanel === 'post' ? 'grid' : 'none' }}>
-                    <div className={style.tabSection}>
-                        <div>
-                            <button
-                                className={style.tab}
-                                onClick={() => toggle((activePanel = 'board'))}
-                            >
-                                Boards
-                            </button>
-                            <button
-                                className={style.activeTab}
-                                onClick={() => toggle((activePanel = 'post'))}
-                            >
-                                My Posts
-                            </button>
-                        </div>
-                        <div />
-                    </div>
-                    <div className={style.activePanel}>
-                        <div className={posts.length === 0 ? style.postContainer1 : style.postContainer}>
-                                {
-                                    posts.length === 0 
-                                    ? <h2>You haven't added any posts yet.</h2>
-                                    : posts.map((post, i) => {
-                                            return <Card className={style.post}>
-                                                        <CardActionArea className={style.post}>
-                                                            <CardMedia className={style.postImg} image={post['image']}>
-                                                                <p className={style.postLink}>
-                                                                    {post['link']}
-                                                                </p>
-                                                            </CardMedia>
-                                                        </CardActionArea>
-                                                    </Card>
-                                    })
-                                }
-                        </div>
+                <div className={style.activePanel}>
+                    <div className={boards.length === 0 ? style.gridContainer1 : style.gridContainer}>
+                        {
+                            boards.length === 0
+                                ? <h2>You haven't added any boards yet.</h2>
+                                : boards.map((board, i) => {
+                                    return <Card className={style.card}>
+                                        <CardActionArea className={style.card}>
+                                            <CardMedia className={style.cardImg} image={house} />
+                                            <Typography variant='h6' className={style.cardHeader}>
+                                                {board['title']}
+                                            </Typography>
+                                            <Typography variant='p' className={style.cardHeader}>
+                                                {board['posts'].length} posts
+                                            </Typography>
+                                        </CardActionArea>
+                                    </Card>;
+                                })
+                        }
                     </div>
                 </div>
             </div>
-        );
-    }
+            <div style={{ display: activePanel === 'post' ? 'grid' : 'none' }}>
+                <div className={style.tabSection}>
+                    <div>
+                        <button
+                            className={style.tab}
+                            onClick={() => toggle((activePanel = 'board'))}
+                        >
+                                Boards
+                        </button>
+                        <button
+                            className={style.activeTab}
+                            onClick={() => toggle((activePanel = 'post'))}
+                        >
+                                My Posts
+                        </button>
+                    </div>
+                    <div />
+                </div>
+                <div className={style.activePanel}>
+                    <div className={posts.length === 0 ? style.postContainer1 : style.postContainer}>
+                        {
+                            posts.length === 0
+                                ? <h2>You haven't added any posts yet.</h2>
+                                : posts.map((post, i) => {
+                                    return <Card className={style.post}>
+                                        <CardActionArea className={style.post}>
+                                            <CardMedia className={style.postImg} image={post['image']}>
+                                                <p className={style.postLink}>
+                                                    {post['link']}
+                                                </p>
+                                            </CardMedia>
+                                        </CardActionArea>
+                                    </Card>;
+                                })
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    );
+};
 
 export default Profile;
