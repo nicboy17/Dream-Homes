@@ -5,6 +5,8 @@ export const userService = {
         return axios.post('/users/login', user).then(res => {
             localStorage.setItem('token', res.data.token);
             return res.data;
+        }).catch(err => {
+            throw err;
         });
     },
     logout: () => {

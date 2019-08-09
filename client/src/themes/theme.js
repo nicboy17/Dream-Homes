@@ -59,6 +59,20 @@ export const theme = createMuiTheme({
                     backgroundColor: 'black'
                 }
             }
+        },
+        MuiInput: {
+            input: {
+                textAlign: 'center',
+                '&::placeholder': {
+                    color: 'black',
+                    opacity: 1
+                }
+            }
+        },
+        MuiFormHelperText: {
+            root: {
+                textAlign: 'center'
+            }
         }
     }
 });
