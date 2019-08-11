@@ -14,8 +14,8 @@ const useStyles = makeStyles(theme => ({
         fontWeight: 'bold'
     },
     image: {
-        height: '60vh',
-        width: 'auto',
+        maxWidth: '80%',
+        maxHeight: '60vh',
         float: 'right',
         paddingRight: '3rem'
     }

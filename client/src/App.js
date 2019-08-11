@@ -9,7 +9,7 @@ import './App.css';
 
 import Home from './pages/Home';
 import SignUp from './pages/SignUp.js';
-import Profile from './pages/Profile.js';
+import ProfilePage from './pages/Profile/ProfilePage';
 
 import PostPage from './pages/Post/PostPage';
 import { getToken } from './actions/userActions';
@@ -29,7 +29,7 @@ class App extends Component {
                         <Route exact path='/' component={Home}/>
                         <Route exact path='/login' component={Login}/>
                         <Route path='/posts/:id' component={PostPage}/>
-                        <Route path='/profile/:username' component={Profile} />
+                        <Route path='/profile/:username' component={ProfilePage}/>
                         <Route exact path='/signup' component={SignUp} />
                     </Switch>
                 </BrowserRouter>
