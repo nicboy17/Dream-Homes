@@ -91,6 +91,7 @@ const Navbar = ({ userStore, logout }) => {
                         className={style.menu}
                     >
                         <MenuItem component={Link} to={'/profile/' + userStore.user.username}>Profile</MenuItem>
+                        <MenuItem component={Link} to={'/profile/' + userStore.user.username + '/interest-quiz'}>Interest Quiz</MenuItem>
                         <MenuItem component={Link} to='/' onClick={() => {
                             logout();
                         }}>Logout</MenuItem>

@@ -28,18 +28,18 @@ const useStyles = makeStyles(theme => ({
 const PostDetails = ({ post }) => {
     const classes = useStyles();
 
+    const date = new Date(post.date).toLocaleString('default', { day: 'numeric', month: 'long', year: 'numeric' });
+
     return (
         <div>
             <Grid container direction="row" justify="flex-start" alignItems="center" spacing={4} className={classes.author}>
                 <Avatar src={face} component={'div'} className={classes.avatar} />
-                <Typography variant="subtitle2" component="subtitle2"
-                    className={classes.user}>{post.user.name}</Typography>
+                <Typography variant="subtitle2" className={classes.user}>{post.user.name}</Typography>
             </Grid>
             <Grid className={classes.content}>
                 <Typography variant="h5" component="h5" className={classes.title}>{post.title}</Typography>
-                <Typography variant="subtitle2" component="subtitle"
-                    className={classes.text}>{post.description}</Typography>
-                <p className={classes.date}>{post.date}</p>
+                <Typography variant="subtitle2" className={classes.text}>{post.description}</Typography>
+                <p className={classes.date}>{'Published ' + date}</p>
             </Grid>
         </div>
     );

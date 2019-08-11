@@ -42,20 +42,24 @@ class QuizDialog extends React.Component {
         this.handleConfirm = this.handleConfirm.bind(this);
     }
 
+    componentDidMount () {
+        const username = this.props.match.params.username;
+        this.setState({ username: username });
+    }
+
     handleChange (interest) {
         const selected = this.state.selected;
         const index = selected.indexOf(interest);
 
         if (index !== -1) {
             selected.splice(index, 1);
-        } else if (selected.length <= 6) {
+        } else if (selected.length < 6) {
             selected.push(interest);
         }
         this.setState({ selected });
     }
 
     async handleConfirm () {
-        const username = this.props.match.username;
         try {
             const body = {
                 interests: this.state.selected
@@ -64,9 +68,9 @@ class QuizDialog extends React.Component {
                 'Content-Type': 'application/json',
                 'access-token': this.props.userStore.token
             };
-            const res = await axios.put(`users/${username}/interests`, body, config);
+            const res = await axios.put(`users/${this.state.username}/interests`, body, config);
             if (res.data.success) {
-                return this.props.history.push(`/profile/${username}`);
+                return this.props.history.push(`/profile/${this.state.username}`);
             }
         } catch (err) {
             console.log(err);
@@ -76,6 +80,7 @@ class QuizDialog extends React.Component {
 
     handleClose = () => {
         this.setState({ open: false });
+        this.props.history.push(`/profile/${this.state.username}`);
     };
 
     render () {

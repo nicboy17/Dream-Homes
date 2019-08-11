@@ -60,7 +60,7 @@ class Profile extends Component {
                         <ProfileTabs selected={this.state.tab} onChange={this.tabChange} boards={boards} posts={posts}/>
                     </div>
                 </div>
-                <Route path={'/interest-quiz'} component={InterestQuizDialog}/>
+                <Route path={'/profile/:username/interest-quiz'} component={InterestQuizDialog}/>
                 <Route path={'/profile/:username/post/create'} component={PostDialog}/>
                 <Route path={'/profile/:username/board/create'} component={BoardDialog}/>
                 <Route path={'/profile/:username/edit'} component={EditPicUserDialog}/>

@@ -41,7 +41,7 @@ const useStyles = makeStyles(theme => ({
         top: 10,
         right: 10
     },
-    select: {
+    selected: {
         width: 14,
         height: 14,
         margin: '0 auto',
@@ -63,6 +63,18 @@ const interests = [
     { image: garden, title: 'Garden' }
 ];
 
+const Check = ({ selected, interest, classes }) => {
+    if (selected.includes(interest.title)) {
+        return (
+            <Chip
+                classes={{ root: classes.check, colorPrimary: '#f5f5f5', label: classes.label, labelSmall: classes.label }}
+                icon={<DoneIcon classes={{ root: classes.selected }}/>} size="small"
+            />
+        );
+    }
+    return null;
+};
+
 const Interests = ({ handleChange, selected }) => {
     const classes = useStyles();
 
@@ -73,13 +85,7 @@ const Interests = ({ handleChange, selected }) => {
                     <GridListTile key={i} classes={{ tile: classes.image }} onClick={() => handleChange(interest.title)} >
                         <img src={interest.image} alt={interest.title} className={classes.image} />
                         <p className={classes.title}>{interest.title}</p>
-                        {
-                            selected.includes(interest.title)
-                                ? <Chip className={classes.check} component={'div'}
-                                    classes={{ colorPrimary: '#f5f5f5', label: classes.label, labelSmall: classes.label }}
-                                    avatar={<DoneIcon className={classes.select} />} size="small"/>
-                                : <div />
-                        }
+                        <Check selected={selected} interest={interest} classes={classes} />
                     </GridListTile>
                 ))}
             </GridList>
