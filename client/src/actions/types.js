@@ -5,6 +5,10 @@ export const LOGIN_ERROR = 'LOGIN_ERROR';
 
 export const REGISTER = 'REGISTER';
 
+export const EDIT_USER = 'EDIT_USER';
+export const EDIT_USER_SUCCESS = 'EDIT_USER_SUCCESS';
+export const EDIT_USER_ERROR = 'EDIT_USER_ERROR';
+
 export const REMOVE_ERROR = 'REMOVE_ERROR';
 
 export const LOGOUT = 'LOGOUT';

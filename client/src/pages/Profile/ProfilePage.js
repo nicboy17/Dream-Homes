@@ -40,7 +40,6 @@ class Profile extends Component {
         const username = this.props.match.params.username;
         this.setState({ username: username });
         this.props.getBoardsandPosts(username);
-        this.props.history.push('/profile/' + username + '/boards');
     }
 
     tabChange (e, value) {

@@ -50,7 +50,7 @@ router.get('/:username', async (req, res) => {
 
 router.put('/:username', [upload.single('image'), UserValidation.updateUser, async (req, res) => {
     let update = {};
-    if(req.file) { update.profile = req.file.location; }
+    if (req.file) { update.image = req.file.location; }
     if (req.body.name) { update.name = req.body.name; }
     try {
         const user = await User.findOneAndUpdate({ username: req.params.username }, update, {new:true}).select('-password').lean();

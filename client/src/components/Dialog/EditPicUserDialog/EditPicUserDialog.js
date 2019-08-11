@@ -3,60 +3,50 @@ import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
-import DialogTitle from '@material-ui/core/DialogTitle';
+import { DialogTitle } from '../components';
 import TextField from '@material-ui/core/TextField';
-import CircularProgress from '@material-ui/core/CircularProgress';
 import Avatar from '@material-ui/core/Avatar';
-import CloseIcon from '@material-ui/icons/Close';
-import axios from 'axios';
+import { bindActionCreators, compose } from 'redux';
+import { edit, respond } from '../../../actions/userActions';
+import { withStyles } from '@material-ui/styles';
+import { connect } from 'react-redux';
+import SnackBar from '../../SnackBar/SnackBar';
+
+const styles = theme => ({
+    button: {
+        margin: '1rem auto'
+    },
+    input: {
+        marginLeft: theme.spacing(5)
+    }
+});
 
 class EditPicUserDialog extends Component {
     constructor (props) {
         super(props);
         this.state = {
+            open: true,
+            loading: false,
+            name: '',
+            username: '',
+            image: '',
+            profile: '',
+            snackBar: false,
             smallText: '',
-            nameError: false,
-            name: ''
+            nameError: false
         };
+
+        this.onSavePress = this.onSavePress.bind(this);
+        this.snackBarClose = this.snackBarClose.bind(this);
     }
 
     // Fetch Name and Picture from UserDB
     componentDidMount = async () => {
-        try {
-            const username = this.props.location.pathname.split('/')[2];
-            const res = await axios.get(`/users/${username}`);
-            console.log(res);
-            if (res.data.user) {
-                return this.setState({
-                    user: res.data.user,
-                    profile: res.data.user.profile,
-                    username: res.data.user.username,
-                    name: res.data.user.name
-                });
-            }
-        } catch (err) {
-            console.log('Something went wrong with fetching user API');
-        }
-    };
-
-    renderLoading = () => {
-        if (!this.state.user) {
-            return (
-                <div
-                    style={{
-                        position: 'absolute',
-                        top: 0,
-                        left: 0,
-                        right: 0,
-                        bottom: 0,
-                        justifyContent: 'center',
-                        alignItems: 'center'
-                    }}
-                >
-                    <CircularProgress />
-                </div>
-            );
-        }
+        this.setState({
+            profile: this.props.userStore.user.image,
+            username: this.props.match.params.username,
+            name: this.props.userStore.user.name
+        });
     };
 
     onChangeText = e => {
@@ -73,7 +63,7 @@ class EditPicUserDialog extends Component {
         if (e.target.files[0]) {
             this.setState({
                 profile: URL.createObjectURL(e.target.files[0]),
-                imageFile: e.target.files[0]
+                image: e.target.files[0]
             });
         }
     };
@@ -82,93 +72,118 @@ class EditPicUserDialog extends Component {
         this.props.history.push(`/profile/${this.state.username}`);
     };
 
-    onSavePress = async () => {
+    onSavePress = () => {
         if (this.state.name.length < 3 || this.state.name.length > 25) {
             this.setState({
                 smallText: 'Name must at least 3 to 25 characters long',
                 nameError: true
             });
         } else {
-            try {
-                const formData = new FormData();
-                if (this.state.imageFile) {
-                    formData.append('image', this.state.imageFile);
-                }
-                if (this.state.user.name !== this.state.name) {
-                    formData.append('name', this.state.name);
-                }
-
-                const res = await axios({
-                    url: `/users/${this.state.user.username}`,
-                    method: 'PUT',
-                    data: formData,
-                    headers: {
-                        'Content-Type': 'application/json'
-                    }
-                });
-                console.log(res);
-                this.props.history.push(`/profile/${this.state.username}`);
-            } catch (err) {
-                console.log('Something went wrong with editing user pic and username');
-            }
+            this.props.edit({
+                username: this.state.username,
+                name: this.state.name,
+                image: this.state.image
+            });
+            this.setState({ snackBar: true });
         }
     };
 
-    render () {
-        this.renderLoading();
-        return (
-            <Dialog
-                open={true}
-                maxWidth='xs'
-                fullWidth
-                onClose={this.handleClose}
-                aria-labelledby='form-dialog-title'
-                onClick={() => this.onCloseClicked()}
-                stop
-            >
-                <div onClick = {e => e.stopPropagation()}>
-                    <CloseIcon onClick={() => this.onCloseClicked()} />
-                    <DialogTitle style={{ textAlign: 'center' }} id='form-dialog-title'>
-                        Edit avatar/username
-                    </DialogTitle>
-                    <DialogContent
-                        style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}
-                    >
-                        <Avatar
-                            style={{ height: 100, width: 100, margin: 10 }}
-                            src={this.state.profile || require('../../../assets/icon_profile.svg')}
-                            onClick={() => this.handleFileUpload()}
-                        />
-                        <input
-                            id='selectImage'
-                            hidden
-                            type='file'
-                            accept='image/png,image/jpeg'
-                            onChange={e => this.onChangeImage(e)}
-                        />
+    snackBarClose (event, reason) {
+        if (reason === 'clickaway') {
+            return;
+        }
 
-                        <TextField
-                            autoFocus
-                            margin='dense'
-                            id='name'
-                            type='name'
-                            label='Name'
-                            fullWidth
-                            onChange={e => this.onChangeText(e)}
-                            value={this.state.name}
-                            helperText={this.state.smallText}
-                            error={this.state.nameError}
-                        />
-                    </DialogContent>
-                    <DialogActions>
-                        <Button onClick={this.onSavePress} color='primary'>
-                            Save
-                        </Button>
-                    </DialogActions>
-                </div>
-            </Dialog>
+        this.setState({ snackBar: false });
+        if (this.props.userStore.success) {
+            this.props.history.push('/profile/' + this.state.username);
+        }
+        this.props.dispatch(respond());
+    }
+
+    // TODO: Refactor into seperate component
+    ServerResponse = () => {
+        if (this.props.userStore.success) {
+            return (
+                <SnackBar message={'User Updated'} variant={'success'} open={this.state.snackBar}
+                    onClose={this.snackBarClose} duration={1250}/>
+            );
+        } else if (this.props.userStore.error) {
+            return (
+                <SnackBar message={'User Update Failed'} variant={'error'}
+                    open={this.state.snackBar} onClose={this.snackBarClose} duration={2000}/>
+            );
+        }
+
+        return null;
+    };
+
+    render () {
+        const { classes } = this.props;
+
+        return (
+            <div>
+                <Dialog
+                    open={this.state.open}
+                    maxWidth='sm'
+                    fullWidth
+                    onClose={this.handleClose}
+                    aria-labelledby='form-dialog-title'
+                    onClick={() => this.onCloseClicked()}
+                >
+                    <div onClick = {e => e.stopPropagation()}>
+                        <DialogTitle id="title" title={'Edit profile image and/or name'} onClose={() => this.onCloseClicked()} />
+                        <DialogContent
+                            style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}
+                        >
+                            <Avatar
+                                style={{ height: 100, width: 100, margin: 10 }}
+                                src={this.state.profile}
+                                onClick={() => this.handleFileUpload()}
+                            />
+                            <input
+                                id='selectImage'
+                                hidden
+                                type='file'
+                                accept='image/png,image/jpeg'
+                                onChange={e => this.onChangeImage(e)}
+                            />
+
+                            <TextField
+                                autoFocus
+                                margin='dense'
+                                id='name'
+                                type='name'
+                                label='Name'
+                                className={classes.input}
+                                onChange={e => this.onChangeText(e)}
+                                value={this.state.name}
+                                helperText={this.state.smallText}
+                                error={this.state.nameError}
+                            />
+                        </DialogContent>
+                        <DialogActions>
+                            <Button onClick={this.onSavePress} color="primary" className={classes.button}>Done!</Button>
+                        </DialogActions>
+                    </div>
+                </Dialog>
+                <this.ServerResponse />
+            </div>
         );
     }
 }
 
-export default EditPicUserDialog;
+const mapStateToProps = state => ({
+    userStore: state.UserStore
+});
+
+function mapDispatchToProps (dispatch) {
+    return bindActionCreators(
+        {
+            edit,
+            dispatch
+        },
+        dispatch
+    );
+}
+
+export default compose(withStyles(styles), connect(mapStateToProps, mapDispatchToProps))(EditPicUserDialog);

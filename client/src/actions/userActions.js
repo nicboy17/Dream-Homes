@@ -6,7 +6,7 @@ import {
     LOGIN,
     REMOVE_ERROR,
     LOGOUT,
-    REGISTER
+    REGISTER, EDIT_USER
 } from '../actions/types';
 
 export const login = (user) => ({
@@ -16,6 +16,11 @@ export const login = (user) => ({
 
 export const register = (user) => ({
     type: REGISTER,
+    user
+});
+
+export const edit = (user) => ({
+    type: EDIT_USER,
     user
 });
 

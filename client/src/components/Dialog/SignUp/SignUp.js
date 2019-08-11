@@ -97,12 +97,12 @@ class SignUp extends React.Component {
         if (this.props.userStore.authenticated) {
             return (
                 <SnackBar message={'Sign Up Success'} variant={'success'} open={this.state.snackBar}
-                    onClose={this.snackBarClose} duration={2000}/>
+                    onClose={this.snackBarClose} duration={1250}/>
             );
         } else if (!this.props.userStore.authenticated && this.props.userStore.error) {
             return (
                 <SnackBar message={'Sign Up Failed: ' + this.props.userStore.error.message} variant={'error'}
-                    open={this.state.snackBar} onClose={this.snackBarClose} duration={3000}/>
+                    open={this.state.snackBar} onClose={this.snackBarClose} duration={2000}/>
             );
         }
 

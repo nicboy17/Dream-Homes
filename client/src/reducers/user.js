@@ -2,7 +2,9 @@ import {
     LOGIN_SUCCESS, LOGOUT_SUCCESS, REMOVE_ERROR,
     LOGIN_ERROR, GET_TOKEN_SUCCESS,
     GET_USER_BOARDS_POSTS_SUCCESS, GET_USER_BOARDS_POSTS_ERROR,
-    ADD_BOARD_SUCCESS, ADD_BOARD_ERROR, ADD_POST_SUCCESS, ADD_POST_ERROR
+    ADD_BOARD_SUCCESS, ADD_BOARD_ERROR,
+    ADD_POST_SUCCESS, ADD_POST_ERROR,
+    EDIT_USER_ERROR, EDIT_USER_SUCCESS
 } from '../actions/types';
 
 const initialState = {
@@ -17,7 +19,12 @@ export default (state = initialState, action) => {
         return { authenticated: true, user: response.user, token: response.token };
     case LOGIN_ERROR:
         return { ...state, authenticated: false, error: action.error };
+    case EDIT_USER_SUCCESS:
+        return { ...state, success: true, user: response.user };
+    case EDIT_USER_ERROR:
+        return { ...state, authenticated: false, error: action.error };
     case REMOVE_ERROR:
+        delete state.success;
         delete state.error;
         return { ...state };
     case LOGOUT_SUCCESS:

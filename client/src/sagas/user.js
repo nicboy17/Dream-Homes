@@ -3,7 +3,7 @@ import {
     LOGIN, LOGIN_SUCCESS, LOGIN_ERROR,
     GET_TOKEN, GET_TOKEN_SUCCESS,
     GET_USER_BOARDS_POSTS, GET_USER_BOARDS_POSTS_SUCCESS, GET_USER_BOARDS_POSTS_ERROR,
-    LOGOUT, LOGOUT_SUCCESS, REGISTER
+    LOGOUT, LOGOUT_SUCCESS, REGISTER, EDIT_USER, EDIT_USER_SUCCESS, EDIT_USER_ERROR
 } from '../actions/types';
 import { userService } from '../services/user';
 
@@ -36,6 +36,20 @@ function * login (request) {
 // listen for 'LOGIN' action -> call login*
 export function * loginSaga () {
     yield takeLatest(LOGIN, login);
+}
+
+function * edit (request) {
+    try {
+        const response = yield call(userService.edit, request.user);
+        yield put({ type: EDIT_USER_SUCCESS, response });
+    } catch (error) {
+        yield put({ type: EDIT_USER_ERROR, error });
+    }
+}
+
+// listen for 'LOGIN' action -> call login*
+export function * editSaga () {
+    yield takeLatest(EDIT_USER, edit);
 }
 
 function * logout (request) {

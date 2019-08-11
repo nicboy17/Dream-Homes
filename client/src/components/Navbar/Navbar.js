@@ -5,8 +5,8 @@ import { makeStyles } from '@material-ui/styles';
 import { Link } from 'react-router-dom';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
-import face from '../../assets/face.jpg';
 import { logout } from '../../actions/userActions';
+import Avatar from '@material-ui/core/Avatar';
 
 const useStyles = makeStyles(theme => ({
     header: {
@@ -17,9 +17,9 @@ const useStyles = makeStyles(theme => ({
         alignItems: 'center'
     },
     cornerIcon: {
-        width: '50px',
-        height: '50px',
-        borderRadius: '50px'
+        width: '40px',
+        height: '40px',
+        borderRadius: '40px'
     },
     headerSearch: {
         width: '35vw',
@@ -77,9 +77,11 @@ const Navbar = ({ userStore, logout }) => {
                         <h5>Following</h5>
                     </div>
                     <div />
-                    <div onClick={handleClick}>
-                        <img className={style.cornerIcon} src={face} alt=''/>
-                    </div>
+                    <Avatar
+                        className={style.cornerIcon}
+                        src={userStore.user.image}
+                        onClick={handleClick}
+                    />
                     <Menu
                         id="simple-menu"
                         anchorEl={open}

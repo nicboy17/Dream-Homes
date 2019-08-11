@@ -33,12 +33,12 @@ const ProfileHeader = ({ user, history }) => {
                 <div>
                     <Grid container direction="row" justify="center" alignItems="center">
                         <div className={classes.beside}>
-                            <Avatar className={classes.avatar} component={Link}
+                            <Avatar className={classes.avatar} component={Link} src={user.image}
                                 to={'/profile/' + user.username + '/edit'}/>
                         </div>
                         <div className={classes.beside}>
                             <Typography variant="h4" gutterBottom>
-                                Delores Jones
+                                {user.name}
                             </Typography>
                             <div>
                                 <Typography variant="caption" gutterBottom className={classes.beside}>

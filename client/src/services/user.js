@@ -1,27 +1,47 @@
 import axios from 'axios';
+import { createFormData } from './utils';
 
 const addTokenHeaders = (token) => {
     axios.defaults.headers.common['access-token'] = token;
 };
 
-const signin = (user, token) => {
-    localStorage.setItem('token', token);
-    localStorage.setItem('user', JSON.stringify(user));
-    addTokenHeaders(token);
+const signin = (data) => {
+    if (!data.user.image) {
+        data.user.image = 'https://team-pineapple.s3.ca-central-1.amazonaws.com/placeholder.jpg';
+    }
+    localStorage.setItem('token', data.token);
+    localStorage.setItem('user', JSON.stringify(data.user));
+    addTokenHeaders(data.token);
+
+    return data;
 };
 
 export const userService = {
     register: (user) => {
         return axios.post('/users/register', user).then(res => {
-            signin(res.data.user, res.data.token);
-            return res.data;
+            return signin(res.data);
         }).catch(err => {
             throw err.response.data;
         });
     },
     login: (user) => {
         return axios.post('/users/login', user).then(res => {
-            signin(res.data.user, res.data.token);
+            return signin(res.data);
+        }).catch(err => {
+            throw err.response.data;
+        });
+    },
+    edit: (user) => {
+        const formData = createFormData(user);
+        return axios({
+            url: `/users/${user.username}`,
+            method: 'PUT',
+            data: formData,
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        }).then(res => {
+            localStorage.setItem('user', JSON.stringify(res.data.user));
             return res.data;
         }).catch(err => {
             throw err.response.data;
