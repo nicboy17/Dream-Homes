@@ -6,6 +6,8 @@ import Navbar from '../../components/Navbar/Navbar';
 import Post from './Post';
 import MorePosts from './MorePosts';
 import Divider from '@material-ui/core/Divider';
+import CircularProgress from '@material-ui/core/CircularProgress';
+import { getBoardsandPosts } from '../../actions/userActions';
 
 const styles = theme => ({
     post: {
@@ -20,11 +22,17 @@ class PostPage extends React.Component {
     constructor (props) {
         super(props);
         this.state = {
+            id: '',
             board: ''
         };
 
         this.handleChange = this.handleChange.bind(this);
         this.save = this.save.bind(this);
+    }
+
+    componentDidMount () {
+        const id = this.props.match.params.id;
+        this.setState({ id });
     }
 
     handleChange (e) {
@@ -40,10 +48,18 @@ class PostPage extends React.Component {
     }
 
     render () {
-        // eslint-disable-next-line react/prop-types
         const { classes } = this.props;
 
-        // eslint-disable-next-line react/prop-types
+        if (!this.props.userStore.boards) {
+            this.props.getBoardsandPosts(this.props.userStore.user.username);
+            return (
+                <div>
+                    <Navbar/>
+                    <CircularProgress/>
+                </div>
+            );
+        }
+
         if (!this.props.post(this.props.match.params.id)) {
             return (
                 <div>
@@ -74,7 +90,15 @@ class PostPage extends React.Component {
 const mapStateToProps = state => ({
     userStore: state.UserStore,
     post: (id) => {
-        return state.PostStore.posts.find((post) => { return id === post._id; });
+        return {
+            ...state.UserStore.posts.find((post) => {
+                return id === post._id;
+            }),
+            user: { ...state.UserStore.user }
+        } ||
+            state.PostStore.posts.find((post) => {
+                return id === post._id;
+            });
     },
     morePosts: state.PostStore.morePosts
 });
@@ -82,7 +106,7 @@ const mapStateToProps = state => ({
 function mapDispatchToProps (dispatch) {
     return bindActionCreators(
         {
-
+            getBoardsandPosts
         },
         dispatch
     );

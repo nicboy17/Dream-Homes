@@ -8,10 +8,10 @@ import * as serviceWorker from './serviceWorker';
 import { createStore, applyMiddleware } from 'redux';
 import createSagaMiddleware from 'redux-saga';
 import { Provider } from 'react-redux';
-import rootReducer from './reducers/rootReducer';
+import root from './reducers/root';
 import rootSaga from './sagas/root';
 const sagaMiddleware = createSagaMiddleware();
-const store = createStore(rootReducer, applyMiddleware(sagaMiddleware));
+const store = createStore(root, applyMiddleware(sagaMiddleware));
 sagaMiddleware.run(rootSaga);
 
 const Application = () => (

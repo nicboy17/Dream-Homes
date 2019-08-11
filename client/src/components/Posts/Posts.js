@@ -1,5 +1,6 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/styles';
+import { Link } from 'react-router-dom';
 import Masonry from 'react-masonry-component';
 
 const useStyles = makeStyles(theme => ({
@@ -39,10 +40,12 @@ const Posts = ({ posts }) => {
 
     const images = posts.map((post, i) => {
         return (
-            <div className={classes.imageContainer} key={i}>
-                <img src={post.image} alt={post.image.title} className={classes.image}/>
-                <p className={classes.title}>{post.title}</p>
-            </div>
+            <Link to={'/posts/' + post._id} key={i}>
+                <div className={classes.imageContainer}>
+                    <img src={post.image} alt={post.title} className={classes.image}/>
+                    <p className={classes.title}>{post.title}</p>
+                </div>
+            </Link>
         );
     });
 

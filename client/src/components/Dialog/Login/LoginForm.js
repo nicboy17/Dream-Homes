@@ -48,7 +48,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 // eslint-disable-next-line react/prop-types
-const LoginForm = ({ handleChange, handleSignIn, email, password }) => {
+const LoginForm = ({ handleChange, handleSignIn, email, password, disabled }) => {
     const classes = useStyles();
 
     const FormHelper = ({ input }) => {
@@ -73,7 +73,8 @@ const LoginForm = ({ handleChange, handleSignIn, email, password }) => {
                     <p className={classes.forgotPassword}>Forgot your password?</p>
                 </FormControl>
                 <div>
-                    <Button type="submit" color="primary" className={classes.button} href={''} disabled={!(!email.error && !password.error)}>
+                    <Button type="submit" color="primary" className={classes.button} href={''}
+                        disabled={(!(!email.error && !password.error)) || disabled}>
                         Login
                     </Button>
                 </div>

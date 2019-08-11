@@ -8,7 +8,7 @@ const FormContent = ({
     tagError,
     title,
     tag,
-    destination,
+    link,
     description
 }) => {
     return (
@@ -39,12 +39,12 @@ const FormContent = ({
 
             <TextField
                 margin='dense'
-                id='destination'
+                id='link'
                 placeholder='Add a destination link'
                 type='text'
                 fullWidth
                 onChange={e => onChangeText(e)}
-                value={destination}
+                value={link}
             />
 
             <TextField

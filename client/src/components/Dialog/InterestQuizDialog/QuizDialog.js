@@ -6,6 +6,7 @@ import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
 import { DialogTitle, DialogActions, DialogContent } from '../components';
 import Interests from './Interests';
+import axios from 'axios';
 
 const styles = theme => ({
     root: {
@@ -53,8 +54,23 @@ class QuizDialog extends React.Component {
         this.setState({ selected });
     }
 
-    handleConfirm () {
-        console.log(this.state.selected);
+    async handleConfirm () {
+        const username = this.props.match.username;
+        try {
+            const body = {
+                interests: this.state.selected
+            };
+            const config = {
+                'Content-Type': 'application/json',
+                'access-token': this.props.userStore.token
+            };
+            const res = await axios.put(`users/${username}/interests`, body, config);
+            if (res.data.success) {
+                return this.props.history.push(`/profile/${username}`);
+            }
+        } catch (err) {
+            console.log(err);
+        }
         this.setState({ open: false });
     }
 
@@ -72,7 +88,7 @@ class QuizDialog extends React.Component {
                     <Interests handleChange={this.handleChange} selected={this.state.selected} />
                 </DialogContent>
                 <DialogActions>
-                    <Button onClick={this.handleConfirm} color="primary" className={classes.button} href={''}>
+                    <Button onClick={this.handleConfirm} color="primary" className={classes.button}>
                         Done!
                     </Button>
                 </DialogActions>

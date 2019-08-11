@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import Dialog from '@material-ui/core/Dialog';
 import { DialogTitle, DialogContent } from '../components';
 import SnackBar from '../../SnackBar/SnackBar';
-import { login } from '../../../actions/userActions';
+import { login, loginResponse } from '../../../actions/userActions';
 import { Link, Redirect } from 'react-router-dom';
 import LoginForm from './LoginForm';
 
@@ -80,21 +80,29 @@ class Login extends React.Component {
         }
 
         this.setState({ snackBar: false });
+        this.props.dispatch(loginResponse());
     }
 
     ServerResponse = () => {
         if (this.props.userStore.authenticated) {
-            return null;
+            return (
+                <SnackBar message={'Authentication Success'} variant={'success'} open={this.state.snackBar}
+                    onClose={this.snackBarClose} duration={2000}/>
+            );
+        } else if (!this.props.userStore.authenticated && this.props.userStore.error) {
+            return (
+                <SnackBar message={'Authentication Failed: email or password is incorrect'} variant={'error'}
+                    open={this.state.snackBar} onClose={this.snackBarClose} duration={3000}/>
+            );
         }
-        return (
-            <SnackBar message={'Authentication Failed: email or password is incorrect'} variant={'error'} open={this.state.snackBar} onClose={this.snackBarClose}/>
-        );
+
+        return null;
     };
 
     render () {
         const { classes } = this.props;
 
-        if (this.props.userStore.authenticated) {
+        if (this.props.userStore.authenticated && !this.state.snackBar) {
             return (<Redirect to={'/profile/' + this.props.userStore.user.username} />);
         }
 
@@ -103,7 +111,9 @@ class Login extends React.Component {
                 <Dialog onClose={this.handleClose} aria-labelledby="dialog-title" open={this.state.open} maxWidth={'md'}>
                     <DialogTitle id="title" title={'Welcome!'} onClose={this.handleClose} />
                     <DialogContent>
-                        <LoginForm handleChange={this.handleChange} handleSignIn={this.handleSignIn} email={this.state.email} password={this.state.password} />
+                        <LoginForm handleChange={this.handleChange} handleSignIn={this.handleSignIn}
+                            email={this.state.email} password={this.state.password}
+                            disabled={this.state.snackBar}/>
                     </DialogContent>
                     <div className={classes.footer}>
                         <p className={classes.p}>{'Don\'t have an account?'}<Link to='/signup' className={classes.signUp}> Sign Up!</Link></p>
@@ -157,7 +167,8 @@ const mapStateToProps = state => ({
 function mapDispatchToProps (dispatch) {
     return bindActionCreators(
         {
-            login
+            login,
+            dispatch
         },
         dispatch
     );

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component } from 'react';
 import { withStyles } from '@material-ui/styles';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
@@ -29,7 +29,7 @@ const styles = theme => ({
     }
 });
 
-class Home extends React.Component {
+class Home extends Component {
     constructor (props) {
         super(props);
         this.state = {};
@@ -42,9 +42,11 @@ class Home extends React.Component {
     render () {
         const { classes } = this.props;
 
+        // TODO: Fix/figure out how we want login to display
         return (
             <div className={classes.container}>
-                <Route path={'/login'} component={Login} />
+                <h1>Home</h1>
+                <Route path='/login' component={Login}/>
             </div>
         );
     }

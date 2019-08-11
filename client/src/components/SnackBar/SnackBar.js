@@ -41,7 +41,7 @@ const useStyles1 = makeStyles(theme => ({
     }
 }));
 
-function SnackBar ({ message, onClose, variant, open }) {
+function SnackBar ({ message, onClose, variant, open, duration = 4000 }) {
     const classes = useStyles1();
     const Icon = variantIcon[variant];
 
@@ -52,7 +52,7 @@ function SnackBar ({ message, onClose, variant, open }) {
                 horizontal: 'left'
             }}
             open={open}
-            autoHideDuration={4000}
+            autoHideDuration={duration}
             onClose={onClose}
         >
             <SnackbarContent

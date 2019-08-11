@@ -1,73 +1,65 @@
 import React, { Component } from 'react';
+import { bindActionCreators, compose } from 'redux';
+import { connect } from 'react-redux';
+import { withStyles } from '@material-ui/styles';
 import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import TextField from '@material-ui/core/TextField';
-import axios from 'axios';
+import { addBoard } from '../../../actions/userActions';
+
+const styles = theme => ({
+    button: {
+        margin: '1rem auto'
+    }
+});
 
 class BoardDialog extends Component {
     constructor (props) {
         super(props);
         this.state = {
-            name: '',
+            username: '',
+            title: '',
             smallText: 'for example <<living room>>',
             nameError: false
         };
     }
 
+    componentDidMount () {
+        this.setState({ username: this.props.match.params.username });
+    }
+
     onChangeText = e => {
-        this.setState({ name: e.target.value });
+        this.setState({ title: e.target.value });
     };
 
     onCreatePress = async () => {
-        const username = this.props.location.pathname.split('/')[2];
-        if (this.state.name.length < 3 || this.state.name.length > 12) {
+        if (this.state.title.length < 3 || this.state.title.length > 12) {
             this.setState({
                 smallText: 'Name must at least 3 to 12 characters long',
                 nameError: true
             });
         } else {
             // Makes a post request to /user/:username/board
-            try {
-                const body = {
-                    title: this.state.name
-                };
-                const config = {
-                    'Content-Type': 'application/json'
-                };
-                const res = await axios.post(`/users/${username}/board`, body, config);
-                if (res.data.success) {
-                    return this.props.history.push('/');
-                }
-                // Snackbar show alert
-                console.log('Something went wrong with the post request');
-            } catch (err) {
-                // Snackbar show alert
-                console.log(err.message);
-            }
+            this.props.addBoard({ title: this.state.title }, this.state.username);
+            this.onCloseClick();
         }
     };
 
     onCloseClick = () => {
-        const username = this.props.location.pathname.split('/')[2];
-        this.props.history.push(`/profile/${username}`);
+        this.props.history.push(`/profile/${this.state.username}`);
     };
 
     render () {
+        const { classes } = this.props;
+
         return (
-            <Dialog
-                open={true}
-                onClick={() => this.onCloseClick()}
-                aria-labelledby='form-dialog-title'
-                maxWidth = 'xs'
-                fullWidth = {true}
-            >
+            <Dialog open={true} onClick={() => this.onCloseClick()} aria-labelledby='board-dialog' maxWidth='xs'
+                fullWidth={true}>
                 <div onClick={e => e.stopPropagation()}>
-                    <DialogTitle style={{ textAlign: 'center' }} id='form-dialog-title'>
-                        Create a board
-                    </DialogTitle>
+                    <DialogTitle style={{ textAlign: 'center' }} id='dialog-title'>Create a board</DialogTitle>
                     <DialogContent>
                         <TextField
                             autoFocus
@@ -77,15 +69,13 @@ class BoardDialog extends Component {
                             label='Name'
                             fullWidth
                             onChange={e => this.onChangeText(e)}
-                            value={this.state.name}
+                            value={this.state.title}
                             helperText={this.state.smallText}
                             error={this.state.nameError}
                         />
                     </DialogContent>
                     <DialogActions>
-                        <Button onClick={this.onCreatePress} color='primary'>
-                            Create
-                        </Button>
+                        <Button onClick={this.onCreatePress} color='primary' className={classes.button}>Create</Button>
                     </DialogActions>
                 </div>
             </Dialog>
@@ -93,4 +83,17 @@ class BoardDialog extends Component {
     }
 }
 
-export default BoardDialog;
+const mapStateToProps = state => ({
+    userStore: state.UserStore
+});
+
+function mapDispatchToProps (dispatch) {
+    return bindActionCreators(
+        {
+            addBoard
+        },
+        dispatch
+    );
+}
+
+export default compose(withStyles(styles), connect(mapStateToProps, mapDispatchToProps))(BoardDialog);

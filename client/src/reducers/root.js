@@ -1,9 +1,9 @@
 import { combineReducers } from 'redux';
-import UserStore from './userReducer';
+import UserStore from './user';
 import PostStore from './post';
 
-const rootReducer = combineReducers({
+const root = combineReducers({
     UserStore,
     PostStore
 });
-export default rootReducer;
+export default root;
