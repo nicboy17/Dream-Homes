@@ -1,12 +1,26 @@
-import { ADD_BOARD, ADD_POST, GET_TOKEN, GET_USER_BOARDS_POSTS, LOGIN, LOGIN_RESPONSE, LOGOUT } from '../actions/types';
+import {
+    ADD_BOARD,
+    ADD_POST,
+    GET_TOKEN,
+    GET_USER_BOARDS_POSTS,
+    LOGIN,
+    REMOVE_ERROR,
+    LOGOUT,
+    REGISTER
+} from '../actions/types';
 
 export const login = (user) => ({
     type: LOGIN,
     user
 });
 
-export const loginResponse = () => ({
-    type: LOGIN_RESPONSE
+export const register = (user) => ({
+    type: REGISTER,
+    user
+});
+
+export const respond = () => ({
+    type: REMOVE_ERROR
 });
 
 export const logout = () => ({

@@ -1,18 +1,30 @@
 import axios from 'axios';
 
-export const addTokenHeaders = (token) => {
+const addTokenHeaders = (token) => {
     axios.defaults.headers.common['access-token'] = token;
 };
 
+const signin = (user, token) => {
+    localStorage.setItem('token', token);
+    localStorage.setItem('user', JSON.stringify(user));
+    addTokenHeaders(token);
+};
+
 export const userService = {
-    login: (user) => {
-        return axios.post('/users/login', user).then(res => {
-            localStorage.setItem('token', res.data.token);
-            localStorage.setItem('user', JSON.stringify(res.data.user));
-            addTokenHeaders(res.data.token);
+    register: (user) => {
+        return axios.post('/users/register', user).then(res => {
+            signin(res.data.user, res.data.token);
             return res.data;
         }).catch(err => {
-            throw err;
+            throw err.response.data;
+        });
+    },
+    login: (user) => {
+        return axios.post('/users/login', user).then(res => {
+            signin(res.data.user, res.data.token);
+            return res.data;
+        }).catch(err => {
+            throw err.response.data;
         });
     },
     getUser: () => {
@@ -42,7 +54,7 @@ export const userService = {
         return axios.get('/users/' + username).then(res => {
             return res.data;
         }).catch(err => {
-            throw err;
+            throw err.response.data;
         });
     }
 };

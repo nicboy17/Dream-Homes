@@ -3,9 +3,22 @@ import {
     LOGIN, LOGIN_SUCCESS, LOGIN_ERROR,
     GET_TOKEN, GET_TOKEN_SUCCESS,
     GET_USER_BOARDS_POSTS, GET_USER_BOARDS_POSTS_SUCCESS, GET_USER_BOARDS_POSTS_ERROR,
-    LOGOUT, LOGOUT_SUCCESS
+    LOGOUT, LOGOUT_SUCCESS, REGISTER
 } from '../actions/types';
 import { userService } from '../services/user';
+
+function * register (request) {
+    try {
+        const response = yield call(userService.register, request.user);
+        yield put({ type: LOGIN_SUCCESS, response });
+    } catch (error) {
+        yield put({ type: LOGIN_ERROR, error });
+    }
+}
+
+export function * registerSaga () {
+    yield takeLatest(REGISTER, register);
+}
 
 /*
 call user service login
