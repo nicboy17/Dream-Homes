@@ -32,6 +32,9 @@ const user = new mongoose.Schema({
     profile: {
         type: String,
         required: false
+    },
+    interests: {
+        type: [String]
     }
 });
 
