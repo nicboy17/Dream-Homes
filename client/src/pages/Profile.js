@@ -1,13 +1,23 @@
-import React, { useState } from 'react';
-import { makeStyles } from '@material-ui/styles';
-import face from './face.jpg';
+import React, { Component } from 'react';
+import { withStyles } from '@material-ui/styles';
+import { compose, bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
+import face from '../assets/face.jpg';
 import { Card, Typography } from '@material-ui/core';
 import CardMedia from '@material-ui/core/CardMedia';
 import CardActionArea from '@material-ui/core/CardActionArea';
-import house from './house.png';
-import { Link } from 'react-router-dom';
+import house from '../assets/house.png';
+import { Route } from 'react-router-dom';
 import Navbar from '../components/Navbar/Navbar';
-const useStyles = makeStyles(theme => ({
+import CircularProgress from '@material-ui/core/CircularProgress';
+import InterestQuizDialog from '../components/Dialog/InterestQuizDialog/QuizDialog';
+import PostDialog from '../components/Dialog/PostDialog/PostDialog';
+import BoardDialog from '../components/Dialog/BoardDialog/BoardDialog';
+import Button from '@material-ui/core/Button';
+import { getBoardsandPosts } from '../actions/userActions';
+import Posts from '../components/Posts/Posts';
+
+const styles = theme => ({
     subHeader: {
         minHeight: '30vh',
         display: 'grid',
@@ -36,21 +46,8 @@ const useStyles = makeStyles(theme => ({
         padding: '0',
         paddingTop: '5px'
     },
-    createBoard: {
-        background: 'white',
-        border: '1px solid lightgrey',
-        borderRadius: '25px',
-        padding: '10px 20px 10px 20px',
-        fontWeight: 'bold',
-        marginRight: '10px'
-    },
-    createPost: {
-        background: 'black',
-        color: 'white',
-        border: 'none',
-        borderRadius: '25px',
-        padding: '10px 20px 10px 20px',
-        fontWeight: 'bold'
+    button: {
+        margin: '0 0.5rem'
     },
     tabSection: {
         minHeight: '25vh',
@@ -87,147 +84,194 @@ const useStyles = makeStyles(theme => ({
         justifyItems: 'center',
         gridGap: '20px'
     },
+    gridContainer1: {
+        display: 'grid',
+        gridTemplateColumns: '1fr',
+        justifyItems: 'center',
+        gridGap: '20px'
+    },
     card: {
+        paddingBottom: '1vh',
         height: '40vh',
         width: '26vw'
     },
     cardImg: {
-        height: '31vh'
+        height: '32vh'
     },
     cardHeader: {
         marginLeft: '20px'
+    },
+    postContainer: {
+        display: 'grid',
+        gridTemplateColumns: '1fr 1fr 1fr 1fr 1fr',
+        justifyItems: 'center',
+        gridGap: '10px'
+    },
+    postContainer1: {
+        display: 'grid',
+        gridTemplateColumns: '1fr',
+        justifyItems: 'center',
+        gridGap: '10px'
+    },
+    postImg: {
+        width: '16vw',
+        minHeight: '50vh'
+    },
+    postLink: {
+        fontSize: '16px',
+        textAlign: 'center',
+        padding: '0',
+        margin: '0'
     }
-}));
+});
 
-const Profile = ({ location }) => {
-    const style = useStyles();
-    let [activePanel, toggle] = useState('board');
+class Profile extends Component {
+    constructor (props) {
+        super(props);
 
-    const username = location.pathname.split('/')[2];
-    return (
-        <div>
-            <Navbar />
-            <div className={style.subHeader}>
-                <div className={style.nameContainer}>
-                    <img src={face} alt='' className={style.subHeaderIcon} />
-                    <div>
-                        <h3 className={style.profileName}>Delores Jones</h3>
-                        <h5 className={style.profileFollowers}>134 Followers | 280 Following</h5>
-                    </div>
-                </div>
-                <div />
+        this.state = {
+            username: '',
+            activePanel: 'board'
+        };
+        this.toggle = this.toggle.bind(this);
+    }
+
+    componentDidMount () {
+        const username = this.props.match.params.username;
+        this.setState({ username: username });
+        this.props.getBoardsandPosts(username);
+    }
+
+    toggle () {
+        if (this.state.activePanel === 'board') {
+            this.setState({ activePanel: 'post' });
+        } else {
+            this.setState({ activePanel: 'board' });
+        }
+    }
+
+    render () {
+        const { classes } = this.props;
+
+        if (!this.props.userStore.boards) {
+            return (
                 <div>
-                    <Link to={`/profile/${username}/board/create`}>
-                        <button className={style.createBoard}>Create Board</button>
-                    </Link>
-                    <Link to={`/profile/${username}/post/create`}>
-                        <button className={style.createPost}>Create Post</button>
-                    </Link>
+                    <Navbar/>
+                    <CircularProgress/>
                 </div>
-            </div>
-            <div style={{ display: activePanel === 'board' ? 'grid' : 'none' }}>
-                <div className={style.tabSection}>
+            );
+        }
+
+        return (
+            <div>
+                <Route path='/profile/:username/interest-quiz' component={InterestQuizDialog}/>
+                <Route path='/profile/:username/post/create' component={PostDialog}/>
+                <Route path='/profile/:username/board/create' component={BoardDialog}/>
+                <Navbar/>
+                <div className={classes.subHeader}>
+                    <div className={classes.nameContainer}>
+                        <img src={face} alt='' className={classes.subHeaderIcon}/>
+                        <div>
+                            <h3 className={classes.profileName}>{this.state.username}</h3>
+                            <h5 className={classes.profileFollowers}>134 Followers | 280 Following</h5>
+                        </div>
+                    </div>
+                    <div/>
                     <div>
-                        <button
-                            className={style.activeTab}
-                            onClick={() => toggle((activePanel = 'board'))}
-                        >
-                            Boards
-                        </button>
-                        <button
-                            className={style.tab}
-                            onClick={() => toggle((activePanel = 'post'))}
-                        >
-                            My Posts
-                        </button>
-                    </div>
-                    <div />
-                </div>
-                <div className={style.activePanel}>
-                    <div className={style.gridContainer}>
-                        <Card className={style.card}>
-                            <CardActionArea className={style.card}>
-                                <CardMedia className={style.cardImg} image={house} />
-                                <Typography variant='h6' className={style.cardHeader}>
-                                    House
-                                </Typography>
-                                <Typography variant='p' className={style.cardHeader}>
-                                    80 posts
-                                </Typography>
-                            </CardActionArea>
-                        </Card>
-                        <Card className={style.card}>
-                            <CardActionArea className={style.card}>
-                                <CardMedia className={style.cardImg} image={house} />
-                                <Typography variant='h6' className={style.cardHeader}>
-                                    House
-                                </Typography>
-                                <Typography variant='p' className={style.cardHeader}>
-                                    80 posts
-                                </Typography>
-                            </CardActionArea>
-                        </Card>
-                        <Card className={style.card}>
-                            <CardActionArea className={style.card}>
-                                <CardMedia className={style.cardImg} image={house} />
-                                <Typography variant='h6' className={style.cardHeader}>
-                                    House
-                                </Typography>
-                                <Typography variant='p' className={style.cardHeader}>
-                                    80 posts
-                                </Typography>
-                            </CardActionArea>
-                        </Card>
-                        <Card className={style.card}>
-                            <CardActionArea className={style.card}>
-                                <CardMedia className={style.cardImg} image={house} />
-                                <Typography variant='h6' className={style.cardHeader}>
-                                    House
-                                </Typography>
-                                <Typography variant='p' className={style.cardHeader}>
-                                    80 posts
-                                </Typography>
-                            </CardActionArea>
-                        </Card>
+                        <Button color="primary" className={classes.button} onClick={() => {
+                            this.props.history.push(`/profile/${this.state.username}/board/create`);
+                        }}>Create Board</Button>
+                        <Button color="primary" className={classes.button} variant={'contained'} onClick={() => {
+                            this.props.history.push(`/profile/${this.state.username}/post/create`);
+                        }}>Create Post</Button>
                     </div>
                 </div>
-            </div>
-            <div style={{ display: activePanel === 'post' ? 'grid' : 'none' }}>
-                <div className={style.tabSection}>
-                    <div>
-                        <button
-                            className={style.tab}
-                            onClick={() => toggle((activePanel = 'board'))}
-                        >
-                            Boards
-                        </button>
-                        <button
-                            className={style.activeTab}
-                            onClick={() => toggle((activePanel = 'post'))}
-                        >
-                            My Posts
-                        </button>
+                <div style={{ display: this.state.activePanel === 'board' ? 'grid' : 'none' }}>
+                    <div className={classes.tabSection}>
+                        <div>
+                            <button
+                                className={classes.activeTab}
+                                onClick={this.toggle}
+                            >
+                                Boards
+                            </button>
+                            <button
+                                className={classes.tab}
+                                onClick={this.toggle}
+                            >
+                                My Posts
+                            </button>
+                        </div>
+                        <div/>
                     </div>
-                    <div />
+                    <div className={classes.activePanel}>
+                        <div
+                            className={this.props.userStore.boards.length === 0 ? classes.gridContainer1 : classes.gridContainer}>
+                            {
+                                this.props.userStore.boards.length === 0
+                                    ? <h2>You have not added any boards yet.</h2>
+                                    : this.props.userStore.boards.map((board, i) => {
+                                        return <Card key={i} className={classes.card}>
+                                            <CardActionArea className={classes.card}>
+                                                <CardMedia className={classes.cardImg} image={house}/>
+                                                <Typography variant='h6' className={classes.cardHeader}>
+                                                    {board['title']}
+                                                </Typography>
+                                                <Typography variant='body1' className={classes.cardHeader}>
+                                                    {board['posts'].length} posts
+                                                </Typography>
+                                            </CardActionArea>
+                                        </Card>;
+                                    })
+                            }
+                        </div>
+                    </div>
                 </div>
-                <div className={style.activePanel}>
-                    <div className={style.gridContainer}>
-                        <Card className={style.card}>
-                            <CardActionArea className={style.card}>
-                                <CardMedia className={style.cardImg} image={house} />
-                                <Typography variant='h6' className={style.cardHeader}>
-                                    House
-                                </Typography>
-                                <Typography variant='p' className={style.cardHeader}>
-                                    80 posts
-                                </Typography>
-                            </CardActionArea>
-                        </Card>
+                <div style={{ display: this.state.activePanel === 'post' ? 'grid' : 'none' }}>
+                    <div className={classes.tabSection}>
+                        <div>
+                            <button
+                                className={classes.tab}
+                                onClick={this.toggle}
+                            >
+                                Boards
+                            </button>
+                            <button
+                                className={classes.activeTab}
+                                onClick={this.toggle}
+                            >
+                                My Posts
+                            </button>
+                        </div>
+                        <div/>
+                    </div>
+                    <div className={classes.activePanel}>
+                        <div
+                            className={this.props.userStore.posts.length === 0 ? classes.postContainer1 : classes.postContainer}>
+                            {
+                                this.props.userStore.posts.length === 0
+                                    ? <h2>You have not added any posts yet.</h2>
+                                    : <Posts posts={this.props.userStore.posts}/>
+                            }
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-    );
+        );
+    }
 };
 
-export default Profile;
+const mapStateToProps = state => ({
+    userStore: state.UserStore
+});
+
+function mapDispatchToProps (dispatch) {
+    return bindActionCreators(
+        {
+            getBoardsandPosts
+        },
+        dispatch
+    );
+}
+
+export default compose(withStyles(styles), connect(mapStateToProps, mapDispatchToProps))(Profile);

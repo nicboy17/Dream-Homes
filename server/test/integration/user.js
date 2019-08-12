@@ -40,14 +40,23 @@ describe('User Routes', () => {
                 });
         });
 
-        it('Should return duplicate', () => {
+        it('Should return duplicate',  async() => {
+            await request
+                .post('/users/register')
+                .send({
+                    'name': 'temp',
+                    'username': 'temp',
+                    'email': 'temp@gmail.com',
+                    'password': 'Password1'
+                });
+
             return request
                 .post('/users/register')
                 .send({
                     'name': 'temp',
                     'username': 'temp',
                     'email': 'temp@gmail.com',
-                    'password': 'Password1',
+                    'password': 'Password1'
                 })
                 .expect(400)
                 .then((res) => {
@@ -59,7 +68,7 @@ describe('User Routes', () => {
     describe('Login', () => {
         it('Should return valid', () => {
             return login({
-                username: 'temp',
+                email: 'temp@gmail.com',
                 password: 'Password1'
             }).expect(200).then((res) => {
                 expect(res.body.success).to.be.true;
@@ -68,7 +77,7 @@ describe('User Routes', () => {
 
         it('Should return invalid', () => {
             return login({
-                username: 'temp',
+                email: 'temp@gmail.com',
                 password: 'Password2'
             }).expect(400).then((res) => {
                 expect(res.body.success).to.be.false;
@@ -77,7 +86,7 @@ describe('User Routes', () => {
 
         it('Should return no password', () => {
             return login({
-                username: 'temp',
+                email: 'temp@gmail.com',
                 password: ''
             }).expect(422).then((res) => {
                 expect(res.body.success).to.be.false;
