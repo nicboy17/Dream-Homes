@@ -89,11 +89,28 @@ router.post('/:username/posts', [upload.single('image'), UserValidation.addPost,
             const post = await Post.create({ ...req.body, user: user._id, image: req.file.location });
             return res.status(201).json({ success: true, post });
         } catch(err) {
-            return res.status(400).json({err});
+            return res.status(400).json({ success: false, err});
         }
     } else {
         return res.status(400).json({ success: false, message: 'no file provided' });
     }
 }]);
+
+// @route    PUT users/board/:id
+// @desc     Update posts in a board
+// @access   Private
+router.put('/board/:id', async (req,res) => {
+    try {
+        const board = await Board.findByIdAndUpdate(req.params.id, { '$addToSet': { posts: req.body._id } }, { 'new': true }).lean();
+        if(!board) {
+            return res.status(404).json({ success: false, message: 'Board not found'});
+        }
+
+        res.status(200).json({ success: true, board });
+    } catch (err) {
+        return res.status(404).json({success: false, err });
+    }
+});
+
 
 module.exports = router;
