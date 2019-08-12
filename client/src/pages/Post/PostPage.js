@@ -70,7 +70,7 @@ class PostPage extends React.Component {
             );
         } else if (this.props.userStore.error) {
             return (
-                <SnackBar message={'Post Addition failed:'} variant={'error'}
+                <SnackBar message={'Post Addition failed'} variant={'error'}
                     open={this.state.snackBar} onClose={this.snackBarClose} duration={2000}/>
             );
         }

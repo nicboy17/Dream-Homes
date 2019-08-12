@@ -2,10 +2,10 @@ import React from 'react';
 import { connect } from 'react-redux';
 import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
-import DialogTitle from '@material-ui/core/DialogTitle';
+import { DialogActions, DialogTitle } from '../components';
 import { Chip } from '@material-ui/core';
+import Grid from '@material-ui/core/Grid';
 // import CircularProgress from '@material-ui/core/CircularProgress';
 
 import _ from 'lodash';
@@ -13,7 +13,8 @@ import _ from 'lodash';
 import FormContent from './FormContent';
 import FileUploader from './FileUploader';
 import { bindActionCreators } from 'redux';
-import { getBoardsandPosts, addPost } from '../../../actions/userActions';
+import { getBoardsandPosts, addPost, respond } from '../../../actions/userActions';
+import SnackBar from '../../SnackBar/SnackBar';
 // import BoardList from './BoardList';
 
 class PostDialog extends React.Component {
@@ -29,8 +30,11 @@ class PostDialog extends React.Component {
             titleError: '',
             board: '',
             image: '',
-            files: []
+            files: [],
+            snackBar: false
         };
+
+        this.snackBarClose = this.snackBarClose.bind(this);
     }
 
     componentDidMount = async () => {
@@ -94,7 +98,7 @@ class PostDialog extends React.Component {
             this.setState({ titleError: 'Title must be greater than 3 characters' });
         } else {
             this.props.addPost(this.state, this.state.username);
-            this.onCloseClick();
+            this.setState({ snackBar: true });
         }
     };
 
@@ -102,52 +106,77 @@ class PostDialog extends React.Component {
         this.props.history.push(`/profile/${this.state.username}`);
     };
 
-    render () {
-        // for now lets leave this commented out,
-        // because the post dialog will never actually render with this, as we only get
-        // errors from our post requests atm.
-        // if (!Boolean(this.state.boards)) {
-        //     return <CircularProgress color='secondary' />;
-        // }
-        return (
-            <Dialog
-                open={true}
-                onClose={this.handleClose}
-                aria-labelledby='form-dialog-title'
-                onClick={() => this.onCloseClick()}
+    snackBarClose (event, reason) {
+        if (reason === 'clickaway') {
+            return;
+        }
 
-            >
-                <div onClick={e => e.stopPropagation()}>
-                    <DialogTitle style={{ textAlign: 'center' }} id='form-dialog-title'>
-                            Create a post
-                    </DialogTitle>
-                    <DialogContent>
-                        <FormContent
-                            onChangeText={this.onChangeText}
-                            titleError={this.state.titleError}
-                            tagError={this.state.tagError}
-                            onSubmitPress={this.onSubmitPress}
-                            tag={this.state.tag}
-                            title={this.state.title}
-                            description={this.state.description}
-                            link={this.state.link}
-                        />
-                        {this.renderTags()}
-                    </DialogContent>
-                    <DialogContent>
-                        <FileUploader
-                            onUploadImages={this.onUploadImages}
-                            files={this.state.files}
-                        />
-                    </DialogContent>
-                    <DialogContent />
-                    <DialogActions>
-                        <Button onClick={this.onCreatePress} color='primary'>
-                                Create
-                        </Button>
-                    </DialogActions>
-                </div>
-            </Dialog>
+        this.setState({ snackBar: false });
+        if (this.props.userStore.success) {
+            this.onCloseClick();
+        }
+        this.props.dispatch(respond());
+    }
+
+    ServerResponse = () => {
+        if (this.props.userStore.success) {
+            return (
+                <SnackBar message={'Post Created'} variant={'success'} open={this.state.snackBar}
+                    onClose={this.snackBarClose} duration={1000}/>
+            );
+        } else if (this.props.userStore.error) {
+            return (
+                <SnackBar message={'Post Creation failed'} variant={'error'}
+                    open={this.state.snackBar} onClose={this.snackBarClose} duration={1500}/>
+            );
+        }
+
+        return null;
+    };
+
+    render () {
+        return (
+            <div>
+                <Dialog
+                    open={true}
+                    onClose={this.handleClose}
+                    aria-labelledby='form-dialog-title'
+                    onClick={() => this.onCloseClick()}
+                    maxWidth={'md'}
+
+                >
+                    <div onClick={e => e.stopPropagation()}>
+                        <DialogTitle style={{ textAlign: 'center' }} id='dialog-title' title={'Create a post'} onClose={() => this.onCloseClick()}/>
+                        <DialogContent>
+                            <Grid container direction="row" justify="space-between" alignItems="center">
+                                <Grid item xs={6}>
+                                    <FormContent
+                                        onChangeText={this.onChangeText}
+                                        titleError={this.state.titleError}
+                                        tagError={this.state.tagError}
+                                        onSubmitPress={this.onSubmitPress}
+                                        tag={this.state.tag}
+                                        title={this.state.title}
+                                        description={this.state.description}
+                                        link={this.state.link}
+                                    />
+                                    {this.renderTags()}
+                                </Grid>
+                                <Grid item xs={6}>
+                                    <FileUploader
+                                        onUploadImages={this.onUploadImages}
+                                        files={this.state.files}
+                                    />
+                                </Grid>
+                            </Grid>
+                        </DialogContent>
+                        <DialogActions>
+                            <Button onClick={this.onCreatePress} color='primary' style={{ margin: '1rem auto' }}>Create</Button>
+                        </DialogActions>
+                    </div>
+                </Dialog>
+                <this.ServerResponse />
+            </div>
         );
     }
 }
@@ -160,7 +189,8 @@ function mapDispatchToProps (dispatch) {
     return bindActionCreators(
         {
             getBoardsandPosts,
-            addPost
+            addPost,
+            dispatch
         },
         dispatch
     );

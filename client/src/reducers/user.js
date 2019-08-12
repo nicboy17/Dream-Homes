@@ -37,12 +37,12 @@ export default (state = initialState, action) => {
         return { ...state, error: action.err };
     case ADD_BOARD_SUCCESS:
         state.boards.push(response.board);
-        return { ...state };
+        return { ...state, success: true };
     case ADD_BOARD_ERROR:
         return { ...state, error: action.err };
     case ADD_POST_SUCCESS:
         state.posts.push(response.post);
-        return { ...state };
+        return { ...state, success: true };
     case ADD_POST_ERROR:
         return { ...state, error: action.err };
     case ADD_POST_TO_BOARD_SUCCESS:
