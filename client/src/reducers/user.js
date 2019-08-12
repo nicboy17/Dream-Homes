@@ -4,7 +4,7 @@ import {
     GET_USER_BOARDS_POSTS_SUCCESS, GET_USER_BOARDS_POSTS_ERROR,
     ADD_BOARD_SUCCESS, ADD_BOARD_ERROR,
     ADD_POST_SUCCESS, ADD_POST_ERROR,
-    EDIT_USER_ERROR, EDIT_USER_SUCCESS
+    EDIT_USER_ERROR, EDIT_USER_SUCCESS, ADD_POST_TO_BOARD_SUCCESS, ADD_POST_TO_BOARD_ERROR
 } from '../actions/types';
 
 const initialState = {
@@ -44,6 +44,13 @@ export default (state = initialState, action) => {
         state.posts.push(response.post);
         return { ...state };
     case ADD_POST_ERROR:
+        return { ...state, error: action.err };
+    case ADD_POST_TO_BOARD_SUCCESS:
+        console.log(response.board);
+        const index = state.boards.findIndex((board) => { return board._id === response.board._id; });
+        state.boards[index] = response.board;
+        return { ...state, success: true };
+    case ADD_POST_TO_BOARD_ERROR:
         return { ...state, error: action.err };
     default:
         return state;

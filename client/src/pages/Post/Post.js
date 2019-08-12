@@ -21,7 +21,7 @@ const useStyles = makeStyles(theme => ({
     }
 }));
 
-const Post = ({ post, boards, handleSelectBoard, handleSave, value }) => {
+const Post = ({ post, boards, handleSelectBoard, handleSave, value, disabled }) => {
     const classes = useStyles();
 
     return (
@@ -35,6 +35,7 @@ const Post = ({ post, boards, handleSelectBoard, handleSave, value }) => {
                     <BoardList
                         boards={boards}
                         value={value}
+                        disabled={disabled}
                         handleSelect={handleSelectBoard}
                         handleSave={handleSave}
                     />

@@ -37,7 +37,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 // eslint-disable-next-line react/prop-types
-const BoardList = ({ boards, handleSelect, value, handleSave }) => {
+const BoardList = ({ boards, handleSelect, value, handleSave, disabled }) => {
     const classes = useStyles();
 
     return (
@@ -60,7 +60,7 @@ const BoardList = ({ boards, handleSelect, value, handleSave }) => {
                     })}
                 </Select>
                 <span>
-                    <Button variant="contained" size="medium" color="primary" className={classes.save} onClick={handleSave} href={''}>Save</Button>
+                    <Button variant="contained" size="medium" color="primary" className={classes.save} onClick={handleSave} disabled={disabled}>Save</Button>
                 </span>
             </FormControl>
         </form>
