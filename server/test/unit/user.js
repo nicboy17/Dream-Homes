@@ -58,17 +58,17 @@ describe('User', () => {
 
         it('Password Salts are random',async () => {
             const user1 = await User.create({
-                "name": "temp",
-                "username": "temp",
+                "name": "temp9",
+                "username": "temp9",
                 "password": "Password1",
-                "email": "temp@gmail.com",
+                "email": "temp9@gmail.com",
             });
 
             const user2 = await User.create({
-                "name": "temp2",
-                "username": "temp2",
+                "name": "temp10",
+                "username": "temp10",
                 "password": "Password1",
-                "email": "temp2@gmail.com",
+                "email": "temp10@gmail.com",
             });
 
             expect(user1.password).to.not.be.equal(user2.password);

@@ -1,3 +1,28 @@
+// User
 export const LOGIN = 'LOGIN';
-export const LOGIN_USER_SUCCESS = 'LOGIN_USER_SUCCESS';
-export const LOGIN_USER_ERROR = 'LOGIN_USER_ERROR';
+export const LOGIN_SUCCESS = 'LOGIN_SUCCESS';
+export const LOGIN_ERROR = 'LOGIN_ERROR';
+export const LOGIN_RESPONSE = 'LOGIN_RESPONSE';
+
+export const LOGOUT = 'LOGOUT';
+export const LOGOUT_SUCCESS = 'LOGOUT_SUCCESS';
+
+export const GET_TOKEN = 'GET_TOKEN';
+export const GET_TOKEN_SUCCESS = 'GET_TOKEN_SUCCESS';
+
+export const GET_USER_BOARDS_POSTS = 'GET_USER_BOARDS_POSTS';
+export const GET_USER_BOARDS_POSTS_SUCCESS = 'GET_USER_BOARDS_POSTS_SUCCESS';
+export const GET_USER_BOARDS_POSTS_ERROR = 'GET_USER_BOARDS_POSTS_ERROR';
+
+export const ADD_BOARD = 'ADD_BOARD';
+export const ADD_BOARD_SUCCESS = 'ADD_BOARD_SUCCESS';
+export const ADD_BOARD_ERROR = 'ADD_BOARD_ERROR';
+
+export const ADD_POST = 'ADD_POST';
+export const ADD_POST_SUCCESS = 'ADD_POST_SUCCESS';
+export const ADD_POST_ERROR = 'ADD_POST_ERROR';
+
+// Post
+export const GET_POSTS = 'GET_POSTS';
+export const GET_POSTS_SUCCESS = 'GET_POSTS_SUCCESS';
+export const GET_POSTS_ERROR = 'GET_POSTS_ERROR';
