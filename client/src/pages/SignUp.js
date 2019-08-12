@@ -89,6 +89,7 @@ const useStyles = makeStyles({
     }
 });
 
+// eslint-disable-next-line react/prop-types
 const SignUp = ({ history }) => {
     const style = useStyles();
     const [formData, setFormData] = useState({
@@ -106,6 +107,8 @@ const SignUp = ({ history }) => {
         if (password !== password2) {
             setFormData({ ...formData, passwordError: 'Passwords do not match' });
         }
+
+        // TODO: Fix Signup (fix password validation as well)
         if (!password.match(/(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])[A-Za-zd$@!%*?&].{8,}/)) {
             setFormData({
                 ...formData,
@@ -193,7 +196,7 @@ const SignUp = ({ history }) => {
                     </button>
                     <p className={style.footer}>
                         Already a Member?{' '}
-                        <Link to='/' className={style.login}>
+                        <Link to='/login' className={style.login}>
                             Log In!
                         </Link>
                     </p>

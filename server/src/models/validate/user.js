@@ -35,13 +35,6 @@ module.exports = {
             validator: 'isLength',
             arguments: [8, 100],
             message: 'Password should be between {ARGS[0]} and {ARGS[1]} characters'
-        }),
-        validate({
-            validator: 'matches',
-            arguments: new RegExp(
-                '(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])[A-Za-zd$@!%*?&].{8,}'
-            ),
-            message: 'Password must contain at least one Upper Case and Number'
         })
     ]
 };

@@ -11,12 +11,12 @@ router.post('/register', [UserValidation.register, async (req, res) => {
         const user = await User.create(req.body);
         res.status(201).json({ success: true, user, token: user.loginToken() });
     } catch (err) {
-        res.status(400).json({ success: false, message: err.errmsg });
+        res.status(400).json({ success: false, message: err.errors });
     }
 }]);
 
 router.post('/login', [UserValidation.login, async (req, res) => {
-    const user = await User.findOne({ username: req.body.username }).exec();
+    const user = await User.findOne({ email: req.body.email }).exec();
     if (!user) {
         res.status(400).json({ success: false, message: 'Could not authenticate' });
     } else {

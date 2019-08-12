@@ -11,7 +11,7 @@ module.exports = {
     },
 
     login: (req, res, next) => {
-        req.checkBody('username', 'No username provided').exists().notEmpty();
+        req.checkBody('email', 'No email provided').exists().notEmpty();
         req.checkBody('password', 'No password provided').exists().notEmpty();
 
         validationHandler(req, res, next);
