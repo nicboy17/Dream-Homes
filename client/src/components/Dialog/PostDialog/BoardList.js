@@ -24,7 +24,6 @@ const useStyles = makeStyles(theme => ({
 const BoardList = ({ boards, handleSelect, value }) => {
     const classes = useStyles();
 
-
     return (
         <form className={classes.root} autoComplete='off'>
             <FormControl className={classes.formControl}>

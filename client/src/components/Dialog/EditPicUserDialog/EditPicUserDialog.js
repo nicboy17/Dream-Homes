@@ -11,16 +11,20 @@ import CloseIcon from '@material-ui/icons/Close';
 import axios from 'axios';
 
 class EditPicUserDialog extends Component {
-    state = {
-        smallText: '',
-        nameError: false,
-        name: ''
-    };
-    //Fetch Name and Picture from UserDB
+    constructor (props) {
+        super(props);
+        this.state = {
+            smallText: '',
+            nameError: false,
+            name: ''
+        };
+    }
+
+    // Fetch Name and Picture from UserDB
     componentDidMount = async () => {
         try {
             const username = this.props.location.pathname.split('/')[2];
-            let res = await axios.get(`/users/${username}`);
+            const res = await axios.get(`/users/${username}`);
             console.log(res);
             if (res.data.user) {
                 return this.setState({
@@ -36,7 +40,7 @@ class EditPicUserDialog extends Component {
     };
 
     renderLoading = () => {
-        if (!Boolean(this.state.user)) {
+        if (!this.state.user) {
             return (
                 <div
                     style={{
@@ -64,6 +68,7 @@ class EditPicUserDialog extends Component {
     handleFileUpload = () => {
         document.getElementById('selectImage').click();
     };
+
     onChangeImage = e => {
         if (e.target.files[0]) {
             this.setState({
@@ -93,7 +98,7 @@ class EditPicUserDialog extends Component {
                     formData.append('name', this.state.name);
                 }
 
-                let res = await axios({
+                const res = await axios({
                     url: `/users/${this.state.user.username}`,
                     method: 'PUT',
                     data: formData,
@@ -109,7 +114,7 @@ class EditPicUserDialog extends Component {
         }
     };
 
-    render() {
+    render () {
         this.renderLoading();
         return (
             <Dialog

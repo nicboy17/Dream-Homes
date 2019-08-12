@@ -1,34 +1,50 @@
-import React from 'react';
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 import { MuiThemeProvider } from '@material-ui/core';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
 
 import { theme } from './themes/theme';
-
-import LogIn from './pages/Landing';
-import SignUp from './pages/SignUp.js';
-import Profile from './pages/Profile.js';
-import NotFound from './pages/NotFound.js';
-
-import PostDialog from './components/Dialog/PostDialog/PostDialog';
-import BoardDialog from './components/Dialog/BoardDialog/BoardDialog';
-
 import './App.css';
 
-function App() {
-    return (
-        <MuiThemeProvider theme={theme}>
-            <BrowserRouter>
-                <Switch>
-                    <Route exact path='/login' component={LogIn} />
-                    <Route exact path='/signup' component={SignUp} />
-                </Switch>
-                <Route path='/profile/:username' component={Profile} />
-                <Route path='/profile/:username/post/create' component={PostDialog} />
-                <Route path='/profile/:username/board/create' component={BoardDialog} />
-                <Route component = {NotFound} />
-            </BrowserRouter>
-        </MuiThemeProvider>
+import Home from './pages/Home';
+import SignUp from './pages/SignUp.js';
+import Profile from './pages/Profile.js';
+
+import PostPage from './pages/Post/PostPage';
+import { getToken } from './actions/userActions';
+import Login from './components/Dialog/Login/Login';
+
+class App extends Component {
+    constructor (props) {
+        super(props);
+        this.props.getToken();
+    }
+
+    render () {
+        return (
+            <MuiThemeProvider theme={theme}>
+                <BrowserRouter>
+                    <Switch>
+                        <Route exact path='/' component={Home}/>
+                        <Route exact path='/login' component={Login}/>
+                        <Route path='/posts/:id' component={PostPage}/>
+                        <Route path='/profile/:username' component={Profile} />
+                        <Route exact path='/signup' component={SignUp} />
+                    </Switch>
+                </BrowserRouter>
+            </MuiThemeProvider>
+        );
+    }
+}
+
+function mapDispatchToProps (dispatch) {
+    return bindActionCreators(
+        {
+            getToken
+        },
+        dispatch
     );
 }
 
-export default App;
+export default connect(null, mapDispatchToProps)(App);

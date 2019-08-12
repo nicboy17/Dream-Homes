@@ -26,7 +26,7 @@ export const theme = createMuiTheme({
                 border: '1px #ddd solid',
                 backgroundColor: '#fff',
                 borderRadius: 25,
-                minHeight: 30,
+                minHeight: 30
             },
             contained: {
                 boxShadow: 'none'
@@ -35,7 +35,7 @@ export const theme = createMuiTheme({
         MuiTabs: {
             root: {
                 display: 'flex',
-                backgroundColor: 'transparent',
+                backgroundColor: 'transparent'
             },
             indicator: {
                 display: 'none'
@@ -53,11 +53,25 @@ export const theme = createMuiTheme({
                 marginRight: '1rem',
                 borderRadius: 25,
                 minHeight: 20,
-                '&$selected':{
+                '&$selected': {
                     opacity: 1,
                     color: '#fff',
-                    backgroundColor: 'black',
+                    backgroundColor: 'black'
                 }
+            }
+        },
+        MuiInput: {
+            input: {
+                textAlign: 'center',
+                '&::placeholder': {
+                    color: 'black',
+                    opacity: 1
+                }
+            }
+        },
+        MuiFormHelperText: {
+            root: {
+                textAlign: 'center'
             }
         }
     }
