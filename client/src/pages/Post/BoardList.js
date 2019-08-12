@@ -11,7 +11,12 @@ const useStyles = makeStyles(theme => ({
         border: '1px #ddd solid',
         display: 'block',
         padding: '0.4rem',
-        marginTop: '2rem'
+        marginTop: '2rem',
+        outline: 'none',
+        '&:focus': {
+            outline: 'none',
+            border: 'none'
+        }
     },
     board: {
         display: 'inline-block',
@@ -37,7 +42,7 @@ const BoardList = ({ boards, handleSelect, value, handleSave }) => {
 
     return (
         <form autoComplete='off'>
-            <FormControl className={classes.select} component={'div'}>
+            <FormControl className={classes.select}>
                 <Select value={value} onChange={handleSelect}
                     displayEmpty variant={'outlined'} className={classes.board}
                     inputProps={{
@@ -45,10 +50,10 @@ const BoardList = ({ boards, handleSelect, value, handleSave }) => {
                         id: 'board'
                     }}
                 >
-                    <MenuItem value="" button={false} component={'li'}>Select board</MenuItem>
+                    <MenuItem value="">Select board</MenuItem>
                     {boards.map((board, i) => {
                         return (
-                            <MenuItem key={i} value={board._id} button={false} component={'li'}>
+                            <MenuItem key={i} value={board._id}>
                                 {board.title}
                             </MenuItem>
                         );

@@ -26,7 +26,8 @@ const useStyles = makeStyles(theme => ({
         minHeight: '40px',
         borderRadius: '50px',
         border: '1px solid lightgrey',
-        paddingLeft: '15px'
+        paddingLeft: '15px',
+        outline: 'none'
     },
     headerBottomBorder: {
         minHeight: '5px',
