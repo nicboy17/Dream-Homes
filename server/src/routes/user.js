@@ -95,4 +95,28 @@ router.post('/:username/posts', [upload.single('image'), UserValidation.addPost,
     }
 }]);
 
+// @route    PUT users/:username/interests
+// @desc     Update user with interests
+// @access   Private
+router.put('/:username/interests', async (req,res) => {
+    try {
+        let user = await User.findOne({username: req.params.username}); 
+        if(user._id.toString() !== req.decoded._id.toString()) {
+            return res.status(401).json({msg: 'You do not have the authorization to do this'});
+        }
+        if(!user) {
+            return res.status(404).json({msg: 'User not found'});
+        }
+        user.interests = (req.body.interests);
+        await user.save();
+        res.json(user);
+    } catch (err) {
+        // Check to see if it is a valid object id
+        if(err.kind === 'ObjectId') {
+            return res.status(404).json({msg: 'The user does not exist'});
+        }
+        return res.status(500).send('Server Error');
+    }
+});
+
 module.exports = router;
