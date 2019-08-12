@@ -95,36 +95,28 @@ router.post('/:username/posts', [upload.single('image'), UserValidation.addPost,
     }
 }]);
 
-// @route    PUT users/board/:id
-// @desc     Update posts in a board
+// @route    PUT users/:username/interests
+// @desc     Update user with interests
 // @access   Private
-router.put('/board/:id', async (req,res) => {
+router.put('/:username/interests', async (req,res) => {
     try {
-        const board = await Board.findById(req.params.id);
-        if(board.user.toString() !== req.decoded._id.toString()) {
-            return res.status(401).json({msg: 'You do not have the authorization to add to this board'});
+        let user = await User.findOne({username: req.params.username}); 
+        if(user._id.toString() !== req.decoded._id.toString()) {
+            return res.status(401).json({msg: 'You do not have the authorization to do this'});
         }
-        // Check to see if there is a board with that id
-        if(!board) {
-            return res.status(404).json({msg: 'Board not found'});
+        if(!user) {
+            return res.status(404).json({msg: 'User not found'});
         }
-        // Check to see if post has already been added to board
-        if (
-            board.posts.filter(post => post.toString() === req.body._id).length > 0
-        ) {
-            return res.status(400).json({ msg: 'Post has already been added to the board' });
-        }
-        board.posts.unshift(req.body._id);
-        await board.save();
-        res.json(board);
+        user.interests = (req.body.interests);
+        await user.save();
+        res.json(user);
     } catch (err) {
-        // Check to see if it is a valid object id 
+        // Check to see if it is a valid object id
         if(err.kind === 'ObjectId') {
-            return res.status(404).json({msg: 'The board or post does not exist'});
+            return res.status(404).json({msg: 'The user does not exist'});
         }
         return res.status(500).send('Server Error');
     }
 });
-
 
 module.exports = router;
