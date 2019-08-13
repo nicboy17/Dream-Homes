@@ -8,7 +8,7 @@ import CardMedia from '@material-ui/core/CardMedia';
 import CardActionArea from '@material-ui/core/CardActionArea';
 import house from '../assets/house.png';
 import { Route } from 'react-router-dom';
-import Navbar from '../components/Navbar/Navbar';
+
 import CircularProgress from '@material-ui/core/CircularProgress';
 import InterestQuizDialog from '../components/Dialog/InterestQuizDialog/QuizDialog';
 import PostDialog from '../components/Dialog/PostDialog/PostDialog';
@@ -156,18 +156,16 @@ class Profile extends Component {
         if (!this.props.userStore.boards) {
             return (
                 <div>
-                    <Navbar/>
                     <CircularProgress/>
                 </div>
             );
         }
-
+        console.log(this.props.userStore)
         return (
             <div>
                 <Route path='/profile/:username/interest-quiz' component={InterestQuizDialog}/>
                 <Route path='/profile/:username/post/create' component={PostDialog}/>
                 <Route path='/profile/:username/board/create' component={BoardDialog}/>
-                <Navbar/>
                 <div className={classes.subHeader}>
                     <div className={classes.nameContainer}>
                         <img src={face} alt='' className={classes.subHeaderIcon}/>
