@@ -2,19 +2,31 @@ const express = require('express');
 const router = express.Router();
 
 const UserValidation = require('./validate/user');
-const { User, Board, Post } = require('../models');
+const { User, Board, Post, Follow } = require ('../models');
 const upload = require('../services/file-upload');
 const token = require('../middleware/token');
 
+
+// @route    POST users/register
+// @desc     register
+// @access   Public
 router.post('/register', [UserValidation.register, async (req, res) => {
     try{
         const user = await User.create(req.body);
-        res.status(201).json({ success: true, user, token: user.loginToken() });
+        res.status (201).json ({
+            success: true,
+            user: { ...user.toObject (), 'followers': 0, 'following': 0 },
+            token: user.loginToken ()
+        });
     } catch (err) {
         res.status(400).json({ success: false, message: err.errors });
     }
 }]);
 
+
+// @route    POST users/login
+// @desc     login
+// @access   Public
 router.post('/login', [UserValidation.login, async (req, res) => {
     const user = await User.findOne({ email: req.body.email }).exec();
     if (!user) {
@@ -24,13 +36,18 @@ router.post('/login', [UserValidation.login, async (req, res) => {
         if (!validPassword) {
             res.status(400).json({ success: false, message: 'Could not authenticate' });
         } else {
-            res.status(200).json({ success: true, user, token: user.loginToken() });
+            res.status (200).json ({
+                success: true,
+                user: { ...user.toObject (), ...await user.follow () },
+                token: user.loginToken ()
+            });
         }
     }
 }]);
 
 //authenticated routes below this middleware
 router.use(token());
+
 
 // @route    GET users/:username
 // @desc     Get user profile with all their posts and boards
@@ -47,6 +64,10 @@ router.get('/:username', async (req, res) => {
     }
 });
 
+
+// @route    PUT users/:username
+// @desc     Update user image and/or name
+// @access   Private
 router.put('/:username', [upload.single('image'), UserValidation.updateUser, async (req, res) => {
     let update = {};
     if(req.file) { update.profile = req.file.location; }
@@ -61,7 +82,32 @@ router.put('/:username', [upload.single('image'), UserValidation.updateUser, asy
         return res.status(400).json({err});
     }
 }]);
-      
+
+
+// @route    PUT users/follow/:id
+// @desc     Follow another user
+// @access   Private
+router.post ('/follow', async (req, res) => {
+    if (req.decoded._id !== req.body.follower) {
+        return res.status (403).json ({ success: false, message: 'You can only follow users' });
+    }
+    try {
+        await Follow.findOneAndUpdate (req.body, req.body, {
+            upsert: true,
+            new: true,
+            setDefaultsOnInsert: true
+        }).lean ();
+        return res.status (200).json ({ success: true });
+    } catch (err) {
+        return res.status (400).json ({ success: false });
+    }
+});
+
+
+// TODO: add to board route ?
+// @route    POST users/:username/board
+// @desc     Create user board
+// @access   Private
 router.post('/:username/board', [UserValidation.addBoard, async (req, res) => {
     try {
         const user = await User.findOne({ username: req.params.username }).select('_id').lean();
@@ -78,6 +124,11 @@ router.post('/:username/board', [UserValidation.addBoard, async (req, res) => {
     }
 }]);
 
+
+// TODO: add to post route ?
+// @route    POST users/:username/posts
+// @desc     Create new post
+// @access   Private
 router.post('/:username/posts', [upload.single('image'), UserValidation.addPost, async (req, res) => {
     const user = await User.findOne({ username: req.params.username }).select('_id').lean();
     if (!user) {
@@ -95,8 +146,9 @@ router.post('/:username/posts', [upload.single('image'), UserValidation.addPost,
     }
 }]);
 
+
 // @route    PUT users/:username/interests
-// @desc     Update user with interests
+// @desc     Update user interests
 // @access   Private
 router.put('/:username/interests', async (req,res) => {
     try {
@@ -119,6 +171,8 @@ router.put('/:username/interests', async (req,res) => {
     }
 });
 
+
+// TODO: add to board route ?
 // @route    PUT users/board/:id
 // @desc     Update posts in a board
 // @access   Private

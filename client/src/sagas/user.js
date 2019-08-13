@@ -25,7 +25,7 @@ export function * loginSaga () {
     yield takeLatest(LOGIN, login);
 }
 
-function * logout (request) {
+function * logout () {
     yield call(userService.logout);
     yield put({ type: LOGOUT_SUCCESS });
 }
@@ -35,14 +35,13 @@ export function * logoutSaga () {
     yield takeLatest(LOGOUT, logout);
 }
 
-function * getToken (request) {
+function * getToken () {
     const token = yield call(userService.getToken);
     if (token) {
         const user = yield call(userService.getUser);
         yield put({ type: GET_TOKEN_SUCCESS, token, user });
     } else {
-        // TODO: logout
-        yield call(userService.logout);
+        yield logout();
     }
 }
 

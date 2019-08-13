@@ -1,7 +1,7 @@
 const chai = require("chai");
 const expect = chai.expect;
 
-const User = require('../../src/models/user');
+const { User } = require ('../../src/models');
 
 describe('User', () => {
     before((done) => {
