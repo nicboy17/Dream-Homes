@@ -12,7 +12,7 @@ import SnackBar from '../components/SnackBar/SnackBar';
 import { CircularProgress } from '@material-ui/core';
 import Masonry from 'react-masonry-component';
 
-import './Content.css';
+import './stylesheet/Content.css';
 
 class Search extends Component {
     state = {
