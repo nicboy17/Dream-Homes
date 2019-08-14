@@ -19,13 +19,12 @@ const FileUploader = ({ onUploadImages, files }) => {
         <Fragment>
             <FilePond
                 files={files}
-                allowMultiple
-                maxFiles={5}
-                acceptedFileTypes={['image/png', 'image/jpeg']}
+                // allowMultiple
+                // maxFiles={5}
+                acceptedFileTypes={['image/jpeg']}
                 labelIdle='Drag and drop or Click to upload. Use high-quality jpg files less than 32mb.'
                 maxFileSize='32MB'
                 onupdatefiles={fileItems => onUploadImages(fileItems)}
-                dropValidation
             />
         </Fragment>
     );
