@@ -3,8 +3,6 @@ const router = express.Router();
 const ObjectId = require('mongodb').ObjectId; 
 const { User, Post } = require('../models');
 
-const token = require('../middleware/token');
-
 const _ = require('lodash');
 
 // @route    GET users/posts
@@ -39,8 +37,5 @@ router.get('/', async (req, res) => {
         res.status(500).send('Something went wrong with the server');
     }
 });
-
-//authenticated routes below this middleware
-// router.use(token());
 
 module.exports = router;
