@@ -87,7 +87,7 @@ router.put('/:username', [upload.single('image'), UserValidation.updateUser, asy
 // @route    PUT users/follow/:id
 // @desc     Follow another user
 // @access   Private
-router.post ('/follow', async (req, res) => {
+router.post ('/follow', [UserValidation.followUser, async (req, res) => {
     if (req.decoded._id !== req.body.follower) {
         return res.status (403).json ({
             success: false,
@@ -107,7 +107,7 @@ router.post ('/follow', async (req, res) => {
     } catch (err) {
         return res.status (400).json ({ success: false });
     }
-});
+}]);
 
 
 // TODO: add to board route ?

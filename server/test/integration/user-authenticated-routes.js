@@ -108,6 +108,17 @@ describe('User Authenticated Routes', () => {
                 });
         });
 
+        it ('Should return missing fields', () => {
+            return request
+                .post ('/users/follow')
+                .set ({ 'access-token': global['token'] })
+                .send ({})
+                .expect (422)
+                .then ((res) => {
+                    expect (res.body.success).to.be.false;
+                });
+        });
+
         it ('Should return error', () => {
             return request
                 .post ('/users/follow')
