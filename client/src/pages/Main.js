@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 import React, { Component } from 'react';
 import Posts from '../components/Posts/Posts';
 import SnackBar from '../components/SnackBar/SnackBar';

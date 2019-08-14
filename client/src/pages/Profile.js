@@ -160,7 +160,6 @@ class Profile extends Component {
                 </div>
             );
         }
-        console.log(this.props.userStore)
         return (
             <div>
                 <Route path='/profile/:username/interest-quiz' component={InterestQuizDialog}/>
