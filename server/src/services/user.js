@@ -59,26 +59,26 @@ class UserClass {
 
     async following () {
         try {
-            const count = await Follow.aggregate ([
+            return await Follow.aggregate ([
                 { $match: { follower: this._id } },
-                {
-                    $group: {
-                        _id: '$follower',
-                        following: { $push: '$followee' }
-                    }
-                },
-                { $unwind: '$following' },
                 {
                     $lookup: {
                         from: 'users',
-                        localField: 'following',
+                        localField: 'followee',
                         foreignField: '_id',
                         as: 'following'
                     }
                 },
-                { $project: { 'following.password': 0, 'following.email': 0 } }
+                { $unwind: '$following' },
+                {
+                    $project: {
+                        _id: '$following._id',
+                        username: '$following.username',
+                        name: '$following.name',
+                        profile: '$following.profile'
+                    }
+                }
             ]);
-            return count[0];
         } catch (e) {
             // eslint-disable-next-line no-console
             console.log (e);
@@ -87,26 +87,26 @@ class UserClass {
 
     async followers () {
         try {
-            const count = await Follow.aggregate ([
-                { $match: { follower: this._id } },
-                {
-                    $group: {
-                        _id: '$followee',
-                        followers: { $push: '$follower' }
-                    }
-                },
-                { $unwind: 'followers' },
+            return await Follow.aggregate ([
+                { $match: { followee: this._id } },
                 {
                     $lookup: {
                         from: 'users',
-                        localField: 'followers',
+                        localField: 'follower',
                         foreignField: '_id',
                         as: 'followers'
                     }
                 },
-                { $project: { 'followers.password': 0, 'followers.email': 0 } }
+                { $unwind: '$followers' },
+                {
+                    $project: {
+                        _id: '$followers._id',
+                        username: '$followers.username',
+                        name: '$followers.name',
+                        profile: '$followers.profile'
+                    }
+                }
             ]);
-            return count[0];
         } catch (e) {
             // eslint-disable-next-line no-console
             console.log (e);

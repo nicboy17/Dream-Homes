@@ -89,8 +89,14 @@ router.put('/:username', [upload.single('image'), UserValidation.updateUser, asy
 // @access   Private
 router.post ('/follow', async (req, res) => {
     if (req.decoded._id !== req.body.follower) {
-        return res.status (403).json ({ success: false, message: 'You can only follow users' });
+        return res.status (403).json ({
+            success: false,
+            message: 'You are not authorized to add yourself to another users following list'
+        });
+    } else if (req.decoded._id === req.body.follower && req.decoded._id === req.body.followee) {
+        return res.status (400).json ({ success: false, message: 'You can not follow yourself' });
     }
+
     try {
         await Follow.findOneAndUpdate (req.body, req.body, {
             upsert: true,
