@@ -12,7 +12,7 @@ const useStyles = makeStyles(theme => ({
     header: {
         display: 'grid',
         gridTemplateColumns: '5fr 3fr 6fr 2.5fr 2.5fr 0fr 3fr',
-        minHeight: '6rem',
+        minHeight: '16vh',
         justifyItems: 'center',
         alignItems: 'center'
     },
@@ -38,8 +38,8 @@ const useStyles = makeStyles(theme => ({
         zIndex: '10'
     },
     placeholderHeader: {
-        minHeight: '14vh',
-        height: '14vh'
+        minHeight: '16vh',
+        height: '16vh'
     },
     menu: {
         marginTop: '4rem'
