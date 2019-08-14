@@ -1,0 +1,44 @@
+.placeholder {
+    min-height: 7vh;
+    height: 7vh;
+}
+
+.buttonmenu {
+    display: grid;
+    justify-content: center;
+    margin-bottom: 50px;
+}
+
+.buttongrid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    grid-gap: 10px;
+}
+
+.option {
+    background: white;
+    border-radius: 20px;
+    border: 1px solid lightgrey;
+    padding: 10px;
+    font-weight: bold;
+}
+
+.contentgrid {
+    display: grid;
+    justify-content: center;
+    max-width: 70vw;
+    margin: 0 auto;
+}
+
+.masonry {
+    margin: 0 auto;
+    position: relative;
+    text-align: center;
+}
+
+.img {
+    width: 200px;
+    height: auto;
+    border-radius: 15px;
+    margin-bottom: 15px;
+}
