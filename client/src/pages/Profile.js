@@ -131,7 +131,9 @@ class Profile extends Component {
 
         this.state = {
             username: '',
-            activePanel: 'board'
+            activePanel: 'board',
+            followers: 0,
+            following: 0,
         };
         this.toggle = this.toggle.bind(this);
     }
@@ -173,7 +175,7 @@ class Profile extends Component {
                         <img src={face} alt='' className={classes.subHeaderIcon}/>
                         <div>
                             <h3 className={classes.profileName}>{this.state.username}</h3>
-                            <h5 className={classes.profileFollowers}>134 Followers | 280 Following</h5>
+                            <h5 className={classes.profileFollowers}>{this.state.followers} Followers | {this.state.following} Following</h5>
                         </div>
                     </div>
                     <div/>
