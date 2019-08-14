@@ -11,7 +11,7 @@ const _ = require('lodash');
 router.get('/', async (req, res) => {
     const { search_filter = '', easy_filters = '', userId = ''} = req.query;
     try {
-        let query;;
+        let query;
         let searchTags = [];
 
         if (search_filter) {
@@ -22,10 +22,13 @@ router.get('/', async (req, res) => {
         }
         // If logged in with empty search
         if (_.isEmpty(searchTags) && userId) {
+            // Get user's interest and add interest into search tags
             const user = await User.findById(ObjectId(userId));
             searchTags = [...searchTags, ...user.interests];
             query = { tags: { $in: user.interests } };
-        } else if (!_.isEmpty(searchTags)) {
+        }
+        // Search by filters if present
+        else if (!_.isEmpty(searchTags)) {
             query = { tags: { $all: searchTags } };
         // If not logged in will return a bunch of posts
         } else {
