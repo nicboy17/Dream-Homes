@@ -7,13 +7,15 @@ import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import { theme } from './themes/theme';
 import './App.css';
 
-import Home from './pages/Home';
+import Main from './pages/Main';
 import SignUp from './pages/SignUp.js';
+import Login from './components/Dialog/Login/Login';
 import Profile from './pages/Profile.js';
 
 import PostPage from './pages/Post/PostPage';
 import { getToken } from './actions/userActions';
-import Login from './components/Dialog/Login/Login';
+
+import NavBar from './components/Navbar/Navbar';
 
 class App extends Component {
     constructor (props) {
@@ -25,8 +27,9 @@ class App extends Component {
         return (
             <MuiThemeProvider theme={theme}>
                 <BrowserRouter>
+                    <NavBar/>
                     <Switch>
-                        <Route exact path='/' component={Home}/>
+                        <Route exact path='/' component={Main}/>
                         <Route exact path='/login' component={Login}/>
                         <Route path='/posts/:id' component={PostPage}/>
                         <Route path='/profile/:username' component={Profile} />

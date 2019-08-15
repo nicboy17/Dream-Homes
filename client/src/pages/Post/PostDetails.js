@@ -3,6 +3,7 @@ import { makeStyles } from '@material-ui/styles';
 import { Typography, Grid } from '@material-ui/core';
 import Avatar from '@material-ui/core/Avatar';
 import face from '../../assets/face.jpg';
+import moment from 'moment';
 
 const useStyles = makeStyles(theme => ({
     author: {
@@ -25,13 +26,13 @@ const useStyles = makeStyles(theme => ({
     }
 }));
 
-const PostDetails = ({ post }) => {
+const PostDetails = ({ post, profileImage }) => {
     const classes = useStyles();
 
     return (
         <div>
             <Grid container direction="row" justify="flex-start" alignItems="center" spacing={4} className={classes.author}>
-                <Avatar src={face} component={'div'} className={classes.avatar} />
+                <Avatar src={profileImage} alt = {face} component={'div'} className={classes.avatar} />
                 <Typography variant="subtitle2" component="subtitle2"
                     className={classes.user}>{post.user.name}</Typography>
             </Grid>
@@ -39,7 +40,7 @@ const PostDetails = ({ post }) => {
                 <Typography variant="h5" component="h5" className={classes.title}>{post.title}</Typography>
                 <Typography variant="subtitle2" component="subtitle"
                     className={classes.text}>{post.description}</Typography>
-                <p className={classes.date}>{post.date}</p>
+                <p className={classes.date}>{moment(post.date).format('MMMM Do YYYY, h:mm a')}</p>
             </Grid>
         </div>
     );
