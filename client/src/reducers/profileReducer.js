@@ -10,22 +10,22 @@ import {
 const INITIAL_STATE = {};
 
 export default (state = INITIAL_STATE, action) => {
-    const response = action.response;
-    switch (action.type) {
+    const { type, response: { user, board, post }, err } = action;
+    switch (type) {
     case GET_USER_BOARDS_POSTS_SUCCESS:
-        return { ...state, boards: response.user.boards, posts: response.user.posts };
+        return user;
     case GET_USER_BOARDS_POSTS_ERROR:
-        return { ...state, error: action.err };
+        return { ...state, error: err };
     case ADD_BOARD_SUCCESS:
-        state.boards.push(response.board);
+        state.boards.push(board);
         return { ...state };
     case ADD_BOARD_ERROR:
-        return { ...state, error: action.err };
+        return { ...state, error: err };
     case ADD_POST_SUCCESS:
-        state.posts.push(response.post);
+        state.posts.push(post);
         return { ...state };
     case ADD_POST_ERROR:
-        return { ...state, error: action.err };
+        return { ...state, error: err };
     default:
         return state;
     }
