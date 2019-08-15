@@ -28,3 +28,8 @@ export const GET_POSTS_SUCCESS = 'GET_POSTS_SUCCESS';
 export const GET_POSTS_ERROR = 'GET_POSTS_ERROR';
 export const FETCH_POSTS_SUCCESS = 'FETCH_POSTS_SUCCESS';
 export const FETCH_POSTS_FAIL = 'FETCH_POSTS_FAIL';
+
+// Follow
+export const FOLLOW_FAIL = 'FOLLOW_FAIL';
+export const FOLLOW_SUCCESS = 'FOLLOW_SUCCESS';
+
