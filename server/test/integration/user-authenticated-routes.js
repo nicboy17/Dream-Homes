@@ -124,10 +124,9 @@ describe('User Authenticated Routes', () => {
                 .post ('/users/follow')
                 .set ({ 'access-token': global['token'] })
                 .send ({
-                    'followee': global._id,
-                    'follower': global._id
+                    'followee': global._id
                 })
-                .expect (400)
+                .expect (403)
                 .then ((res) => {
                     expect (res.body.success).to.be.false;
                 });
@@ -139,7 +138,6 @@ describe('User Authenticated Routes', () => {
                 .set ({ 'access-token': global['token'] })
                 .send ({
                     'followee': user,
-                    'follower': global._id
                 })
                 .expect (200)
                 .then ((res) => {
