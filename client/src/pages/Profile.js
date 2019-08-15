@@ -146,9 +146,9 @@ class Profile extends Component {
     }
 
     render () {
-        const { classes } = this.props;
+        const { classes, profile } = this.props;
 
-        if (!this.props.profile.boards) {
+        if (!profile.boards) {
             return (
                 <div>
                     <Navbar/>
@@ -201,11 +201,11 @@ class Profile extends Component {
                     </div>
                     <div className={classes.activePanel}>
                         <div
-                            className={this.props.profile.boards.length === 0 ? classes.gridContainer1 : classes.gridContainer}>
+                            className={profile.boards.length === 0 ? classes.gridContainer1 : classes.gridContainer}>
                             {
-                                this.props.profile.boards.length === 0
+                                profile.boards.length === 0
                                     ? <h2>You have not added any boards yet.</h2>
-                                    : this.props.profile.boards.map((board, i) => {
+                                    : profile.boards.map((board, i) => {
                                         return <Card key={i} className={classes.card}>
                                             <CardActionArea className={classes.card}>
                                                 <CardMedia className={classes.cardImg} image={house}/>
@@ -242,11 +242,11 @@ class Profile extends Component {
                     </div>
                     <div className={classes.activePanel}>
                         <div
-                            className={this.props.profile.posts.length === 0 ? classes.postContainer1 : classes.postContainer}>
+                            className={profile.posts.length === 0 ? classes.postContainer1 : classes.postContainer}>
                             {
-                                this.props.profile.posts.length === 0
+                                profile.posts.length === 0
                                     ? <h2>You have not added any posts yet.</h2>
-                                    : <Posts posts={this.props.profile.posts}/>
+                                    : <Posts posts={profile.posts}/>
                             }
                         </div>
                     </div>
