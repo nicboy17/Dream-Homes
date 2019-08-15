@@ -33,5 +33,15 @@ module.exports = {
             image: 'test image'
         });
     },
+    addUser: async () => {
+        const user = await User.create ({
+            name: 'test user',
+            username: 'testing123',
+            email: 'testing123@gmail.com',
+            password: 'Password2'
+        });
+
+        return user._id;
+    },
     request
 };

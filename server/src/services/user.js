@@ -1,5 +1,6 @@
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+const Follow = require ('../models/Follow');
 
 class UserClass {
     async comparePassword(password) {
@@ -16,6 +17,101 @@ class UserClass {
             username: this.username,
         }, process.env.SECRET, { expiresIn: '24hr' });
     };
+
+    async follow () {
+        try {
+            const count = await Follow.aggregate ([
+                {
+                    $facet: {
+                        'following': [
+                            { $match: { follower: this._id } },
+                            {
+                                $group: {
+                                    _id: '$follower',
+                                    count: { $sum: 1 }
+                                }
+                            }
+                        ],
+                        'followers': [
+                            { $match: { followee: this._id } },
+                            {
+                                $group: {
+                                    _id: 'followee',
+                                    count: { $sum: 1 }
+                                }
+                            }
+                        ]
+                    }
+                },
+                {
+                    $project: {
+                        following: { $ifNull: [{ $arrayElemAt: ['$following.count', 0] }, 0] },
+                        followers: { $ifNull: [{ $arrayElemAt: ['$followers.count', 0] }, 0] }
+                    }
+                }
+            ]);
+            return count[0];
+        } catch (e) {
+            // eslint-disable-next-line no-console
+            console.log (e);
+        }
+    }
+
+    async following () {
+        try {
+            return await Follow.aggregate ([
+                { $match: { follower: this._id } },
+                {
+                    $lookup: {
+                        from: 'users',
+                        localField: 'followee',
+                        foreignField: '_id',
+                        as: 'following'
+                    }
+                },
+                { $unwind: '$following' },
+                {
+                    $project: {
+                        _id: '$following._id',
+                        username: '$following.username',
+                        name: '$following.name',
+                        profile: '$following.profile'
+                    }
+                }
+            ]);
+        } catch (e) {
+            // eslint-disable-next-line no-console
+            console.log (e);
+        }
+    }
+
+    async followers () {
+        try {
+            return await Follow.aggregate ([
+                { $match: { followee: this._id } },
+                {
+                    $lookup: {
+                        from: 'users',
+                        localField: 'follower',
+                        foreignField: '_id',
+                        as: 'followers'
+                    }
+                },
+                { $unwind: '$followers' },
+                {
+                    $project: {
+                        _id: '$followers._id',
+                        username: '$followers.username',
+                        name: '$followers.name',
+                        profile: '$followers.profile'
+                    }
+                }
+            ]);
+        } catch (e) {
+            // eslint-disable-next-line no-console
+            console.log (e);
+        }
+    }
 }
 
 module.exports = UserClass;

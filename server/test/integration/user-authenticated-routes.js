@@ -1,5 +1,5 @@
 const { User }  = require('../../src/models');
-const { request,  authentication_setup, addBoardandPost } = require('../utils/common');
+const { request, login, authentication_setup, addBoardandPost, addUser } = require ('../utils/common');
 
 const chai = require('chai');
 const expect = chai.expect;
@@ -9,6 +9,7 @@ describe('User Authenticated Routes', () => {
         const {token, id} = await authentication_setup();
         await addBoardandPost(id);
         global.token = token;
+        global._id = id;
     });
 
     after(async () => {
@@ -82,6 +83,76 @@ describe('User Authenticated Routes', () => {
                 .expect(404)
                 .then((res) => {
                     expect(res.body.success).to.be.false;
+                });
+        });
+    });
+
+    describe ('Follow another user', () => {
+        let user = '';
+
+        before (async () => {
+            user = await addUser ();
+        });
+
+        it ('Should return unauthorized', () => {
+            return request
+                .post ('/users/follow')
+                .set ({ 'access-token': global['token'] })
+                .send ({
+                    'followee': global._id,
+                    'follower': user
+                })
+                .expect (403)
+                .then ((res) => {
+                    expect (res.body.success).to.be.false;
+                });
+        });
+
+        it ('Should return missing fields', () => {
+            return request
+                .post ('/users/follow')
+                .set ({ 'access-token': global['token'] })
+                .send ({})
+                .expect (422)
+                .then ((res) => {
+                    expect (res.body.success).to.be.false;
+                });
+        });
+
+        it ('Should return error', () => {
+            return request
+                .post ('/users/follow')
+                .set ({ 'access-token': global['token'] })
+                .send ({
+                    'followee': global._id
+                })
+                .expect (403)
+                .then ((res) => {
+                    expect (res.body.success).to.be.false;
+                });
+        });
+
+        it ('Should return valid', async () => {
+            return request
+                .post ('/users/follow')
+                .set ({ 'access-token': global['token'] })
+                .send ({
+                    'followee': user,
+                })
+                .expect (200)
+                .then ((res) => {
+                    expect (res.body.success).to.be.true;
+                });
+        });
+
+        it ('should return count 1', () => {
+            return login ({
+                email: 'test@gmail.com',
+                password: 'Password1'
+            })
+                .expect (200)
+                .then ((res) => {
+                    expect (res.body.user.following).to.be.equal (1);
                 });
         });
     });

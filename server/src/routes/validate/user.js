@@ -37,6 +37,12 @@ module.exports = {
     addBoard: (req, res, next) => {
         req.checkBody('title', 'No title provided').exists().notEmpty();
 
+        validationHandler (req, res, next);
+    },
+
+    followUser: (req, res, next) => {
+        req.checkBody ('followee', 'No followee provided').exists ().notEmpty ();
+
         validationHandler(req, res, next);
     }
 };
