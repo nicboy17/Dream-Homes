@@ -7,7 +7,7 @@ import MorePosts from './MorePosts';
 import Divider from '@material-ui/core/Divider';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import { getBoardsandPosts } from '../../actions/profileActions';
-import axios from 'axios'
+import axios from 'axios';
 
 const styles = theme => ({
     post: {
@@ -74,8 +74,8 @@ class PostPage extends React.Component {
                                 axios.put(`/users/${post(match.params.id).user.name}`, {
                                     objectID: `${this.state.id}`
                                 })
-                                .then(response => console.log(response))
-                                .catch(err => console.log(err))
+                                    .then(response => console.log(response))
+                                    .catch(err => console.log(err));
                             }
                         }
                         handleSelectBoard={this.handleChange}
