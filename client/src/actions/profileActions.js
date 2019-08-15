@@ -24,22 +24,23 @@ export const addPost = (post, username) => ({
     username
 });
 
-export const followUser = id => async dispatch => {
+export const followUser = (currentUserId, followingId) => async dispatch => {
     const body = {
-        followee: id
+        followee: followingId,
+        follower: currentUserId
     };
     const config = {
         headers: 'application/json'
     };
     try {
-        await axios.post(`/users/follow`, body, config)
+        await axios.post('/users/follow', body, config);
         dispatch({
             type: FOLLOW_SUCCESS
-        })
+        });
     } catch (err) {
         dispatch({
             type: FOLLOW_FAIL,
-            payload: {error: 'Failed to follow user'}
-        })
+            payload: { error: 'Failed to follow user' }
+        });
     }
-}
+};

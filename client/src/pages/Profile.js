@@ -26,7 +26,7 @@ class Profile extends Component {
         followedOrNot: false
     };
 
-    componentDidMount() {
+    componentDidMount () {
         const username = this.props.match.params.username;
         this.setState({ username: username });
         this.props.getBoardsandPosts(username);
@@ -49,14 +49,21 @@ class Profile extends Component {
     };
 
     onFollowPress = () => {
-        const { userStore: {authenticated}, profileStore: { _id }, history, followUser } = this.props;
-        if(!authenticated) {
+        const {
+            userStore: { authenticated, user },
+            profileStore: { _id },
+            history,
+            followUser
+        } = this.props;
+        const currentUserId = user._id;
+        const followingId = _id;
+        if (!authenticated) {
             history.push('/login');
         } else {
-            followUser(_id);
-            this.setState({ followedOrNot: !this.state.followedOrNot})
-         }
-    }
+            followUser(currentUserId, followingId);
+            this.setState({ followedOrNot: !this.state.followedOrNot });
+        }
+    };
 
     renderFollowButton = () => {
         return this.state.followedOrNot === false ? (
@@ -64,10 +71,7 @@ class Profile extends Component {
                 Follow!
             </button>
         ) : (
-            <button
-                className='followButton'
-                onClick={() => this.onFollowPress()}
-            >
+            <button className='followButton' onClick={() => this.onFollowPress()}>
                 Stop Following!
             </button>
         );
@@ -112,8 +116,7 @@ class Profile extends Component {
             if (profileStore._id !== user._id) {
                 return <>{this.renderFollowButton()}</>;
             }
-        }
-        else if (!authenticated) {
+        } else if (!authenticated) {
             return <>{this.renderFollowButton()}</>;
         }
         return (
@@ -137,7 +140,7 @@ class Profile extends Component {
         );
     };
 
-    render() {
+    render () {
         const { profileStore } = this.props;
         if (!profileStore.boards) {
             return <CircularProgress />;
