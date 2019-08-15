@@ -14,7 +14,7 @@ import InterestQuizDialog from '../components/Dialog/InterestQuizDialog/QuizDial
 import PostDialog from '../components/Dialog/PostDialog/PostDialog';
 import BoardDialog from '../components/Dialog/BoardDialog/BoardDialog';
 import Button from '@material-ui/core/Button';
-import { getBoardsandPosts } from '../actions/userActions';
+import { getBoardsandPosts } from '../actions/profileActions';
 import Posts from '../components/Posts/Posts';
 
 const styles = theme => ({
@@ -126,15 +126,10 @@ const styles = theme => ({
 });
 
 class Profile extends Component {
-    constructor (props) {
-        super(props);
-
-        this.state = {
-            username: '',
-            activePanel: 'board'
-        };
-        this.toggle = this.toggle.bind(this);
-    }
+    state = {
+        username: '',
+        activePanel: 'board'
+    };
 
     componentDidMount () {
         const username = this.props.match.params.username;
@@ -142,7 +137,7 @@ class Profile extends Component {
         this.props.getBoardsandPosts(username);
     }
 
-    toggle () {
+    toggle = () => {
         if (this.state.activePanel === 'board') {
             this.setState({ activePanel: 'post' });
         } else {
@@ -153,7 +148,7 @@ class Profile extends Component {
     render () {
         const { classes } = this.props;
 
-        if (!this.props.userStore.boards) {
+        if (!this.props.profile.boards) {
             return (
                 <div>
                     <Navbar/>
@@ -191,13 +186,13 @@ class Profile extends Component {
                         <div>
                             <button
                                 className={classes.activeTab}
-                                onClick={this.toggle}
+                                onClick={() => this.toggle()}
                             >
                                 Boards
                             </button>
                             <button
                                 className={classes.tab}
-                                onClick={this.toggle}
+                                onClick={() => this.toggle()}
                             >
                                 My Posts
                             </button>
@@ -206,11 +201,11 @@ class Profile extends Component {
                     </div>
                     <div className={classes.activePanel}>
                         <div
-                            className={this.props.userStore.boards.length === 0 ? classes.gridContainer1 : classes.gridContainer}>
+                            className={this.props.profile.boards.length === 0 ? classes.gridContainer1 : classes.gridContainer}>
                             {
-                                this.props.userStore.boards.length === 0
+                                this.props.profile.boards.length === 0
                                     ? <h2>You have not added any boards yet.</h2>
-                                    : this.props.userStore.boards.map((board, i) => {
+                                    : this.props.profile.boards.map((board, i) => {
                                         return <Card key={i} className={classes.card}>
                                             <CardActionArea className={classes.card}>
                                                 <CardMedia className={classes.cardImg} image={house}/>
@@ -232,13 +227,13 @@ class Profile extends Component {
                         <div>
                             <button
                                 className={classes.tab}
-                                onClick={this.toggle}
+                                onClick={() => this.toggle()}
                             >
                                 Boards
                             </button>
                             <button
                                 className={classes.activeTab}
-                                onClick={this.toggle}
+                                onClick={() => this.toggle()}
                             >
                                 My Posts
                             </button>
@@ -247,11 +242,11 @@ class Profile extends Component {
                     </div>
                     <div className={classes.activePanel}>
                         <div
-                            className={this.props.userStore.posts.length === 0 ? classes.postContainer1 : classes.postContainer}>
+                            className={this.props.profile.posts.length === 0 ? classes.postContainer1 : classes.postContainer}>
                             {
-                                this.props.userStore.posts.length === 0
+                                this.props.profile.posts.length === 0
                                     ? <h2>You have not added any posts yet.</h2>
-                                    : <Posts posts={this.props.userStore.posts}/>
+                                    : <Posts posts={this.props.profile.posts}/>
                             }
                         </div>
                     </div>
@@ -262,7 +257,7 @@ class Profile extends Component {
 };
 
 const mapStateToProps = state => ({
-    userStore: state.UserStore
+    profile: state.ProfileStore
 });
 
 function mapDispatchToProps (dispatch) {

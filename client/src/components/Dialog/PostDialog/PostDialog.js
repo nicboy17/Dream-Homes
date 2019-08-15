@@ -14,7 +14,7 @@ import _ from 'lodash';
 import FormContent from './FormContent';
 import FileUploader from './FileUploader';
 import { bindActionCreators } from 'redux';
-import { getBoardsandPosts, addPost } from '../../../actions/userActions';
+import { getBoardsandPosts, addPost } from '../../../actions/profileActions';
 // import BoardList from './BoardList';
 
 class PostDialog extends React.Component {
