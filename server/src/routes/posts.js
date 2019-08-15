@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
-const ObjectId = require('mongodb').ObjectId; 
+const { pub } = require ('../middleware');
+const ObjectId = require ('mongoose').ObjectId;
 const { User, Post } = require('../models');
 
 const _ = require('lodash');
@@ -8,7 +9,7 @@ const _ = require('lodash');
 // @route    GET users/posts
 // @desc     Get all posts based on user's interests or filter
 // @access   Public
-router.get('/', async (req, res) => {
+router.get ('/', [pub, async (req, res) => {
     const { search_filter = '', easy_filters = '', userId = ''} = req.query;
     try {
         let query;
@@ -39,6 +40,6 @@ router.get('/', async (req, res) => {
     } catch (err) {
         res.status(500).send('Something went wrong with the server');
     }
-});
+}]);
 
 module.exports = router;

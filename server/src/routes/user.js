@@ -4,7 +4,7 @@ const router = express.Router();
 const UserValidation = require('./validate/user');
 const { User, Board, Post } = require('../models');
 const upload = require('../services/file-upload');
-const token = require('../middleware/token');
+const { auth, pub } = require ('../middleware');
 
 router.post('/register', [UserValidation.register, async (req, res) => {
     try{
@@ -29,13 +29,10 @@ router.post('/login', [UserValidation.login, async (req, res) => {
     }
 }]);
 
-//authenticated routes below this middleware
-router.use(token());
-
 // @route    GET users/:username
 // @desc     Get user profile with all their posts and boards
 // @access   Private
-router.get('/:username', async (req, res) => {
+router.get ('/:username', [pub, async (req, res) => {
     try {
         const user = await User.findOne({ username: req.params.username }).select('-password').populate('boards').populate('posts').lean();
         if (!user) {
@@ -45,7 +42,10 @@ router.get('/:username', async (req, res) => {
     } catch (err) {
         return res.status(400).json({ success: false, message: err });
     }
-});
+}]);
+
+//authenticated routes below this middleware
+router.use (auth);
 
 router.put('/:username', [upload.single('image'), UserValidation.updateUser, async (req, res) => {
     let update = {};
