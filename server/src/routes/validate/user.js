@@ -43,6 +43,12 @@ module.exports = {
     followUser: (req, res, next) => {
         req.checkBody ('followee', 'No followee provided').exists ().notEmpty ();
 
+        validationHandler (req, res, next);
+    },
+
+    unfollowUser: (req, res, next) => {
+        req.checkBody ('followee', 'No followee provided').exists ().notEmpty ();
+
         validationHandler(req, res, next);
     }
 };

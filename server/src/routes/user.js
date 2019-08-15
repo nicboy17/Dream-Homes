@@ -105,6 +105,45 @@ router.post ('/follow', [UserValidation.followUser, async (req, res) => {
     }
 }]);
 
+// @route    POST users/unfollow
+// @desc     unfollow user
+// @access   Private
+router.post ('/unfollow', [UserValidation.unfollowUser, async (req, res) => {
+    if (req.decoded._id === req.body.followee) {
+        return res.status (403).json ({ success: false, message: 'You can not unfollow yourself' });
+    }
+
+    try {
+        await Follow.findOneAndRemove ({ ...req.body, follower: req.decoded._id }).lean ();
+        return res.status (200).json ({ success: true });
+    } catch (err) {
+        return res.status (400).json ({ success: false });
+    }
+}]);
+
+// @route    GET users/:username/following
+// @desc     get users who are following specified user
+// @access   Private
+router.get ('/:username/following', async (req, res) => {
+    try {
+        const following = await User.following (req.decoded._id);
+        return res.status (200).json ({ success: true, following });
+    } catch (err) {
+        return res.status (400).json ({ success: false });
+    }
+});
+
+// @route    GET users/:username/followers
+// @desc     get specified user's followers
+// @access   Private
+router.get ('/:username/followers', async (req, res) => {
+    try {
+        const followers = await User.followers (req.decoded._id);
+        return res.status (200).json ({ success: true, followers });
+    } catch (err) {
+        return res.status (400).json ({ success: false });
+    }
+});
 
 // TODO: add to board route ?
 // @route    POST users/:username/board
