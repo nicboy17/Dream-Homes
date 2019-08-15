@@ -71,8 +71,8 @@ class PostPage extends React.Component {
                         handleSave={
                             e => {
                                 e.preventDefault();
-                                axios.put(`user/${post(match.params.id).user.name}`, {
-                                    objectID: `${this.state.id}`
+                                axios.put(`users/board/${this.state.board}`, {
+                                    object_id: `${this.state.id}`
                                 })
                                     .then(response => console.log(response))
                                     .catch(err => console.log(err));
