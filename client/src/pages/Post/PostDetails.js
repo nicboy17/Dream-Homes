@@ -22,6 +22,16 @@ const useStyles = makeStyles(theme => ({
         fontSize: 10,
         marginBottom: '1rem',
         fontStyle: 'oblique'
+    },
+    favorite: {
+        background: 'white',
+        border: '1px solid lightgrey',
+        borderRadius: '25px',
+        padding: '15px',
+        '&:hover': {
+            background: 'rgb(225, 225, 225)',
+            cursor: 'pointer',
+        }
     }
 }));
 
@@ -40,6 +50,7 @@ const PostDetails = ({ post }) => {
                 <Typography variant="subtitle2" component="subtitle"
                     className={classes.text}>{post.description}</Typography>
                 <p className={classes.date}>{post.date}</p>
+                <button className={classes.favorite}>Favorite This Post!</button>
             </Grid>
         </div>
     );
