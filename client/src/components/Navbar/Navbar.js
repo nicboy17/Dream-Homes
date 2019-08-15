@@ -71,7 +71,7 @@ const Navbar = ({ userStore, logout, history }) => {
             return (
             <>
                 <div onClick={handleClick}>
-                    <img className={style.cornerIcon} src={face} alt='' />
+                    <img className={style.cornerIcon} src={userStore.user.profile} alt='' />
                 </div>
                 <Menu
                     id='simple-menu'
