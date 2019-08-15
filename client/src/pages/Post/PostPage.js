@@ -7,6 +7,7 @@ import MorePosts from './MorePosts';
 import Divider from '@material-ui/core/Divider';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import { getBoardsandPosts } from '../../actions/profileActions';
+import axios from 'axios'
 
 const styles = theme => ({
     post: {
@@ -33,11 +34,6 @@ class PostPage extends React.Component {
         const value = e.target.value;
 
         this.setState({ [name]: value });
-    };
-
-    save = e => {
-        e.preventDefault();
-        console.log(this.state.board);
     };
 
     render () {
@@ -72,7 +68,16 @@ class PostPage extends React.Component {
             <div>
                 <div className={classes.post}>
                     <Post
-                        handleSave={this.save}
+                        handleSave={
+                            e => {
+                                e.preventDefault();
+                                axios.put(`/users/${post(match.params.id).user.name}`, {
+                                    objectID: `${this.state.id}`
+                                })
+                                .then(response => console.log(response))
+                                .catch(err => console.log(err))
+                            }
+                        }
                         handleSelectBoard={this.handleChange}
                         value={this.state.board}
                         post={post(match.params.id)}
