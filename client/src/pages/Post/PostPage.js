@@ -2,7 +2,6 @@ import React from 'react';
 import { withStyles } from '@material-ui/styles';
 import { compose, bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import Navbar from '../../components/Navbar/Navbar';
 import Post from './Post';
 import MorePosts from './MorePosts';
 import Divider from '@material-ui/core/Divider';
@@ -56,7 +55,6 @@ class PostPage extends React.Component {
             getBoardsandPosts(user.username);
             return (
                 <div>
-                    <Navbar />
                     <CircularProgress />
                 </div>
             );
@@ -72,7 +70,6 @@ class PostPage extends React.Component {
 
         return (
             <div>
-                <Navbar />
                 <div className={classes.post}>
                     <Post
                         handleSave={this.save}
@@ -80,6 +77,7 @@ class PostPage extends React.Component {
                         value={this.state.board}
                         post={post(match.params.id)}
                         boards={profileStore.boards}
+                        profileImage = {profileStore.profile}
                     />
                 </div>
                 <Divider component={'hr'} />
