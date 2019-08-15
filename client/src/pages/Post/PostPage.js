@@ -44,7 +44,7 @@ class PostPage extends React.Component {
     render () {
         const {
             classes,
-            profile,
+            profileStore,
             userStore: { user },
             post,
             morePosts,
@@ -52,7 +52,7 @@ class PostPage extends React.Component {
             getBoardsandPosts
         } = this.props;
 
-        if (!profile.boards) {
+        if (!profileStore.boards) {
             getBoardsandPosts(user.username);
             return (
                 <div>
@@ -79,7 +79,7 @@ class PostPage extends React.Component {
                         handleSelectBoard={this.handleChange}
                         value={this.state.board}
                         post={post(match.params.id)}
-                        boards={profile.boards}
+                        boards={profileStore.boards}
                     />
                 </div>
                 <Divider component={'hr'} />
@@ -107,7 +107,7 @@ const mapStateToProps = state => ({
         );
     },
     morePosts: state.PostStore.morePosts,
-    profile: state.ProfileStore
+    profileStore: state.ProfileStore
 });
 
 function mapDispatchToProps (dispatch) {

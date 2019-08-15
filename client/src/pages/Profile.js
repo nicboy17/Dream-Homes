@@ -146,9 +146,8 @@ class Profile extends Component {
     }
 
     render () {
-        const { classes, profile } = this.props;
-
-        if (!profile.boards) {
+        const { classes, profileStore } = this.props;
+        if (!profileStore.boards) {
             return (
                 <div>
                     <Navbar/>
@@ -165,7 +164,7 @@ class Profile extends Component {
                 <Navbar/>
                 <div className={classes.subHeader}>
                     <div className={classes.nameContainer}>
-                        <img src={face} alt='' className={classes.subHeaderIcon}/>
+                        <img src={profileStore.profile} alt={face} className={classes.subHeaderIcon}/>
                         <div>
                             <h3 className={classes.profileName}>{this.state.username}</h3>
                             <h5 className={classes.profileFollowers}>134 Followers | 280 Following</h5>
@@ -201,11 +200,11 @@ class Profile extends Component {
                     </div>
                     <div className={classes.activePanel}>
                         <div
-                            className={profile.boards.length === 0 ? classes.gridContainer1 : classes.gridContainer}>
+                            className={profileStore.boards.length === 0 ? classes.gridContainer1 : classes.gridContainer}>
                             {
-                                profile.boards.length === 0
+                                profileStore.boards.length === 0
                                     ? <h2>You have not added any boards yet.</h2>
-                                    : profile.boards.map((board, i) => {
+                                    : profileStore.boards.map((board, i) => {
                                         return <Card key={i} className={classes.card}>
                                             <CardActionArea className={classes.card}>
                                                 <CardMedia className={classes.cardImg} image={house}/>
@@ -242,11 +241,11 @@ class Profile extends Component {
                     </div>
                     <div className={classes.activePanel}>
                         <div
-                            className={profile.posts.length === 0 ? classes.postContainer1 : classes.postContainer}>
+                            className={profileStore.posts.length === 0 ? classes.postContainer1 : classes.postContainer}>
                             {
-                                profile.posts.length === 0
+                                profileStore.posts.length === 0
                                     ? <h2>You have not added any posts yet.</h2>
-                                    : <Posts posts={profile.posts}/>
+                                    : <Posts posts={profileStore.posts}/>
                             }
                         </div>
                     </div>
@@ -257,7 +256,7 @@ class Profile extends Component {
 };
 
 const mapStateToProps = state => ({
-    profile: state.ProfileStore
+    profileStore: state.ProfileStore
 });
 
 function mapDispatchToProps (dispatch) {
