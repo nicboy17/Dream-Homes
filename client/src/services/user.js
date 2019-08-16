@@ -1,8 +1,4 @@
-import axios from 'axios';
-
-export const addTokenHeaders = (token) => {
-    axios.defaults.headers.common['access-token'] = token;
-};
+import { axios, addTokenHeaders } from './utils';
 
 export const userService = {
     login: (user) => {
