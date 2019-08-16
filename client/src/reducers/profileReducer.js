@@ -14,7 +14,9 @@ import {
     FETCH_FOLLOWERS_SUCCESS,
     FETCH_FOLLOWERS_FAIL,
     FETCH_PROFILE_SUCCESS,
-    FETCH_PROFILE_FAIL
+    FETCH_PROFILE_FAIL,
+    EDIT_PROFILE_SUCCESS,
+    EDIT_PROFILE_FAIL
 } from '../actions/types';
 import _ from 'lodash';
 
@@ -26,7 +28,10 @@ export default (state = INITIAL_STATE, action) => {
     case FETCH_PROFILE_SUCCESS:
         return action.payload;
     case FETCH_PROFILE_FAIL:
+    case EDIT_PROFILE_FAIL:
         return { ...state, error: action.payload.error };
+    case EDIT_PROFILE_SUCCESS:
+        return { ...state, profileInfo: { ...state.profileInfo, name: action.payload.user.name, profile: action.payload.user.profile } };
     case GET_USER_BOARDS_POSTS_SUCCESS:
         return response.user;
     case GET_USER_BOARDS_POSTS_ERROR:
