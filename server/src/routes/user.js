@@ -45,12 +45,9 @@ router.post('/login', [UserValidation.login, async (req, res) => {
     }
 }]);
 
-//authenticated routes below this middleware
-router.use(token());
-
 // @route    GET users/:username
 // @desc     Get user profile with all their posts and boards
-// @access   Private
+// @access   Public
 router.get('/:username', async (req, res) => {
     try {
         const user = await User.findOne({ username: req.params.username }).select('-password').populate('boards').populate('posts').lean();
