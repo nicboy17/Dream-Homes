@@ -23,6 +23,10 @@
     font-weight: bold;
 }
 
+.option:hover {
+    background: rgb(225, 225, 225)
+}
+
 .contentgrid {
     display: grid;
     justify-content: center;
