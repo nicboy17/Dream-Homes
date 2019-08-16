@@ -6,7 +6,7 @@ import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
 import { DialogTitle, DialogActions, DialogContent } from '../components';
 import Interests from './Interests';
-import axios from 'axios';
+import { axios } from '../../../services/utils.js';
 
 const styles = theme => ({
     root: {
@@ -55,23 +55,12 @@ class QuizDialog extends React.Component {
     }
 
     async handleConfirm () {
-        const username = this.props.match.username;
-        try {
-            const body = {
-                interests: this.state.selected
-            };
-            const config = {
-                'Content-Type': 'application/json',
-                'access-token': this.props.userStore.token
-            };
-            const res = await axios.put(`users/${username}/interests`, body, config);
-            if (res.data.success) {
-                return this.props.history.push(`/profile/${username}`);
-            }
-        } catch (err) {
-            console.log(err);
-        }
-        this.setState({ open: false });
+        const username = this.props.match.params.username;
+        axios.put(`/users/${username}/interests`, {
+            interests: this.state.interests
+        })
+            .then(res => console.log(res))
+            .catch(err => console.log(err));
     }
 
     handleClose = () => {
