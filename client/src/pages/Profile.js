@@ -2,19 +2,19 @@ import React, { Component } from 'react';
 import { withStyles } from '@material-ui/styles';
 import { compose, bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import face from '../assets/face.jpg';
+import Avatar from '@material-ui/core/Avatar';
 import { Card, Typography } from '@material-ui/core';
 import CardMedia from '@material-ui/core/CardMedia';
 import CardActionArea from '@material-ui/core/CardActionArea';
 import house from '../assets/house.png';
-import { Route } from 'react-router-dom';
-
+import { Route, Link } from 'react-router-dom';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import InterestQuizDialog from '../components/Dialog/InterestQuizDialog/QuizDialog';
 import PostDialog from '../components/Dialog/PostDialog/PostDialog';
 import BoardDialog from '../components/Dialog/BoardDialog/BoardDialog';
+import EditPicUserDialog from '../components/Dialog/EditPicUserDialog/EditPicUserDialog';
 import Button from '@material-ui/core/Button';
-import { getBoardsandPosts } from '../actions/userActions';
+import { getBoardsandPosts } from '../actions/profileActions';
 import Posts from '../components/Posts/Posts';
 
 const styles = theme => ({
@@ -126,15 +126,10 @@ const styles = theme => ({
 });
 
 class Profile extends Component {
-    constructor (props) {
-        super(props);
-
-        this.state = {
-            username: '',
-            activePanel: 'board'
-        };
-        this.toggle = this.toggle.bind(this);
-    }
+    state = {
+        username: '',
+        activePanel: 'board'
+    };
 
     componentDidMount () {
         const username = this.props.match.params.username;
@@ -142,7 +137,7 @@ class Profile extends Component {
         this.props.getBoardsandPosts(username);
     }
 
-    toggle () {
+    toggle = () => {
         if (this.state.activePanel === 'board') {
             this.setState({ activePanel: 'post' });
         } else {
@@ -151,9 +146,8 @@ class Profile extends Component {
     }
 
     render () {
-        const { classes } = this.props;
-
-        if (!this.props.userStore.boards) {
+        const { classes, profileStore } = this.props;
+        if (!profileStore.boards) {
             return (
                 <div>
                     <CircularProgress/>
@@ -162,12 +156,14 @@ class Profile extends Component {
         }
         return (
             <div>
+                <Route path='/profile/:username/edit' component={EditPicUserDialog}/>
                 <Route path='/profile/:username/interest-quiz' component={InterestQuizDialog}/>
                 <Route path='/profile/:username/post/create' component={PostDialog}/>
                 <Route path='/profile/:username/board/create' component={BoardDialog}/>
                 <div className={classes.subHeader}>
                     <div className={classes.nameContainer}>
-                        <img src={face} alt='' className={classes.subHeaderIcon}/>
+                        <Avatar className={classes.subHeaderIcon} component={Link} src={profileStore.profile}
+                            to={'/profile/' + profileStore.username + '/edit'}/>
                         <div>
                             <h3 className={classes.profileName}>{this.state.username}</h3>
                             <h5 className={classes.profileFollowers}>134 Followers | 280 Following</h5>
@@ -188,13 +184,13 @@ class Profile extends Component {
                         <div>
                             <button
                                 className={classes.activeTab}
-                                onClick={this.toggle}
+                                onClick={() => this.toggle()}
                             >
                                 Boards
                             </button>
                             <button
                                 className={classes.tab}
-                                onClick={this.toggle}
+                                onClick={() => this.toggle()}
                             >
                                 My Posts
                             </button>
@@ -203,11 +199,11 @@ class Profile extends Component {
                     </div>
                     <div className={classes.activePanel}>
                         <div
-                            className={this.props.userStore.boards.length === 0 ? classes.gridContainer1 : classes.gridContainer}>
+                            className={profileStore.boards.length === 0 ? classes.gridContainer1 : classes.gridContainer}>
                             {
-                                this.props.userStore.boards.length === 0
+                                profileStore.boards.length === 0
                                     ? <h2>You have not added any boards yet.</h2>
-                                    : this.props.userStore.boards.map((board, i) => {
+                                    : profileStore.boards.map((board, i) => {
                                         return <Card key={i} className={classes.card}>
                                             <CardActionArea className={classes.card}>
                                                 <CardMedia className={classes.cardImg} image={house}/>
@@ -229,13 +225,13 @@ class Profile extends Component {
                         <div>
                             <button
                                 className={classes.tab}
-                                onClick={this.toggle}
+                                onClick={() => this.toggle()}
                             >
                                 Boards
                             </button>
                             <button
                                 className={classes.activeTab}
-                                onClick={this.toggle}
+                                onClick={() => this.toggle()}
                             >
                                 My Posts
                             </button>
@@ -244,11 +240,11 @@ class Profile extends Component {
                     </div>
                     <div className={classes.activePanel}>
                         <div
-                            className={this.props.userStore.posts.length === 0 ? classes.postContainer1 : classes.postContainer}>
+                            className={profileStore.posts.length === 0 ? classes.postContainer1 : classes.postContainer}>
                             {
-                                this.props.userStore.posts.length === 0
+                                profileStore.posts.length === 0
                                     ? <h2>You have not added any posts yet.</h2>
-                                    : <Posts posts={this.props.userStore.posts}/>
+                                    : <Posts posts={profileStore.posts}/>
                             }
                         </div>
                     </div>
@@ -256,10 +252,10 @@ class Profile extends Component {
             </div>
         );
     }
-};
+}
 
 const mapStateToProps = state => ({
-    userStore: state.UserStore
+    profileStore: state.ProfileStore
 });
 
 function mapDispatchToProps (dispatch) {
