@@ -40,6 +40,18 @@ module.exports = {
         validationHandler (req, res, next);
     },
 
+    followUser: (req, res, next) => {
+        req.checkBody ('followee', 'No followee provided').exists ().notEmpty ();
+
+        validationHandler (req, res, next);
+    },
+
+    unfollowUser: (req, res, next) => {
+        req.checkBody ('followee', 'No followee provided').exists ().notEmpty ();
+
+        validationHandler (req, res, next);
+    },
+
     addPostToFavourites: (req, res, next) => {
         req.checkBody ('post', 'No Post provided').exists ().notEmpty ();
 

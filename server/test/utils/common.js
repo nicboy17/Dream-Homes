@@ -17,7 +17,7 @@ module.exports = {
             password: 'Password1'
         });
 
-        return { token:user.loginToken(), id: user._id };
+        return { token: user.loginToken (), id: user._id, user };
     },
     addBoardandPost: async (id) => {
         const board = await Board.create ({
@@ -34,6 +34,16 @@ module.exports = {
         });
 
         return { board, post };
+    },
+    addUser: async () => {
+        const user = await User.create ({
+            name: 'test user',
+            username: 'testing123',
+            email: 'testing123@gmail.com',
+            password: 'Password2'
+        });
+
+        return user._id;
     },
     request
 };
