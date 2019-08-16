@@ -43,13 +43,12 @@ const styles = theme => ({
     },
     profileFollowers: {
         margin: '0',
-        padding: '0',
+        padding: '0'
     },
     followButton: {
         background: 'white',
         border: '1px solid lightgrey',
         borderRadius: '25px',
-        padding: '5px',
         fontWeight: 'bold',
         padding: '10px',
         paddingLeft: '20px',
@@ -148,7 +147,7 @@ class Profile extends Component {
             activePanel: 'board',
             followers: 0,
             following: 0,
-            followedOrNot: false,
+            followedOrNot: false
         };
         this.toggle = this.toggle.bind(this);
     }
@@ -191,9 +190,9 @@ class Profile extends Component {
                         <div>
                             <h3 className={classes.profileName}>{this.state.username}</h3>
                             <h5 className={classes.profileFollowers}>{this.state.followers} Followers | {this.state.following} Following</h5>
-                            {this.state.followedOrNot === false 
-                            ? <button className={classes.followButton} onClick={() => this.setState({followedOrNot: true})}>Follow!</button>
-                            : <button className={classes.followButton} onClick={() => this.setState({followedOrNot: false})}>Stop Following!</button>
+                            {this.state.followedOrNot === false
+                                ? <button className={classes.followButton} onClick={() => this.setState({ followedOrNot: true })}>Follow!</button>
+                                : <button className={classes.followButton} onClick={() => this.setState({ followedOrNot: false })}>Stop Following!</button>
                             }
                         </div>
                     </div>

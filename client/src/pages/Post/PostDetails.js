@@ -30,7 +30,7 @@ const useStyles = makeStyles(theme => ({
         padding: '15px',
         '&:hover': {
             background: 'rgb(225, 225, 225)',
-            cursor: 'pointer',
+            cursor: 'pointer'
         }
     }
 }));
