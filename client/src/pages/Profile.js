@@ -161,7 +161,7 @@ class Profile extends Component {
     render () {
         const { profileStore: { profileInfo, following = [], followers = [] } } = this.props;
         if (_.isEmpty(this.props.profileStore)) {
-            return <CircularProgress />;
+            return <CircularProgress className = 'spinner' />;
         }
         console.log(this.props.profileStore);
         return (
