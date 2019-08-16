@@ -17,7 +17,7 @@ module.exports = {
             password: 'Password1'
         });
 
-        return { token:user.loginToken(), id: user._id };
+        return { token: user.loginToken (), id: user._id, user };
     },
     addBoardandPost: async (id) => {
         await Board.create({

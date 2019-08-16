@@ -85,14 +85,14 @@ describe('User', () => {
         });
 
         it ('Should return list of users following Kenny', async () => {
-            const kenny_followers = await global.users[1].followers ();
+            const kenny_followers = await User.followers (global.users[1]._id);
             expect (kenny_followers[0].username).to.be.equal (global.users[0].username);
             expect (kenny_followers[1].username).to.be.equal (global.users[2].username);
             expect (kenny_followers[2].username).to.be.equal (global.users[3].username);
         });
 
         it ('Should return list of users Kenny is following', async () => {
-            const kenny_following = await global.users[1].following ();
+            const kenny_following = await User.following (global.users[1]._id);
             expect (kenny_following[0].username).to.be.equal (global.users[2].username);
             expect (kenny_following[1].username).to.be.equal (global.users[3].username);
         });

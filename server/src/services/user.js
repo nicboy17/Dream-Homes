@@ -52,15 +52,14 @@ class UserClass {
             ]);
             return count[0];
         } catch (e) {
-            // eslint-disable-next-line no-console
-            console.log (e);
+            throw(e);
         }
     }
 
-    async following () {
+    static async following (id) {
         try {
             return await Follow.aggregate ([
-                { $match: { follower: this._id } },
+                { $match: { follower: id } },
                 {
                     $lookup: {
                         from: 'users',
@@ -80,15 +79,14 @@ class UserClass {
                 }
             ]);
         } catch (e) {
-            // eslint-disable-next-line no-console
-            console.log (e);
+            throw(e);
         }
     }
 
-    async followers () {
+    static async followers (id) {
         try {
             return await Follow.aggregate ([
-                { $match: { followee: this._id } },
+                { $match: { followee: id } },
                 {
                     $lookup: {
                         from: 'users',
@@ -108,8 +106,7 @@ class UserClass {
                 }
             ]);
         } catch (e) {
-            // eslint-disable-next-line no-console
-            console.log (e);
+            throw(e);
         }
     }
 }
