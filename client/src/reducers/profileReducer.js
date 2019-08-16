@@ -29,9 +29,9 @@ export default (state = INITIAL_STATE, action) => {
     case ADD_POST_ERROR:
         return { ...state, error: action.err };
     case FOLLOW_SUCCESS:
-        return { ...state, followers: state.followers + 1}
-    case FOLLOW_FAIL: 
-        return { ...state, error: action.payload.error}
+        return { ...state, followers: state.followers + 1 };
+    case FOLLOW_FAIL:
+        return { ...state, error: action.payload.error };
     default:
         return state;
     }

@@ -25,15 +25,12 @@ export const addPost = (post, username) => ({
 });
 
 export const followUser = (currentUserId, followingId) => async dispatch => {
-    const body = {
-        followee: followingId,
-        follower: currentUserId
-    };
-    const config = {
-        headers: 'application/json'
-    };
     try {
-        await axios.post('/users/follow', body, config);
+        const body = {
+            followee: followingId,
+            follower: currentUserId
+        };
+        await axios.post('/users/follow', body);
         dispatch({
             type: FOLLOW_SUCCESS
         });
