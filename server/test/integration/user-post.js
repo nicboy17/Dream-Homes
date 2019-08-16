@@ -1,13 +1,15 @@
 const { User }  = require('../../src/models');
-const { request, authentication_setup } = require('../utils/common');
+const { request, authentication_setup, addBoardandPost } = require ('../utils/common');
 
 const chai = require('chai');
 const expect = chai.expect;
 
 describe('User Post Routes', () => {
     before(async() => {
-        const {token} = await authentication_setup();
+        const { token, id } = await authentication_setup ();
+        const { post } = await addBoardandPost (id);
         global.token = token;
+        global.post = post;
     });
 
     after(async () => {
@@ -55,6 +57,41 @@ describe('User Post Routes', () => {
                 .expect(422)
                 .then((res) => {
                     expect(res.body.success).to.be.false;
+                });
+        });
+    });
+
+    describe ('Add Post to User Favourites', () => {
+        it ('Should need return unauthorized', () => {
+            return request
+                .post ('/users/test/favourite')
+                .expect (401)
+                .then ((res) => {
+                    expect (res.body.success).to.be.false;
+                });
+        });
+
+        it ('Should need return missing field', () => {
+            return request
+                .post ('/users/test/favourite')
+                .set ({ 'access-token': global['token'] })
+                .expect (422)
+                .then ((res) => {
+                    expect (res.body.success).to.be.false;
+                });
+        });
+
+        //need abs path to file
+        it ('Should return valid', () => {
+            return request
+                .post ('/users/test/favourite')
+                .set ({ 'access-token': global['token'] })
+                .send ({
+                    post: global.post._id
+                })
+                .expect (201)
+                .then ((res) => {
+                    expect (res.body.success).to.be.true;
                 });
         });
     });

@@ -3,16 +3,17 @@ import { compose, bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
 import face from '../assets/face.jpg';
+import Avatar from '@material-ui/core/Avatar';
 import { Card, Typography } from '@material-ui/core';
 import CardMedia from '@material-ui/core/CardMedia';
 import CardActionArea from '@material-ui/core/CardActionArea';
 import house from '../assets/house.png';
-import { Route } from 'react-router-dom';
-
+import { Route, Link } from 'react-router-dom';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import InterestQuizDialog from '../components/Dialog/InterestQuizDialog/QuizDialog';
 import PostDialog from '../components/Dialog/PostDialog/PostDialog';
 import BoardDialog from '../components/Dialog/BoardDialog/BoardDialog';
+import EditPicUserDialog from '../components/Dialog/EditPicUserDialog/EditPicUserDialog';
 import Button from '@material-ui/core/Button';
 import { getBoardsandPosts, followUser, unfollowUser } from '../actions/profileActions';
 import Posts from '../components/Posts/Posts';
@@ -157,12 +158,17 @@ class Profile extends Component {
         if (!profileStore.boards) {
             return <CircularProgress />;
         }
-        console.log(profileStore)
+
         return (
             <div>
-                <Route path='/profile/:username/interest-quiz' component={InterestQuizDialog} />
-                <Route path='/profile/:username/post/create' component={PostDialog} />
-                <Route path='/profile/:username/board/create' component={BoardDialog} />
+                <Route path='/profile/:username/edit' component={EditPicUserDialog}/>
+                <Route path='/profile/:username/interest-quiz' component={InterestQuizDialog}/>
+                <Route path='/profile/:username/post/create' component={PostDialog}/>
+                <Route path='/profile/:username/board/create' component={BoardDialog}/>
+                <div className={classes.subHeader}>
+                    <div className={classes.nameContainer}>
+                        <Avatar className={classes.subHeaderIcon} component={Link} src={profileStore.profile}
+                            to={'/profile/' + profileStore.username + '/edit'}/>
                 <div className='subHeader'>
                     <div className='nameContainer'>
                         <img src={profileStore.profile} alt={face} className='subHeaderIcon' />

@@ -4,11 +4,13 @@ const follow = new mongoose.Schema ({
     followee: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'users',
+        index: true,
         required: true
     },
     follower: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'users',
+        index: true,
         required: true
     },
     start: {
@@ -21,4 +23,4 @@ const follow = new mongoose.Schema ({
     }
 });
 
-module.exports = mongoose.model ('follow', follow, 'follow');
+module.exports = mongoose.model ('follow', follow);

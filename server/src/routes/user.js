@@ -45,9 +45,12 @@ router.post('/login', [UserValidation.login, async (req, res) => {
     }
 }]);
 
+//authenticated routes below this middleware
+router.use(token());
+
 // @route    GET users/:username
 // @desc     Get user profile with all their posts and boards
-// @access   Public
+// @access   Private
 router.get('/:username', async (req, res) => {
     try {
         const user = await User.findOne({ username: req.params.username }).select('-password').populate('boards').populate('posts').lean();
@@ -60,9 +63,10 @@ router.get('/:username', async (req, res) => {
     }
 });
 
-//authenticated routes below this middleware
-router.use(token());
 
+// @route    PUT users/:username
+// @desc     Update user image and/or name
+// @access   Private
 router.put('/:username', [upload.single('image'), UserValidation.updateUser, async (req, res) => {
     let update = {};
     if(req.file) { update.profile = req.file.location; }
@@ -183,6 +187,23 @@ router.post('/:username/posts', [upload.single('image'), UserValidation.addPost,
 }]);
 
 
+// @route    POST users/:username/favourite
+// @desc     Add post to user's favourites
+// @access   Private
+router.post ('/:username/favourite', [UserValidation.addPostToFavourites, async (req, res) => {
+    try {
+        const user = await User.findByIdAndUpdate (req.decoded._id, { '$addToSet': { posts: req.body.post } }, { 'new': true }).lean ();
+        if (!user) {
+            return res.status (404).json ({ success: false, message: 'User not found' });
+        }
+
+        res.status (201).json ({ success: true });
+    } catch (err) {
+        return res.status (400).json ({ success: false, err });
+    }
+}]);
+
+
 // @route    PUT users/:username/interests
 // @desc     Update user interests
 // @access   Private
@@ -241,5 +262,4 @@ router.put('/board/:id', async (req,res) => {
 });
 
 module.exports = router;
-
 

@@ -1,3 +1,4 @@
+const mongoose = require ('mongoose');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const Follow = require ('../models/Follow');
@@ -59,7 +60,7 @@ class UserClass {
     static async following (id) {
         try {
             return await Follow.aggregate ([
-                { $match: { follower: id } },
+                { $match: { follower: mongoose.Types.ObjectId (id) } },
                 {
                     $lookup: {
                         from: 'users',
@@ -86,7 +87,7 @@ class UserClass {
     static async followers (id) {
         try {
             return await Follow.aggregate ([
-                { $match: { followee: id } },
+                { $match: { followee: mongoose.Types.ObjectId (id) } },
                 {
                     $lookup: {
                         from: 'users',
