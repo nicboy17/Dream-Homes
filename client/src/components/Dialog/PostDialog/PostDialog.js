@@ -6,6 +6,7 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import { Chip } from '@material-ui/core';
+import { Redirect } from 'react-router-dom';
 // import CircularProgress from '@material-ui/core/CircularProgress';
 
 import _ from 'lodash';
@@ -13,7 +14,7 @@ import _ from 'lodash';
 import FormContent from './FormContent';
 import FileUploader from './FileUploader';
 import { bindActionCreators } from 'redux';
-import { getBoardsandPosts, addPost } from '../../../actions/userActions';
+import { getBoardsandPosts, addPost } from '../../../actions/profileActions';
 // import BoardList from './BoardList';
 
 class PostDialog extends React.Component {
@@ -103,12 +104,15 @@ class PostDialog extends React.Component {
     };
 
     render () {
-        // for now lets leave this commented out,
-        // because the post dialog will never actually render with this, as we only get
-        // errors from our post requests atm.
-        // if (!Boolean(this.state.boards)) {
-        //     return <CircularProgress color='secondary' />;
-        // }
+        // Redirect user to profile if not authorized
+        const { userStore, match: { params } } = this.props;
+        if (userStore.authenticated) {
+            if (userStore.user.username !== params.username) {
+                const redirect = `/profile/${params.username}`;
+                return <Redirect to ={redirect}/>;
+            }
+        }
+
         return (
             <Dialog
                 open={true}

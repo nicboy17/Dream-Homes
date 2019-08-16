@@ -8,7 +8,8 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import TextField from '@material-ui/core/TextField';
-import { addBoard } from '../../../actions/userActions';
+import { addBoard } from '../../../actions/profileActions';
+import { Redirect } from 'react-router-dom';
 
 const styles = theme => ({
     button: {
@@ -17,15 +18,12 @@ const styles = theme => ({
 });
 
 class BoardDialog extends Component {
-    constructor (props) {
-        super(props);
-        this.state = {
-            username: '',
-            title: '',
-            smallText: 'for example <<living room>>',
-            nameError: false
-        };
-    }
+    state = {
+        username: '',
+        title: '',
+        smallText: 'for example <<living room>>',
+        nameError: false
+    };
 
     componentDidMount () {
         this.setState({ username: this.props.match.params.username });
@@ -53,13 +51,30 @@ class BoardDialog extends Component {
     };
 
     render () {
-        const { classes } = this.props;
-
+        // Redirect user to profile if not authorized
+        const {
+            userStore,
+            match: { params },
+            classes
+        } = this.props;
+        if (userStore.authenticated) {
+            if (userStore.user.username !== params.username) {
+                const redirect = `/profile/${params.username}`;
+                return <Redirect to={redirect} />;
+            }
+        }
         return (
-            <Dialog open={true} onClick={() => this.onCloseClick()} aria-labelledby='board-dialog' maxWidth='xs'
-                fullWidth={true}>
+            <Dialog
+                open={true}
+                onClick={() => this.onCloseClick()}
+                aria-labelledby='board-dialog'
+                maxWidth='xs'
+                fullWidth={true}
+            >
                 <div onClick={e => e.stopPropagation()}>
-                    <DialogTitle style={{ textAlign: 'center' }} id='dialog-title'>Create a board</DialogTitle>
+                    <DialogTitle style={{ textAlign: 'center' }} id='dialog-title'>
+                        Create a board
+                    </DialogTitle>
                     <DialogContent>
                         <TextField
                             autoFocus
@@ -75,7 +90,13 @@ class BoardDialog extends Component {
                         />
                     </DialogContent>
                     <DialogActions>
-                        <Button onClick={this.onCreatePress} color='primary' className={classes.button}>Create</Button>
+                        <Button
+                            onClick={this.onCreatePress}
+                            color='primary'
+                            className={classes.button}
+                        >
+                            Create
+                        </Button>
                     </DialogActions>
                 </div>
             </Dialog>
@@ -96,4 +117,10 @@ function mapDispatchToProps (dispatch) {
     );
 }
 
-export default compose(withStyles(styles), connect(mapStateToProps, mapDispatchToProps))(BoardDialog);
+export default compose(
+    withStyles(styles),
+    connect(
+        mapStateToProps,
+        mapDispatchToProps
+    )
+)(BoardDialog);

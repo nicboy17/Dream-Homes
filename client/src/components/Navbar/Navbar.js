@@ -1,12 +1,13 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
+import { bindActionCreators, compose } from 'redux';
 import { makeStyles } from '@material-ui/styles';
-import { Link } from 'react-router-dom';
-import Menu from '@material-ui/core/Menu';
-import MenuItem from '@material-ui/core/MenuItem';
-import face from '../../assets/face.jpg';
+import { Link, withRouter } from 'react-router-dom';
+import queryString from 'query-string';
 import { logout } from '../../actions/userActions';
+import NavMenu from './NavMenu';
+import NavSearch from './NavSearch';
+import { searchPosts } from '../../actions/post';
 
 const useStyles = makeStyles(theme => ({
     header: {
@@ -15,18 +16,6 @@ const useStyles = makeStyles(theme => ({
         minHeight: '16vh',
         justifyItems: 'center',
         alignItems: 'center'
-    },
-    cornerIcon: {
-        width: '50px',
-        height: '50px',
-        borderRadius: '50px'
-    },
-    headerSearch: {
-        width: '35vw',
-        minHeight: '40px',
-        borderRadius: '50px',
-        border: '1px solid lightgrey',
-        paddingLeft: '15px'
     },
     headerBottomBorder: {
         minHeight: '5px',
@@ -40,63 +29,63 @@ const useStyles = makeStyles(theme => ({
     placeholderHeader: {
         minHeight: '16vh',
         height: '16vh'
-    },
-    menu: {
-        marginTop: '4rem'
     }
 }));
 
-const Navbar = ({ userStore, logout }) => {
-    const [open, setMenu] = React.useState(null);
+const Navbar = ({ userStore, logout, history, location, searchPosts }) => {
+    const [search, setSearch] = React.useState('');
+    const classes = useStyles();
 
-    const style = useStyles();
-
-    function handleClick (event) {
-        setMenu(event.currentTarget);
+    function handleLogOutClicked () {
+        logout();
+        history.replace('/');
     }
 
-    function handleClose () {
-        setMenu(null);
+    function handleSearch (event) {
+        event.preventDefault();
+        // eslint-disable-next-line camelcase
+        const { easy_filters = '' } = queryString.parse(location.search);
+        if (userStore.authenticated) {
+            searchPosts(search, easy_filters, userStore.user._id);
+        } else {
+            searchPosts(search, easy_filters, '');
+        }
+        history.push('/');
+    }
+
+    function handleSearchChange (event) {
+        setSearch(event.target.value);
+    }
+
+    function clearSearch () {
+        setSearch('');
     }
 
     return (
         <div>
-            <div className={style.headerContainer}>
-                <div className={style.header}>
+            <div className={classes.headerContainer}>
+                <div className={classes.header}>
                     <div>
                         <h3>Dream Home</h3>
                     </div>
                     <div />
+                    <NavSearch search={search} handleSearch={handleSearch} handleChange={handleSearchChange}
+                        clear={clearSearch}/>
                     <div>
-                        <input className={style.headerSearch} placeholder='Search' />
-                    </div>
-                    <div>
-                        <h5>Home</h5>
+                        <h5>
+                            <Link to='/'>Home</Link>
+                        </h5>
                     </div>
                     <div>
                         <h5>Following</h5>
                     </div>
                     <div />
-                    <div onClick={handleClick}>
-                        <img className={style.cornerIcon} src={face} alt=''/>
-                    </div>
-                    <Menu
-                        id="simple-menu"
-                        anchorEl={open}
-                        keepMounted
-                        open={Boolean(open)}
-                        onClose={handleClose}
-                        className={style.menu}
-                    >
-                        <MenuItem component={Link} to={'/profile/' + userStore.user.username}>Profile</MenuItem>
-                        <MenuItem component={Link} to='/' onClick={() => {
-                            logout();
-                        }}>Logout</MenuItem>
-                    </Menu>
+                    <NavMenu user={userStore.user} handleLogOutClicked={handleLogOutClicked}
+                        authenticated={userStore.authenticated}/>
                 </div>
-                <div className={style.headerBottomBorder} />
+                <div className={classes.headerBottomBorder}/>
             </div>
-            <div className={style.placeholderHeader}>placeholder</div>
+            <div className={classes.placeholderHeader}>placeholder</div>
         </div>
     );
 };
@@ -108,10 +97,11 @@ const mapStateToProps = state => ({
 function mapDispatchToProps (dispatch) {
     return bindActionCreators(
         {
-            logout
+            logout,
+            searchPosts
         },
         dispatch
     );
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Navbar);
+export default compose(withRouter, connect(mapStateToProps, mapDispatchToProps))(Navbar);
