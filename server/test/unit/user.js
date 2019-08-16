@@ -1,26 +1,28 @@
 const chai = require("chai");
 const expect = chai.expect;
 
-const User = require('../../src/models/user');
+const { User } = require ('../../src/models');
+const importUsers = require ('../utils/test-data/users');
 
 describe('User', () => {
-    before((done) => {
+    before (async function () {
+        this.timeout (5000);
         require('dotenv').config();
         require('../../config/mongo');
-        done();
+        global.users = await importUsers ();
     });
 
-    describe('Pre Save', () => {
-        after(() => {
-            User.collection.drop();
-        });
+    after (() => {
+        User.collection.drop ();
+    });
 
+    describe ('Pre Save', () => {
         it('Should create new user',async() => {
             const user = await User.create({
-                "name": "temp",
-                "username": "temp",
+                'name': 'temp7',
+                'username': 'temp7',
                 "password": "Password1",
-                "email": "temp@gmail.com",
+                'email': 'temp7@gmail.com'
             });
             expect(await user.comparePassword('Password1')).to.be.true;
         });
@@ -40,16 +42,12 @@ describe('User', () => {
     });
 
     describe('Password Verification', () => {
-        after(() => {
-            User.collection.drop();
-        });
-
         it('Should match',async () => {
             const user = await User.create({
-                "name": "temp",
-                "username": "temp",
+                'name': 'temp123',
+                'username': 'temp123',
                 "password": "Password1",
-                "email": "temp@gmail.com",
+                'email': 'temp123@gmail.com'
             });
 
             expect(await user.comparePassword('Password1')).to.be.true;
@@ -75,4 +73,28 @@ describe('User', () => {
         });
     });
 
+    describe ('Follow User', () => {
+        it ('Should return following and followers', async () => {
+            const eric = await global.users[0].follow ();
+            expect (eric.following).to.be.equal (1);
+            expect (eric.followers).to.be.equal (0);
+
+            const kenny = await global.users[1].follow ();
+            expect (kenny.following).to.be.equal (2);
+            expect (kenny.followers).to.be.equal (3);
+        });
+
+        it ('Should return list of users following Kenny', async () => {
+            const kenny_followers = await User.followers (global.users[1]._id);
+            expect (kenny_followers[0].username).to.be.equal (global.users[0].username);
+            expect (kenny_followers[1].username).to.be.equal (global.users[2].username);
+            expect (kenny_followers[2].username).to.be.equal (global.users[3].username);
+        });
+
+        it ('Should return list of users Kenny is following', async () => {
+            const kenny_following = await User.following (global.users[1]._id);
+            expect (kenny_following[0].username).to.be.equal (global.users[2].username);
+            expect (kenny_following[1].username).to.be.equal (global.users[3].username);
+        });
+    });
 });

@@ -4,7 +4,11 @@ import {
     ADD_BOARD_SUCCESS,
     ADD_BOARD_ERROR,
     ADD_POST_SUCCESS,
-    ADD_POST_ERROR
+    ADD_POST_ERROR,
+    FOLLOW_SUCCESS,
+    FOLLOW_FAIL,
+    UNFOLLOW_SUCCESS,
+    UNFOLLOW_FAIL
 } from '../actions/types';
 
 const INITIAL_STATE = {};
@@ -26,6 +30,13 @@ export default (state = INITIAL_STATE, action) => {
         return { ...state };
     case ADD_POST_ERROR:
         return { ...state, error: action.err };
+    case FOLLOW_SUCCESS:
+        return { ...state, followers: state.followers + 1 };
+    case UNFOLLOW_SUCCESS:
+        return { ...state, followers: state.followers - 1 };
+    case FOLLOW_FAIL:
+    case UNFOLLOW_FAIL:
+        return { ...state, error: action.payload.error };
     default:
         return state;
     }
