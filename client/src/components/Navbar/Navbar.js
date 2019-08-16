@@ -6,14 +6,13 @@ import { makeStyles } from '@material-ui/styles';
 import { Link, withRouter } from 'react-router-dom';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
-import face from '../../assets/face.jpg';
 import { logout } from '../../actions/userActions';
 
 const useStyles = makeStyles(theme => ({
     header: {
         display: 'grid',
         gridTemplateColumns: '5fr 3fr 6fr 2.5fr 2.5fr 0fr 3fr',
-        minHeight: '6rem',
+        minHeight: '16vh',
         justifyItems: 'center',
         alignItems: 'center'
     },
@@ -39,8 +38,8 @@ const useStyles = makeStyles(theme => ({
         zIndex: '10'
     },
     placeholderHeader: {
-        minHeight: '14vh',
-        height: '14vh'
+        minHeight: '16vh',
+        height: '16vh'
     },
     menu: {
         marginTop: '4rem'
@@ -71,7 +70,7 @@ const Navbar = ({ userStore, logout, history }) => {
             return (
             <>
                 <div onClick={handleClick}>
-                    <img className={style.cornerIcon} src={face} alt='' />
+                    <img className={style.cornerIcon} src={userStore.user.profile} alt='' />
                 </div>
                 <Menu
                     id='simple-menu'

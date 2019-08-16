@@ -63,6 +63,8 @@ router.get('/:username', async (req, res) => {
     }
 });
 
+//authenticated routes below this middleware
+router.use (token ());
 
 // @route    PUT users/:username
 // @desc     Update user image and/or name
@@ -203,6 +205,7 @@ router.post ('/:username/favourite', [UserValidation.addPostToFavourites, async 
     }
 }]);
 
+
 // @route    PUT users/:username/interests
 // @desc     Update user interests
 // @access   Private
@@ -235,8 +238,8 @@ router.put('/:username/interests', async (req,res) => {
 router.put('/board/:id', async (req,res) => {
     try {
         const board = await Board.findById(req.params.id);
-        if(board.user.toString() !== req.decoded.users._id.toString()) {
-            return res.status(404).json({msg: 'You do not have the authorization to add to this board'});
+        if(board.user.toString() !== req.decoded._id.toString()) {
+            return res.status(401).json({msg: 'You do not have the authorization to add to this board'});
         }
         // Check to see if there is a board with that id
         if(!board) {
