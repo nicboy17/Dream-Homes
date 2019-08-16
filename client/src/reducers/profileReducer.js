@@ -32,13 +32,11 @@ export default (state = INITIAL_STATE, action) => {
     case GET_USER_BOARDS_POSTS_ERROR:
         return { ...state, error: action.err };
     case ADD_BOARD_SUCCESS:
-        state.boards.push(response.board);
-        return { ...state };
+        return { ...state, profileInfo: { ...state.profileInfo, boards: [...state.profileInfo.boards, response.board] } };
     case ADD_BOARD_ERROR:
         return { ...state, error: action.err };
     case ADD_POST_SUCCESS:
-        state.posts.push(response.post);
-        return { ...state };
+        return { ...state, profileInfo: { ...state.profileInfo, posts: [...state.profileInfo.posts, response.post] } };
     case ADD_POST_ERROR:
         return { ...state, error: action.err };
     case FOLLOW_SUCCESS:
