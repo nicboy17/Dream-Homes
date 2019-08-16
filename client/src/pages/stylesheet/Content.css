@@ -42,3 +42,12 @@
     border-radius: 15px;
     margin-bottom: 15px;
 }
+
+.spinner {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    margin: auto
+}

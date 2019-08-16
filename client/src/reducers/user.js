@@ -4,11 +4,7 @@ import {
     LOGIN_RESPONSE,
     LOGIN_ERROR,
     GET_TOKEN_SUCCESS,
-    FOLLOW_SUCCESS,
-    FETCH_FOLLOWINGS_SUCCESS,
-    FETCH_FOLLOWINGS_FAIL,
-    FETCH_FOLLOWERS_SUCCESS,
-    FETCH_FOLLOWERS_FAIL
+    FOLLOW_SUCCESS
 } from '../actions/types';
 
 const initialState = {
@@ -32,13 +28,6 @@ export default (state = initialState, action) => {
         return { ...state, authenticated: true, user: action.user, token: action.token };
     case FOLLOW_SUCCESS:
         return { ...state, following: state.following + 1 };
-    case FETCH_FOLLOWINGS_SUCCESS:
-        return { ...state, followingUsers: action.payload };
-    case FETCH_FOLLOWINGS_FAIL:
-    case FETCH_FOLLOWERS_FAIL:
-        return { ...state, error: action.payload.error };
-    case FETCH_FOLLOWERS_SUCCESS:
-        return { ...state, followerUsers: action.payload };
     default:
         return state;
     }
