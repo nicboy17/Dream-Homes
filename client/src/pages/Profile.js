@@ -174,6 +174,10 @@ class Profile extends Component {
                                 {profileStore.followers || 0} Followers |{' '}
                                 {profileStore.following || 0} Following
                             </h5>
+                            {this.state.followedOrNot === false
+                                ? <button className='followButton' onClick={() => this.setState({ followedOrNot: true })}>Follow!</button>
+                                : <button className='followButton' onClick={() => this.setState({ followedOrNot: false })}>Stop Following!</button>
+                            }
                         </div>
                     </div>
                     <div />
