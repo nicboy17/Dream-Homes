@@ -7,9 +7,9 @@
     border-bottom: 1px solid lightgrey;
 }
 .subHeaderIcon {
-    width: 100px;
-    height: 100px;
-    border-radius: 50px;
+    width: 100px !important;
+    height: 100px !important;
+    border-radius: 50px !important;
 }
 .nameContainer {
     display: grid;

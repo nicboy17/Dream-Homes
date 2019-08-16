@@ -6,7 +6,6 @@ import { makeStyles } from '@material-ui/styles';
 import { Link, withRouter } from 'react-router-dom';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
-import face from '../../assets/face.jpg';
 import { logout } from '../../actions/userActions';
 
 const useStyles = makeStyles(theme => ({
