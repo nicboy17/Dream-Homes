@@ -238,8 +238,8 @@ router.put('/:username/interests', async (req,res) => {
 router.put('/board/:id', async (req,res) => {
     try {
         const board = await Board.findById(req.params.id);
-        if(board.user.toString() !== req.decoded._id.toString()) {
-            return res.status(401).json({msg: 'You do not have the authorization to add to this board'});
+        if (board.user.toString () !== req.decoded._id.toString ()) {
+            return res.status (403).json ({ msg: 'You do not have the authorization to add to this board' });
         }
         // Check to see if there is a board with that id
         if(!board) {
@@ -259,7 +259,7 @@ router.put('/board/:id', async (req,res) => {
         if(err.kind === 'ObjectId') {
             return res.status(404).json({msg: 'The board or post does not exist'});
         }
-        return res.status(500).send('Server Error');
+        return res.status (500).send (err);
     }
 });
 

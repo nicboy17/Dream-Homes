@@ -7,6 +7,7 @@ import MorePosts from './MorePosts';
 import Divider from '@material-ui/core/Divider';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import { getBoardsandPosts } from '../../actions/profileActions';
+import { boardService } from '../../services/board';
 
 const styles = theme => ({
     post: {
@@ -35,9 +36,17 @@ class PostPage extends React.Component {
         this.setState({ [name]: value });
     };
 
-    save = e => {
+    save = async e => {
         e.preventDefault();
-        console.log(this.state.board);
+        try {
+            const response = await boardService.addPost({
+                post: this.state.id,
+                board: this.state.board
+            });
+            console.log(response);
+        } catch (err) {
+            console.log(err.response);
+        }
     };
 
     render () {
@@ -72,7 +81,7 @@ class PostPage extends React.Component {
             <div>
                 <div className={classes.post}>
                     <Post
-                        handleSave={this.save}
+                        handleSave={e => this.save(e)}
                         handleSelectBoard={this.handleChange}
                         value={this.state.board}
                         post={post(match.params.id)}

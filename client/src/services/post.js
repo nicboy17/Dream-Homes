@@ -1,5 +1,4 @@
-import axios from 'axios';
-import { createFormData } from './utils';
+import { axios, createFormData } from './utils';
 
 export const postService = {
     addPost: ({ post, username }) => {
