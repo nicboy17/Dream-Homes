@@ -14,5 +14,15 @@ export const postService = {
         }).catch(err => {
             throw err;
         });
+    },
+    // eslint-disable-next-line camelcase
+    searchPosts: ({ search_filter, easy_filters, userId }) => {
+        return axios.get(
+            // eslint-disable-next-line camelcase
+            `/posts?userId=${userId}&search_filter=${search_filter}&easy_filters=${easy_filters}`).then(res => {
+            return res.data;
+        }).catch(err => {
+            throw err;
+        });
     }
 };
