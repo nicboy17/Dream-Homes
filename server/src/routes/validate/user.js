@@ -37,6 +37,12 @@ module.exports = {
     addBoard: (req, res, next) => {
         req.checkBody('title', 'No title provided').exists().notEmpty();
 
+        validationHandler (req, res, next);
+    },
+
+    addPostToFavourites: (req, res, next) => {
+        req.checkBody ('post', 'No Post provided').exists ().notEmpty ();
+
         validationHandler(req, res, next);
     }
 };

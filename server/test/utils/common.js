@@ -20,11 +20,11 @@ module.exports = {
         return { token:user.loginToken(), id: user._id };
     },
     addBoardandPost: async (id) => {
-        await Board.create({
+        const board = await Board.create ({
             title: 'test board',
             user: id
         });
-        await Post.create({
+        const post = await Post.create ({
             title: 'test',
             description: 'test post',
             link: 'test link',
@@ -32,6 +32,8 @@ module.exports = {
             user: id,
             image: 'test image'
         });
+
+        return { board, post };
     },
     request
 };

@@ -95,6 +95,23 @@ router.post('/:username/posts', [upload.single('image'), UserValidation.addPost,
     }
 }]);
 
+
+// @route    POST users/:username/favourite
+// @desc     Add post to user's favourites
+// @access   Private
+router.post ('/:username/favourite', [UserValidation.addPostToFavourites, async (req, res) => {
+    try {
+        const user = await User.findByIdAndUpdate (req.decoded._id, { '$addToSet': { posts: req.body.post } }, { 'new': true }).lean ();
+        if (!user) {
+            return res.status (404).json ({ success: false, message: 'User not found' });
+        }
+
+        res.status (201).json ({ success: true });
+    } catch (err) {
+        return res.status (400).json ({ success: false, err });
+    }
+}]);
+
 // @route    PUT users/:username/interests
 // @desc     Update user with interests
 // @access   Private
