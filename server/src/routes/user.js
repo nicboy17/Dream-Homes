@@ -122,24 +122,24 @@ router.post ('/unfollow', [UserValidation.unfollowUser, async (req, res) => {
     }
 }]);
 
-// @route    GET users/:username/following
+// @route    GET users/:id/following
 // @desc     get users who are following specified user
 // @access   Private
-router.get ('/:username/following', async (req, res) => {
+router.get ('/:id/following', async (req, res) => {
     try {
-        const following = await User.following (req.decoded._id);
+        const following = await User.following (req.params.id);
         return res.status (200).json ({ success: true, following });
     } catch (err) {
         return res.status (400).json ({ success: false });
     }
 });
 
-// @route    GET users/:username/followers
+// @route    GET users/:id/followers
 // @desc     get specified user's followers
 // @access   Private
-router.get ('/:username/followers', async (req, res) => {
+router.get ('/:id/followers', async (req, res) => {
     try {
-        const followers = await User.followers (req.decoded._id);
+        const followers = await User.followers (req.params.id);
         return res.status (200).json ({ success: true, followers });
     } catch (err) {
         return res.status (400).json ({ success: false });
