@@ -175,7 +175,7 @@ class Profile extends Component {
                         <Avatar className='subHeaderIcon' component={Link} src={profileInfo.profile}
                             to={'/profile/' + profileInfo.username + '/edit'}/>
                         <div>
-                            <h3 className='profileName'>{this.state.username}</h3>
+                            <h3 className='profileName'>{profileInfo.name}</h3>
                             <h5 className='profileFollowers'>
                                 {followers.length} Followers | {following.length} Following
                             </h5>
