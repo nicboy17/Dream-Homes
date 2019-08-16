@@ -63,6 +63,8 @@ router.get('/:username', async (req, res) => {
     }
 });
 
+//authenticated routes below this middleware
+router.use (token ());
 
 // @route    PUT users/:username
 // @desc     Update user image and/or name
@@ -262,4 +264,3 @@ router.put('/board/:id', async (req,res) => {
 });
 
 module.exports = router;
-

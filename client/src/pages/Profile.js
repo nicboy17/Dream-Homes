@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { compose, bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
-import face from '../assets/face.jpg';
 import Avatar from '@material-ui/core/Avatar';
 import { Card, Typography } from '@material-ui/core';
 import CardMedia from '@material-ui/core/CardMedia';
@@ -165,13 +164,10 @@ class Profile extends Component {
                 <Route path='/profile/:username/interest-quiz' component={InterestQuizDialog}/>
                 <Route path='/profile/:username/post/create' component={PostDialog}/>
                 <Route path='/profile/:username/board/create' component={BoardDialog}/>
-                <div className={classes.subHeader}>
-                    <div className={classes.nameContainer}>
-                        <Avatar className={classes.subHeaderIcon} component={Link} src={profileStore.profile}
-                            to={'/profile/' + profileStore.username + '/edit'}/>
                 <div className='subHeader'>
                     <div className='nameContainer'>
-                        <img src={profileStore.profile} alt={face} className='subHeaderIcon' />
+                        <Avatar className='subHeaderIcon' component={Link} src={profileStore.profile}
+                            to={'/profile/' + profileStore.username + '/edit'}/>
                         <div>
                             <h3 className='profileName'>{this.state.username}</h3>
                             <h5 className='profileFollowers'>
