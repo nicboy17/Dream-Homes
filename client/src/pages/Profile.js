@@ -14,7 +14,7 @@ import InterestQuizDialog from '../components/Dialog/InterestQuizDialog/QuizDial
 import PostDialog from '../components/Dialog/PostDialog/PostDialog';
 import BoardDialog from '../components/Dialog/BoardDialog/BoardDialog';
 import Button from '@material-ui/core/Button';
-import { getBoardsandPosts, followUser } from '../actions/profileActions';
+import { getBoardsandPosts, followUser, unfollowUser } from '../actions/profileActions';
 import Posts from '../components/Posts/Posts';
 
 import './stylesheet/Profile.css';
@@ -65,13 +65,25 @@ class Profile extends Component {
         }
     };
 
+    onUnfollowPress = () => {
+        const {
+            userStore: { user },
+            profileStore: { _id },
+            unfollowUser
+        } = this.props;
+        const currentUserId = user._id;
+        const followingId = _id;
+        unfollowUser(currentUserId, followingId);
+        this.setState({ followedOrNot: !this.state.followedOrNot });
+    };
+
     renderFollowButton = () => {
         return this.state.followedOrNot === false ? (
             <button className='followButton' onClick={() => this.onFollowPress()}>
                 Follow!
             </button>
         ) : (
-            <button className='followButton' onClick={() => this.onFollowPress()}>
+            <button className='followButton' onClick={() => this.onUnfollowPress()}>
                 Stop Following!
             </button>
         );
@@ -145,6 +157,7 @@ class Profile extends Component {
         if (!profileStore.boards) {
             return <CircularProgress />;
         }
+        console.log(profileStore)
         return (
             <div>
                 <Route path='/profile/:username/interest-quiz' component={InterestQuizDialog} />
@@ -225,7 +238,8 @@ const mapDispatchToProps = dispatch => {
     return bindActionCreators(
         {
             getBoardsandPosts,
-            followUser
+            followUser,
+            unfollowUser
         },
         dispatch
     );

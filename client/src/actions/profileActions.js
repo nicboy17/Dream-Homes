@@ -3,7 +3,9 @@ import {
     ADD_POST,
     GET_USER_BOARDS_POSTS,
     FOLLOW_FAIL,
-    FOLLOW_SUCCESS
+    FOLLOW_SUCCESS,
+    UNFOLLOW_FAIL,
+    UNFOLLOW_SUCCESS
 } from '../actions/types';
 import axios from 'axios';
 
@@ -38,6 +40,23 @@ export const followUser = (currentUserId, followingId) => async dispatch => {
         dispatch({
             type: FOLLOW_FAIL,
             payload: { error: 'Failed to follow user' }
+        });
+    }
+};
+export const unfollowUser = (currentUserId, followingId) => async dispatch => {
+    try {
+        const body = {
+            followee: followingId,
+            follower: currentUserId
+        };
+        await axios.post('/users/unfollow', body);
+        dispatch({
+            type: UNFOLLOW_SUCCESS
+        });
+    } catch (err) {
+        dispatch({
+            type: UNFOLLOW_FAIL,
+            payload: { error: 'Failed to unfollow user' }
         });
     }
 };
