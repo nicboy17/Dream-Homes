@@ -7,7 +7,7 @@ import { Card, Typography } from '@material-ui/core';
 import CardMedia from '@material-ui/core/CardMedia';
 import CardActionArea from '@material-ui/core/CardActionArea';
 import house from '../assets/house.png';
-import { Route, Link } from 'react-router-dom';
+import { Route, Link, withRouter } from 'react-router-dom';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import InterestQuizDialog from '../components/Dialog/InterestQuizDialog/QuizDialog';
 import PostDialog from '../components/Dialog/PostDialog/PostDialog';
@@ -163,7 +163,6 @@ class Profile extends Component {
         if (_.isEmpty(this.props.profileStore)) {
             return <CircularProgress className = 'spinner' />;
         }
-        console.log(this.props.profileStore);
         return (
             <div>
                 <Route path='/profile/:username/edit' component={EditPicUserDialog}/>
@@ -179,10 +178,6 @@ class Profile extends Component {
                             <h5 className='profileFollowers'>
                                 {followers.length} Followers | {following.length} Following
                             </h5>
-                            {this.state.followedOrNot === false
-                                ? <button className='followButton' onClick={() => this.setState({ followedOrNot: true })}>Follow!</button>
-                                : <button className='followButton' onClick={() => this.setState({ followedOrNot: false })}>Stop Following!</button>
-                            }
                         </div>
                     </div>
                     <div />
@@ -258,6 +253,7 @@ const mapDispatchToProps = dispatch => {
 };
 
 export default compose(
+    withRouter,
     connect(
         mapStateToProps,
         mapDispatchToProps
