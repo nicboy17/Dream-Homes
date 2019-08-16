@@ -6,7 +6,6 @@ import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
 import { DialogTitle, DialogActions, DialogContent } from '../components';
 import Interests from './Interests';
-// import axios from 'axios';
 import { axios } from '../../../services/utils.js'
 
 const styles = theme => ({
@@ -73,7 +72,8 @@ class QuizDialog extends React.Component {
         //     console.log(err);
         // }
         // this.setState({ open: false });
-        axios.put('users/chris/interests', {
+        const username = this.props.match.params.username;
+        axios.put(`/users/${username}/interests`, {
             interests: this.state.interests
         })
         .then(res => console.log(res))
