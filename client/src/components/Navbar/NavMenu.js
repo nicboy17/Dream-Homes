@@ -64,7 +64,7 @@ const NavMenu = ({ authenticated, user, handleLogOutClicked }) => {
         return (
             <>
                 <h5>
-                    <Link to='/login'>Log In</Link>
+                    <Link to='/login' style={{ textDecoration: 'none', color: 'black' }}>Log In</Link>
                 </h5>
             </>
         );
