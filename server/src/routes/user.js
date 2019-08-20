@@ -171,12 +171,14 @@ router.post('/:username/board', [UserValidation.addBoard, async (req, res) => {
 router.post('/:username/posts', [upload.array('image', 5), UserValidation.addPost, async (req, res) => {
     const user = await User.findOne({ username: req.params.username }).select('_id').lean();
     
-    if (req.decoded.username !== req.params.username) {
-        return res.status(403).json({ success: false, message: 'Cannot create posts for other users'});
-    }
     if (!user) {
         return res.status(404).json({ success: false, message: 'no user found' });
     }
+
+    if (req.decoded.username !== req.params.username) {
+        return res.status(403).json({ success: false, message: 'Cannot create posts for other users'});
+    }
+    
     if (req.files) {
         try {
             const filesArr = req.files.map(file => file.location);
