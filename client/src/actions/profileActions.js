@@ -6,6 +6,7 @@ import {
     FOLLOW_SUCCESS,
     UNFOLLOW_FAIL,
     UNFOLLOW_SUCCESS,
+    FETCHING_PROFILE,
     FETCH_FOLLOWINGS_SUCCESS,
     FETCH_FOLLOWINGS_FAIL,
     FETCH_FOLLOWERS_SUCCESS,
@@ -32,8 +33,11 @@ export const addPost = (post, username) => ({
     username
 });
 
-export const fetchProfileInfo = (username) => async dispatch => {
+export const fetchProfileInfo = username => async dispatch => {
     try {
+        dispatch({
+            type: FETCHING_PROFILE
+        });
         const res = await axios.get(`/users/${username}`);
         const promises = [
             axios.get(`/users/${res.data.user._id}/following`),
@@ -43,9 +47,11 @@ export const fetchProfileInfo = (username) => async dispatch => {
         const following = results[0].data.following;
         const followers = results[1].data.followers;
         const profileInfo = res.data.user;
+        profileInfo['following'] = following;
+        profileInfo['followers'] = followers;
         dispatch({
             type: FETCH_PROFILE_SUCCESS,
-            payload: { profileInfo, following, followers }
+            payload: profileInfo
         });
     } catch (err) {
         dispatch({
@@ -85,7 +91,7 @@ export const unfollowUser = (followee, id) => async dispatch => {
     } catch (err) {
         dispatch({
             type: UNFOLLOW_FAIL,
-            payload: { error: 'Failed to unfollow user' }
+            payload: 'Failed to unfollow user'
         });
     }
 };
