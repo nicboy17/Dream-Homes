@@ -15,7 +15,9 @@ import {
     FETCH_PROFILE_FAIL,
     CREATE_POST_LOADING,
     ADD_POST_ERROR,
-    ADD_POST_SUCCESS
+    ADD_POST_SUCCESS,
+    EDIT_PROFILE_SUCCESS,
+    EDIT_PROFILE_FAIL
 } from '../actions/types';
 import axios from 'axios';
 import _ from 'lodash';
@@ -151,6 +153,21 @@ export const createPost = (formData, username, board) => async dispatch => {
     } catch (err) {
         dispatch({
             type: ADD_POST_ERROR
+        });
+    }
+};
+
+export const editProfile = (formData, username) => async dispatch => {
+    try {
+        const res = await axios.put(`/users/${username}`, formData);
+        dispatch({
+            type: EDIT_PROFILE_SUCCESS,
+            payload: res.data
+        });
+    } catch (err) {
+        dispatch({
+            type: EDIT_PROFILE_FAIL,
+            payload: { error: 'Something went wrong with updating the profile' }
         });
     }
 };

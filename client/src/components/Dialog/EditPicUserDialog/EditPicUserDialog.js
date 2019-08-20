@@ -8,54 +8,31 @@ import TextField from '@material-ui/core/TextField';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Avatar from '@material-ui/core/Avatar';
 import CloseIcon from '@material-ui/icons/Close';
-import axios from 'axios';
+import { connect } from 'react-redux';
+import { editProfile } from '../../../actions/profileActions';
+import '../../../pages/stylesheet/Dialog.css';
 
 class EditPicUserDialog extends Component {
-    constructor (props) {
-        super(props);
-        this.state = {
-            smallText: '',
-            nameError: false,
-            name: ''
-        };
-    }
+    state = {
+        smallText: '',
+        nameError: false,
+        name: ''
+    };
 
-    // Fetch Name and Picture from UserDB
-    componentDidMount = async () => {
-        try {
-            const username = this.props.location.pathname.split('/')[2];
-            const res = await axios.get(`/users/${username}`);
-            console.log(res);
-            if (res.data.user) {
-                return this.setState({
-                    user: res.data.user,
-                    profile: res.data.user.profile,
-                    username: res.data.user.username,
-                    name: res.data.user.name
-                });
-            }
-        } catch (err) {
-            console.log('Something went wrong with fetching user API');
-        }
+    componentDidMount = () => {
+        const {
+            profileStore: { profileInfo }
+        } = this.props;
+        this.setState({
+            profile: profileInfo.profile,
+            name: profileInfo.name,
+            username: profileInfo.username
+        });
     };
 
     renderLoading = () => {
-        if (!this.state.user) {
-            return (
-                <div
-                    style={{
-                        position: 'absolute',
-                        top: 0,
-                        left: 0,
-                        right: 0,
-                        bottom: 0,
-                        justifyContent: 'center',
-                        alignItems: 'center'
-                    }}
-                >
-                    <CircularProgress />
-                </div>
-            );
+        if (!this.props.profileStore.profileInfo) {
+            return <CircularProgress className="spinner" />;
         }
     };
 
@@ -89,29 +66,15 @@ class EditPicUserDialog extends Component {
                 nameError: true
             });
         } else {
-            try {
-                const formData = new FormData();
-                if (this.state.imageFile) {
-                    formData.append('image', this.state.imageFile);
-                }
-                if (this.state.user.name !== this.state.name) {
-                    formData.append('name', this.state.name);
-                }
-
-                const res = await axios({
-                    url: `/users/${this.state.user.username}`,
-                    method: 'PUT',
-                    data: formData,
-                    headers: {
-                        'Content-Type': 'application/json'
-                    }
-                });
-                console.log(res);
-                this.props.history.push(`/profile/${this.state.username}`);
-                window.location.reload();
-            } catch (err) {
-                console.log('Something went wrong with editing user pic and username');
+            const formData = new FormData();
+            if (this.state.imageFile) {
+                formData.append('image', this.state.imageFile);
             }
+            if (this.props.profileStore.profileInfo.name !== this.state.name) {
+                formData.append('name', this.state.name);
+            }
+            this.props.editProfile(formData, this.state.username);
+            this.props.history.push(`/profile/${this.state.username}`);
         }
     };
 
@@ -120,40 +83,42 @@ class EditPicUserDialog extends Component {
         return (
             <Dialog
                 open={true}
-                maxWidth='xs'
+                maxWidth="xs"
                 fullWidth
                 onClose={this.handleClose}
-                aria-labelledby='form-dialog-title'
+                aria-labelledby="form-dialog-title"
                 onClick={() => this.onCloseClicked()}
-                stop
             >
-                <div onClick = {e => e.stopPropagation()}>
-                    <CloseIcon onClick={() => this.onCloseClicked()} />
-                    <DialogTitle style={{ textAlign: 'center' }} id='form-dialog-title'>
+                <div onClick={e => e.stopPropagation()}>
+                    <CloseIcon
+                        className="closeButton"
+                        fontSize="small"
+                        onClick={() => this.onCloseClicked()}
+                    />
+                    <DialogTitle style={{ textAlign: 'center' }} id="form-dialog-title">
                         Edit avatar/username
                     </DialogTitle>
-                    <DialogContent
-                        style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}
-                    >
+                    <DialogContent className="DialogContent">
                         <Avatar
                             style={{ height: 100, width: 100, margin: 10 }}
+                            className="img"
                             src={this.state.profile || require('../../../assets/icon_profile.svg')}
                             onClick={() => this.handleFileUpload()}
                         />
                         <input
-                            id='selectImage'
+                            id="selectImage"
                             hidden
-                            type='file'
-                            accept='image/png,image/jpeg'
+                            type="file"
+                            accept="image/png,image/jpeg"
                             onChange={e => this.onChangeImage(e)}
                         />
-
                         <TextField
                             autoFocus
-                            margin='dense'
-                            id='name'
-                            type='name'
-                            label='Name'
+                            autoComplete="off"
+                            margin="dense"
+                            id="name"
+                            type="name"
+                            label="Name"
                             fullWidth
                             onChange={e => this.onChangeText(e)}
                             value={this.state.name}
@@ -162,7 +127,7 @@ class EditPicUserDialog extends Component {
                         />
                     </DialogContent>
                     <DialogActions>
-                        <Button onClick={this.onSavePress} color='primary'>
+                        <Button onClick={this.onSavePress} color="primary">
                             Save
                         </Button>
                     </DialogActions>
@@ -172,4 +137,12 @@ class EditPicUserDialog extends Component {
     }
 }
 
-export default EditPicUserDialog;
+const mapStateToProps = state => ({
+    userStore: state.UserStore,
+    profileStore: state.ProfileStore
+});
+
+export default connect(
+    mapStateToProps,
+    { editProfile }
+)(EditPicUserDialog);

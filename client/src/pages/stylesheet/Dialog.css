@@ -54,6 +54,15 @@
     margin-bottom: 10px;
 }
 
+.spinner {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    margin: auto;
+}
+
 .closeButton {
     float: right;
     margin-top: 10px;
@@ -71,4 +80,20 @@
 
 .dialogLoading {
     display: none;
+}
+
+.img {
+    height: 100px;
+    width: 100px;
+    margin: 10;
+}
+
+.img:hover {
+    cursor: pointer;
+}
+
+.DialogContent {
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
