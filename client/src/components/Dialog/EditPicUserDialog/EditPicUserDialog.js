@@ -32,7 +32,7 @@ class EditPicUserDialog extends Component {
 
     renderLoading = () => {
         if (!this.props.profileStore.profileInfo) {
-            return <CircularProgress className = 'spinner' />;
+            return <CircularProgress className="spinner" />;
         }
     };
 
@@ -83,38 +83,42 @@ class EditPicUserDialog extends Component {
         return (
             <Dialog
                 open={true}
-                maxWidth='xs'
+                maxWidth="xs"
                 fullWidth
                 onClose={this.handleClose}
-                aria-labelledby='form-dialog-title'
+                aria-labelledby="form-dialog-title"
                 onClick={() => this.onCloseClicked()}
             >
                 <div onClick={e => e.stopPropagation()}>
-                    <CloseIcon className = 'closeButton' onClick={() => this.onCloseClicked()} />
-                    <DialogTitle style={{ textAlign: 'center' }} id='form-dialog-title'>
+                    <CloseIcon
+                        className="closeButton"
+                        fontSize="small"
+                        onClick={() => this.onCloseClicked()}
+                    />
+                    <DialogTitle style={{ textAlign: 'center' }} id="form-dialog-title">
                         Edit avatar/username
                     </DialogTitle>
-                    <DialogContent className = 'DialogContent'>
+                    <DialogContent className="DialogContent">
                         <Avatar
                             style={{ height: 100, width: 100, margin: 10 }}
-                            className = 'img'
+                            className="img"
                             src={this.state.profile || require('../../../assets/icon_profile.svg')}
                             onClick={() => this.handleFileUpload()}
                         />
                         <input
-                            id='selectImage'
+                            id="selectImage"
                             hidden
-                            type='file'
-                            accept='image/png,image/jpeg'
+                            type="file"
+                            accept="image/png,image/jpeg"
                             onChange={e => this.onChangeImage(e)}
                         />
                         <TextField
                             autoFocus
-                            autoComplete = 'off'
-                            margin='dense'
-                            id='name'
-                            type='name'
-                            label='Name'
+                            autoComplete="off"
+                            margin="dense"
+                            id="name"
+                            type="name"
+                            label="Name"
                             fullWidth
                             onChange={e => this.onChangeText(e)}
                             value={this.state.name}
@@ -123,7 +127,7 @@ class EditPicUserDialog extends Component {
                         />
                     </DialogContent>
                     <DialogActions>
-                        <Button onClick={this.onSavePress} color='primary'>
+                        <Button onClick={this.onSavePress} color="primary">
                             Save
                         </Button>
                     </DialogActions>
