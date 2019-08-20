@@ -18,6 +18,7 @@ import { getBoardsandPosts, followUser, unfollowUser, fetchProfileInfo } from '.
 import Posts from '../components/Posts/Posts';
 import _ from 'lodash';
 import './stylesheet/Profile.css';
+import Masonry from 'react-masonry-component';
 
 class Profile extends Component {
     state = {
@@ -32,12 +33,16 @@ class Profile extends Component {
         this.props.fetchProfileInfo(username);
     }
 
-    toggle = () => {
-        if (this.state.activePanel === 'board') {
-            this.setState({ activePanel: 'post' });
-        } else {
-            this.setState({ activePanel: 'board' });
-        }
+    togglePosts = () => {
+        this.setState({activePanel: 'post'})
+    };
+
+    toggleBoards = () => {
+        this.setState({activePanel: 'board'})
+    };
+
+    toggleFavorites = () => {
+        this.setState({activePanel: 'favorite'})
     };
 
     onCreateBoardPress = () => {
@@ -125,6 +130,26 @@ class Profile extends Component {
         );
     };
 
+    renderFavorites = () => {
+        const favoritePosts = []
+        let favorites = favoritePosts.map(function(el) {
+            return (
+                <img className='favoritePost' src={el}></img>
+            )
+        })
+        return favoritePosts.length === 0 ? (
+            <h2>You have no favorite posts</h2>
+        ) : (
+            <Masonry
+                className='masonry'
+                elementType={'div'}
+                options={{ fitWidth: true, gutter: 15 }}
+            >
+                {favorites}
+            </Masonry>
+        )
+    }
+
     renderCreateButtons = () => {
         const {
             userStore: { user, authenticated },
@@ -201,12 +226,21 @@ class Profile extends Component {
                             </Button>
                             <Button 
                             color='primary' 
-                            onClick={() => this.toggle()}
+                            onClick={() => this.togglePosts()}
                             style={{
                                 margin: '10px'
                             }}
                             >
                                 Posts
+                            </Button>
+                            <Button 
+                            color='primary' 
+                            onClick={() => this.toggleFavorites()}
+                            style={{
+                                margin: '10px'
+                            }}
+                            >
+                                Favorites
                             </Button>
                         </div>
                         <div />
@@ -228,7 +262,7 @@ class Profile extends Component {
                         <div>
                             <Button 
                             color='primary' 
-                            onClick={() => this.toggle()}
+                            onClick={() => this.toggleBoards()}
                             style={{
                                 margin: '10px'
                             }}
@@ -244,6 +278,15 @@ class Profile extends Component {
                             >
                                 Posts
                             </Button>
+                            <Button 
+                            color='primary' 
+                            onClick={() => this.toggleFavorites()}
+                            style={{
+                                margin: '10px'
+                            }}
+                            >
+                                Favorites
+                            </Button>
                         </div>
                         <div />
                     </div>
@@ -255,6 +298,43 @@ class Profile extends Component {
                         >
                             {this.renderPosts()}
                         </div>
+                    </div>
+                </div>
+                <div style={{ display: this.state.activePanel === 'favorite' ? 'grid' : 'none' }}>
+                <div className='tabSection'>
+                        <div>
+                            <Button 
+                            color='primary' 
+                            onClick={() => this.toggleBoards()}
+                            style={{
+                                margin: '10px'
+                            }}
+                            >
+                                Boards
+                            </Button>
+                            <Button 
+                            color='primary' 
+                            onClick={() => this.togglePosts()}
+                            style={{
+                                margin: '10px'
+                            }}
+                            >
+                                Posts
+                            </Button>
+                            <Button 
+                            color='primary' 
+                            variant={'contained'}
+                            style={{
+                                margin: '10px'
+                            }}
+                            >
+                                Favorites
+                            </Button>
+                        </div>
+                        <div />
+                    </div>
+                    <div className='activePanel'>
+                        {this.renderFavorites()}
                     </div>
                 </div>
             </div>

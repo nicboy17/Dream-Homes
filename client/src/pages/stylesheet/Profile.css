@@ -48,7 +48,7 @@
 .tabSection {
     min-height: 25vh;
     display: grid;
-    grid-template-columns: 1fr 1.9fr;
+    grid-template-columns: 1fr 1fr;
     align-items: center;
     justify-items: center;
 }
@@ -111,4 +111,11 @@
     right: 0;
     left: 0;
     margin: auto
+}
+
+.favoritePost {
+    width: 200px;
+    height: auto;
+    border-radius: 15px;
+    margin-bottom: 15px;
 }
