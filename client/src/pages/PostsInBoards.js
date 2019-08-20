@@ -49,7 +49,10 @@ class PostInBoards extends Component {
                 }}>
                     Placeholder Name of Board
                 </h1>
-                <div>
+                <div style={{
+                    display: 'grid',
+                    justifyContent: 'center',
+                }}>
                     {this.renderPosts()}
                 </div>
             </div>
