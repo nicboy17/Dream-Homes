@@ -16,17 +16,23 @@ import {
     FETCH_PROFILE_SUCCESS,
     FETCH_PROFILE_FAIL,
     EDIT_PROFILE_SUCCESS,
-    EDIT_PROFILE_FAIL
+    EDIT_PROFILE_FAIL,
+    FETCHING_PROFILE
 } from '../actions/types';
 import _ from 'lodash';
 
-const INITIAL_STATE = {};
+const INITIAL_STATE = {
+    loading: false,
+    error: ''
+};
 
 export default (state = INITIAL_STATE, action) => {
     const response = action.response;
     switch (action.type) {
+    case FETCHING_PROFILE:
+        return { ...state, loading: true };
     case FETCH_PROFILE_SUCCESS:
-        return action.payload;
+        return { ...state, profileInfo: action.payload, loading: false, error: '' };
     case FETCH_PROFILE_FAIL:
     case EDIT_PROFILE_FAIL:
         return { ...state, error: action.payload.error };
@@ -45,10 +51,30 @@ export default (state = INITIAL_STATE, action) => {
     case ADD_POST_ERROR:
         return { ...state, error: action.err };
     case FOLLOW_SUCCESS:
-        const containsId = _.filter(state.followers, follower => follower.id === action.payload.id);
-        return { ...state, followers: !_.isEmpty(containsId) ? state.followers : [...state.followers, action.payload] };
+        const containsId = _.filter(state.profileInfo.followers, follower => follower.id === action.payload.id);
+        return {
+            ...state,
+            profileInfo: {
+                ...state.profileInfo,
+                followers: _.isEmpty(containsId)
+                    ? state.profileInfo.followers : [...state.profileInfo.followers, action.payload]
+            },
+            loading: false,
+            error: ''
+        };
     case UNFOLLOW_SUCCESS:
-        return { ...state, followers: _.filter(state.followers, follower => follower._id !== action.payload) };
+        return {
+            ...state,
+            profileInfo: {
+                ...state.profileInfo,
+                followers: _.filter(
+                    state.profileInfo.followers,
+                    follower => follower._id !== action.payload
+                )
+            },
+            loading: false,
+            error: action.payload
+        };
     case FOLLOW_FAIL:
     case UNFOLLOW_FAIL:
         return { ...state, error: action.payload.error };

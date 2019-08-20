@@ -29,6 +29,9 @@ const useStyles = makeStyles(theme => ({
     placeholderHeader: {
         minHeight: '16vh',
         height: '16vh'
+    },
+    clear: {
+        cursor: 'pointer'
     }
 }));
 
@@ -73,7 +76,7 @@ const Navbar = ({ userStore, logout, history, location, searchPosts }) => {
                         clear={clearSearch}/>
                     <div>
                         <h5>
-                            <Link to='/'>Home</Link>
+                            <Link to='/'style={{ textDecoration: 'none', color: 'black' }} >Home</Link>
                         </h5>
                     </div>
                     <div>
