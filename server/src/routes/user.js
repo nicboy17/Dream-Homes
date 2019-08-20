@@ -47,13 +47,8 @@ router.post('/login', [UserValidation.login, async (req, res) => {
 
 // @route    GET users/:username
 // @desc     Get user profile with all their posts and boards
-<<<<<<< HEAD
-// @access   Public
-router.get('/:username', async (req, res) => {
-=======
 // @access   Private
 router.get ('/:username', [pub, async (req, res) => {
->>>>>>> origin/change-server-middleware
     try {
         const user = await User.findOne({ username: req.params.username }).select('-password').populate('boards').populate('posts').lean();
         if (!user) {
@@ -67,9 +62,6 @@ router.get ('/:username', [pub, async (req, res) => {
 
 //authenticated routes below this middleware
 router.use (auth);
-
-//authenticated routes below this middleware
-router.use (token ());
 
 // @route    PUT users/:username
 // @desc     Update user image and/or name
