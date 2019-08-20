@@ -5,8 +5,7 @@ import Masonry from 'react-masonry-component';
 
 const useStyles = makeStyles(theme => ({
     root: {
-        width: '80vw',
-        marginLeft: '10vw'
+        width: '100vw',
     },
     title: {
         padding: '1rem 0 1rem 0',
@@ -23,7 +22,7 @@ const useStyles = makeStyles(theme => ({
         margin: '1vw'
     },
     image: {
-        width: '16vw',
+        width: '20vw',
         height: 'auto',
         borderRadius: '1vw'
     },
@@ -53,7 +52,7 @@ const Posts = ({ posts }) => {
         <div className={classes.root}>
             <Masonry
                 className={classes.masonry}
-                options={{ fitWidth: true, columnWidth: 1 }}
+                options={{ fitWidth: true }}
                 disableImagesLoaded={false}
                 updateOnEachImageLoad={false}
                 imagesLoadedOptions={{}}

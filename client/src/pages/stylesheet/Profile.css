@@ -58,6 +58,7 @@
     justify-items: center;
     margin-bottom: 50px;
 }
+
 .gridContainer {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
@@ -81,18 +82,13 @@
     padding-left: 10px;
 }
 
-.postContainer {
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
-    justify-items: center;
-    grid-gap: 10px;
-}
 .postContainer1 {
     display: grid;
     grid-template-columns: 1fr;
     justify-items: center;
     grid-gap: 10px;
 }
+
 .postImg {
     width: 16vw;
     min-height: 50vh;

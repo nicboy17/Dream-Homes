@@ -65,9 +65,8 @@ class Search extends Component {
                         <Button className='option'>Simple</Button>
                     </div>
                 </div>
-                <div className='contentgrid'>
+                <div>
                     <Masonry
-                        className='masonry'
                         elementType={'div'}
                         options={{ fitWidth: true, gutter: 15 }}
                     >
