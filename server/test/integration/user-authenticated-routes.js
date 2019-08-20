@@ -56,12 +56,12 @@ describe('User Authenticated Routes', () => {
     });
 
     describe('Get user boards and posts', () => {
-        it ('Should need return authorized', () => {
+        it('Should need return unauthorized', () => {
             return request
                 .get('/users/test')
-                .expect (200)
+                .expect(401)
                 .then((res) => {
-                    expect (res.body.success).to.be.true;
+                    expect(res.body.success).to.be.false;
                 });
         });
 

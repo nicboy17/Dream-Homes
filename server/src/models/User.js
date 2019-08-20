@@ -36,12 +36,10 @@ const user = new mongoose.Schema({
     interests: {
         type: [String]
     },
-    favourites: [
-        {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: 'posts'
-        }
-    ]
+    favourites: {
+        type: [mongoose.Schema.Types.ObjectId],
+        ref: 'posts'
+    }
 });
 
 user.virtual('boards', {

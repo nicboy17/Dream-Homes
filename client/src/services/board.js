@@ -1,4 +1,4 @@
-import axios from 'axios';
+import { axios } from './utils';
 
 export const boardService = {
     addBoard: ({ board, username }) => {
@@ -7,5 +7,14 @@ export const boardService = {
         }).catch(err => {
             throw err;
         });
+    },
+    addPost: ({ board, post }) => {
+        return axios.put(`/users/board/${board}`, {
+            _id: `${post}`
+        })
+            .then(res => res.data)
+            .catch(err => {
+                throw err;
+            });
     }
 };

@@ -48,7 +48,7 @@ class Search extends Component {
 
     render () {
         if (this.props.posts.loading) {
-            return <CircularProgress/>;
+            return <CircularProgress className = 'spinner'/>;
         };
         return (
             <div>
