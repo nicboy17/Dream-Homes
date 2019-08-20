@@ -12,7 +12,9 @@ import {
     FETCH_FOLLOWERS_SUCCESS,
     FETCH_FOLLOWERS_FAIL,
     FETCH_PROFILE_SUCCESS,
-    FETCH_PROFILE_FAIL
+    FETCH_PROFILE_FAIL,
+    EDIT_PROFILE_SUCCESS,
+    EDIT_PROFILE_FAIL
 } from '../actions/types';
 import axios from 'axios';
 
@@ -122,6 +124,21 @@ export const fetchFollowers = username => async dispatch => {
         dispatch({
             type: FETCH_FOLLOWERS_FAIL,
             payload: { error: 'Something went wrong with fetching followers' }
+        });
+    }
+};
+
+export const editProfile = (formData, username) => async dispatch => {
+    try {
+        const res = await axios.put(`/users/${username}`, formData);
+        dispatch({
+            type: EDIT_PROFILE_SUCCESS,
+            payload: res.data
+        });
+    } catch (err) {
+        dispatch({
+            type: EDIT_PROFILE_FAIL,
+            payload: { error: 'Something went wrong with updating the profile' }
         });
     }
 };

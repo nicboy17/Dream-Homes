@@ -52,6 +52,7 @@ const NavSearch = ({ search, handleSearch, handleChange, clear, posts: { loading
         } else if (search) {
             return <CloseIcon fontSize={'small'} onClick={clear} />;
         }
+        return <div/>;
     }
 
     return (
