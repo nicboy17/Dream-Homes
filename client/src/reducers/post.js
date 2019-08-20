@@ -1,7 +1,3 @@
-import {
-    GET_POSTS_SUCCESS,
-    GET_POSTS_ERROR
-} from '../actions/types';
 import postPic from '../assets/posts/post_ex.png';
 import banna from '../assets/posts/banana.jpg';
 import interior from '../assets/posts/interiour.jpg';
@@ -18,12 +14,5 @@ const initialState = {
 };
 
 export default (state = initialState, action) => {
-    switch (action.type) {
-    case GET_POSTS_SUCCESS:
-        return { ...state };
-    case GET_POSTS_ERROR:
-        return { ...state };
-    default:
-        return state;
-    }
+    return state;
 };
