@@ -168,14 +168,19 @@ router.post('/:username/board', [UserValidation.addBoard, async (req, res) => {
 // @route    POST users/:username/posts
 // @desc     Create new post
 // @access   Private
-router.post('/:username/posts', [upload.single('image'), UserValidation.addPost, async (req, res) => {
+router.post('/:username/posts', [upload.array('image', 5), UserValidation.addPost, async (req, res) => {
     const user = await User.findOne({ username: req.params.username }).select('_id').lean();
-    if (!user) {
+    
+    if (req.decoded.username !== req.params.username) {
+        return res.status(403).json({ success: false, message: 'Cannot create posts for other users'});
+    }
+    else if (!user) {
         return res.status(404).json({ success: false, message: 'no user found' });
     }
-    if (req.file) {
+    if (req.files) {
         try {
-            const post = await Post.create({ ...req.body, user: user._id, image: req.file.location });
+            const filesArr = req.files.map(file => file.location);
+            const post = await Post.create({ ...req.body, user: user._id, image: filesArr });
             return res.status(201).json({ success: true, post });
         } catch(err) {
             return res.status(400).json({err});
