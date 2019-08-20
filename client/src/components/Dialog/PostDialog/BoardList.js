@@ -14,7 +14,7 @@ const useStyles = makeStyles(theme => ({
     },
     formControl: {
         margin: theme.spacing(1),
-        minWidth: 300
+        minWidth: 200
     },
     selectEmpty: {
         marginTop: theme.spacing(2)
@@ -25,9 +25,9 @@ const BoardList = ({ boards, handleSelect, value }) => {
     const classes = useStyles();
 
     return (
-        <form className={classes.root} autoComplete='off'>
+        <form className={classes.root} autoComplete="off">
             <FormControl className={classes.formControl}>
-                <InputLabel htmlFor='board'>Boards</InputLabel>
+                <InputLabel htmlFor="board">Boards</InputLabel>
                 <Select
                     value={value}
                     onChange={e => handleSelect(e)}
@@ -36,9 +36,9 @@ const BoardList = ({ boards, handleSelect, value }) => {
                         id: 'board'
                     }}
                 >
-                    {boards.map((board, i) => {
+                    {[{ title: 'No board', _id: '' }, ...boards].map((board, i) => {
                         return (
-                            <MenuItem key={i} value={board}>
+                            <MenuItem key={i} value={board._id}>
                                 {board.title}
                             </MenuItem>
                         );

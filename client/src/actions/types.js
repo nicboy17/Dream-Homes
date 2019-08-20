@@ -30,6 +30,7 @@ export const ADD_POST_ERROR = 'ADD_POST_ERROR';
 export const FETCH_POSTS_SUCCESS = 'FETCH_POSTS_SUCCESS';
 export const FETCH_POSTS_FAIL = 'FETCH_POSTS_FAIL';
 export const SEARCH_POSTS = 'SEARCH_POSTS';
+export const CREATE_POST_LOADING = 'CREATE_POST_LOADING';
 
 // Follow
 export const FOLLOW_FAIL = 'FOLLOW_FAIL';

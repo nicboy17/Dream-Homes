@@ -11,9 +11,13 @@ import {
     FETCH_FOLLOWERS_SUCCESS,
     FETCH_FOLLOWERS_FAIL,
     FETCH_PROFILE_SUCCESS,
-    FETCH_PROFILE_FAIL
+    FETCH_PROFILE_FAIL,
+    CREATE_POST_LOADING,
+    ADD_POST_ERROR,
+    ADD_POST_SUCCESS
 } from '../actions/types';
 import axios from 'axios';
+import _ from 'lodash';
 
 export const getBoardsandPosts = username => ({
     type: GET_USER_BOARDS_POSTS,
@@ -32,7 +36,7 @@ export const addPost = (post, username) => ({
     username
 });
 
-export const fetchProfileInfo = (username) => async dispatch => {
+export const fetchProfileInfo = username => async dispatch => {
     try {
         const res = await axios.get(`/users/${username}`);
         const promises = [
@@ -116,6 +120,31 @@ export const fetchFollowers = username => async dispatch => {
         dispatch({
             type: FETCH_FOLLOWERS_FAIL,
             payload: { error: 'Something went wrong with fetching followers' }
+        });
+    }
+};
+
+export const createPost = (formData, username, board) => async dispatch => {
+    try {
+        dispatch({
+            type: CREATE_POST_LOADING
+        });
+        const res = await axios({
+            url: '/users/' + username + '/posts',
+            method: 'POST',
+            data: formData,
+            headers: { 'Content-Type': 'multipart/form-data' }
+        });
+        if (!_.isEmpty(board)) {
+            await axios.put(`/users/board/${board}`, { _id: res.data.post._id });
+        }
+        dispatch({
+            type: ADD_POST_SUCCESS,
+            response: res.data
+        });
+    } catch (err) {
+        dispatch({
+            type: ADD_POST_ERROR
         });
     }
 };
