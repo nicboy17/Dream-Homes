@@ -8,6 +8,7 @@ import { logout } from '../../actions/userActions';
 import NavMenu from './NavMenu';
 import NavSearch from './NavSearch';
 import { searchPosts } from '../../actions/post';
+import Button from '@material-ui/core/Button';
 
 const useStyles = makeStyles(theme => ({
     header: {
@@ -73,11 +74,30 @@ const Navbar = ({ userStore, logout, history, location, searchPosts }) => {
                         clear={clearSearch}/>
                     <div>
                         <h5>
-                            <Link to='/'>Home</Link>
+                            <Link to='/' style={{
+                                textDecoration: 'none'
+                            }}
+                            >
+                                <Button style={{
+                                    border: 'none',
+                                    padding: '0',
+                                    borderRadius: '7.5px'
+                                }}
+                                >
+                                    Home
+                                </Button>
+                            </Link>
                         </h5>
                     </div>
                     <div>
-                        <h5>Following</h5>
+                        <Button style={{
+                            border: 'none',
+                            padding: '0',
+                            borderRadius: '7.5px'
+                        }}
+                        >
+                            Following
+                        </Button>
                     </div>
                     <div />
                     <NavMenu user={userStore.user} handleLogOutClicked={handleLogOutClicked}

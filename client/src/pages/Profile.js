@@ -85,13 +85,13 @@ class Profile extends Component {
 
     renderFollowButton = () => {
         return this.checkFollowing() ? (
-            <button className='followButton' onClick={() => this.onFollowPress()}>
+            <Button className='followButton' color='primary' onClick={() => this.onFollowPress()}>
                 Follow!
-            </button>
+            </Button>
         ) : (
-            <button className='followButton' onClick={() => this.onUnfollowPress()}>
+            <Button className='followButton' color='primary' variant={'contained'} onClick={() => this.onUnfollowPress()}>
                 Stop Following!
-            </button>
+            </Button>
         );
     };
 
@@ -141,16 +141,20 @@ class Profile extends Component {
             <>
                 <Button
                     color='primary'
-                    className='button'
                     onClick={() => this.onCreateBoardPress()}
+                    style={{
+                        margin: '10px'
+                    }}
                 >
                     Create Board
                 </Button>
                 <Button
                     color='primary'
-                    className='button'
                     variant={'contained'}
                     onClick={() => this.onCreatePostPress()}
+                    style={{
+                        margin: '10px'
+                    }}
                 >
                     Create Post
                 </Button>
@@ -161,7 +165,7 @@ class Profile extends Component {
     render () {
         const { profileStore: { profileInfo, following = [], followers = [] } } = this.props;
         if (_.isEmpty(this.props.profileStore)) {
-            return <CircularProgress className = 'spinner' />;
+            return <div><CircularProgress className = 'spinner' /></div>;
         }
         return (
             <div>
@@ -182,17 +186,28 @@ class Profile extends Component {
                     </div>
                     <div />
                     <div>{this.renderCreateButtons()}</div>
-                    <div />
                 </div>
                 <div style={{ display: this.state.activePanel === 'board' ? 'grid' : 'none' }}>
                     <div className='tabSection'>
                         <div>
-                            <button className='activeTab' onClick={() => this.toggle()}>
+                            <Button 
+                            color='primary' 
+                            variant={'contained'}
+                            style={{
+                                margin: '10px'
+                            }}
+                            >
                                 Boards
-                            </button>
-                            <button className='tab' onClick={() => this.toggle()}>
+                            </Button>
+                            <Button 
+                            color='primary' 
+                            onClick={() => this.toggle()}
+                            style={{
+                                margin: '10px'
+                            }}
+                            >
                                 Posts
-                            </button>
+                            </Button>
                         </div>
                         <div />
                     </div>
@@ -211,12 +226,24 @@ class Profile extends Component {
                 <div style={{ display: this.state.activePanel === 'post' ? 'grid' : 'none' }}>
                     <div className='tabSection'>
                         <div>
-                            <button className='tab' onClick={() => this.toggle()}>
+                            <Button 
+                            color='primary' 
+                            onClick={() => this.toggle()}
+                            style={{
+                                margin: '10px'
+                            }}
+                            >
                                 Boards
-                            </button>
-                            <button className='activeTab' onClick={() => this.toggle()}>
-                                My Posts
-                            </button>
+                            </Button>
+                            <Button 
+                            color='primary' 
+                            variant={'contained'}
+                            style={{
+                                margin: '10px'
+                            }}
+                            >
+                                Posts
+                            </Button>
                         </div>
                         <div />
                     </div>
