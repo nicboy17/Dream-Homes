@@ -18,7 +18,8 @@ import {
     getBoardsandPosts,
     followUser,
     unfollowUser,
-    fetchProfileInfo
+    fetchProfileInfo,
+    clearError
 } from '../actions/profileActions';
 import Posts from '../components/Posts/Posts';
 import _ from 'lodash';
@@ -28,7 +29,7 @@ class Profile extends Component {
     state = {
         username: '',
         activePanel: 'board',
-        SnackBar: !_.isEmpty(this.props.profileStore.error)
+        SnackBar: true
     };
 
     componentDidMount () {
@@ -85,7 +86,9 @@ class Profile extends Component {
     checkFollowing = () => {
         const {
             userStore: { user },
-            profileStore: { profileInfo: { followers } }
+            profileStore: {
+                profileInfo: { followers }
+            }
         } = this.props;
         const res = _.filter(followers, follower => follower._id === user._id);
         return _.isEmpty(res);
@@ -93,11 +96,11 @@ class Profile extends Component {
 
     renderFollowButton = () => {
         return this.checkFollowing() ? (
-            <button className='followButton' onClick={() => this.onFollowPress()}>
+            <button className="followButton" onClick={() => this.onFollowPress()}>
                 Follow!
             </button>
         ) : (
-            <button className='followButton' onClick={() => this.onUnfollowPress()}>
+            <button className="followButton" onClick={() => this.onUnfollowPress()}>
                 Stop Following!
             </button>
         );
@@ -110,13 +113,13 @@ class Profile extends Component {
         ) : (
             boards.map((board, i) => {
                 return (
-                    <Card key={i} className='card'>
-                        <CardActionArea className='card'>
-                            <CardMedia className='cardImg' image={house} />
-                            <Typography variant='h6' className='cardHeader'>
+                    <Card key={i} className="card">
+                        <CardActionArea className="card">
+                            <CardMedia className="cardImg" image={house} />
+                            <Typography variant="h6" className="cardHeader">
                                 {board['title']}
                             </Typography>
-                            <Typography variant='body1' className='cardHeader'>
+                            <Typography variant="body1" className="cardHeader">
                                 {board['posts'].length} posts
                             </Typography>
                         </CardActionArea>
@@ -146,15 +149,15 @@ class Profile extends Component {
         return (
             <>
                 <Button
-                    color='primary'
-                    className='button'
+                    color="primary"
+                    className="button"
                     onClick={() => this.onCreateBoardPress()}
                 >
                     Create Board
                 </Button>
                 <Button
-                    color='primary'
-                    className='button'
+                    color="primary"
+                    className="button"
                     variant={'contained'}
                     onClick={() => this.onCreatePostPress()}
                 >
@@ -165,14 +168,20 @@ class Profile extends Component {
     };
 
     renderSnackBarError = () => {
-        const { profileStore } = this.props;
-        if (!_.isEmpty(profileStore.error)) {
+        const {
+            profileStore: { error },
+            clearError
+        } = this.props;
+        if (!_.isEmpty(error)) {
             return (
                 <SnackBar
-                    message= { profileStore.error }
-                    variant='error'
+                    message={error.message}
+                    variant={error.status}
                     open={this.state.SnackBar}
-                    onClose = {() => this.setState({ SnackBar: false })}
+                    onClose={() => {
+                        this.setState({ SnackBar: false });
+                        clearError();
+                    }}
                 />
             );
         }
@@ -183,25 +192,28 @@ class Profile extends Component {
             profileStore: { profileInfo, loading }
         } = this.props;
         if (_.isUndefined(profileInfo) || loading) {
-            return <CircularProgress className='spinner' />;
+            return <CircularProgress className="spinner" />;
         }
         return (
             <div>
-                <Route path='/profile/:username/edit' component={EditPicUserDialog} />
-                <Route path='/profile/:username/interest-quiz' component={InterestQuizDialog} />
-                <Route path='/profile/:username/post/create' component={PostDialog} />
-                <Route path='/profile/:username/board/create' component={BoardDialog} />
-                <div className='subHeader'>
-                    <div className='nameContainer'>
+                <Route path="/profile/:username/edit" component={EditPicUserDialog} />
+                <Route path="/profile/:username/interest-quiz" component={InterestQuizDialog} />
+                <Route
+                    path="/profile/:username/post/create"
+                    render={props => <PostDialog key={props.match.params.username} {...props} />}
+                />
+                <Route path="/profile/:username/board/create" component={BoardDialog} />
+                <div className="subHeader">
+                    <div className="nameContainer">
                         <Avatar
-                            className='subHeaderIcon'
+                            className="subHeaderIcon"
                             component={Link}
                             src={profileInfo.profile}
                             to={'/profile/' + profileInfo.username + '/edit'}
                         />
                         <div>
-                            <h3 className='profileName'>{profileInfo.name}</h3>
-                            <h5 className='profileFollowers'>
+                            <h3 className="profileName">{profileInfo.name}</h3>
+                            <h5 className="profileFollowers">
                                 {profileInfo.followers.length} Followers |{' '}
                                 {profileInfo.following.length} Following
                             </h5>
@@ -212,18 +224,18 @@ class Profile extends Component {
                     <div />
                 </div>
                 <div style={{ display: this.state.activePanel === 'board' ? 'grid' : 'none' }}>
-                    <div className='tabSection'>
+                    <div className="tabSection">
                         <div>
-                            <button className='activeTab' onClick={() => this.toggle()}>
+                            <button className="activeTab" onClick={() => this.toggle()}>
                                 Boards
                             </button>
-                            <button className='tab' onClick={() => this.toggle()}>
+                            <button className="tab" onClick={() => this.toggle()}>
                                 Posts
                             </button>
                         </div>
                         <div />
                     </div>
-                    <div className='activePanel'>
+                    <div className="activePanel">
                         <div
                             className={
                                 profileInfo.boards.length === 0 ? 'gridContainer1' : 'gridContainer'
@@ -234,18 +246,18 @@ class Profile extends Component {
                     </div>
                 </div>
                 <div style={{ display: this.state.activePanel === 'post' ? 'grid' : 'none' }}>
-                    <div className='tabSection'>
+                    <div className="tabSection">
                         <div>
-                            <button className='tab' onClick={() => this.toggle()}>
+                            <button className="tab" onClick={() => this.toggle()}>
                                 Boards
                             </button>
-                            <button className='activeTab' onClick={() => this.toggle()}>
+                            <button className="activeTab" onClick={() => this.toggle()}>
                                 Posts
                             </button>
                         </div>
                         <div />
                     </div>
-                    <div className='activePanel'>
+                    <div className="activePanel">
                         <div
                             className={
                                 profileInfo.posts.length === 0 ? 'postContainer1' : 'postContainer'
@@ -256,6 +268,7 @@ class Profile extends Component {
                     </div>
                 </div>
                 {this.renderSnackBarError()}
+                {/* <SnackBar variant = 'success' message = 'hello' open ={this.state.SnackBar}/> */}
             </div>
         );
     }
@@ -272,7 +285,8 @@ const mapDispatchToProps = dispatch => {
             getBoardsandPosts,
             followUser,
             unfollowUser,
-            fetchProfileInfo
+            fetchProfileInfo,
+            clearError
         },
         dispatch
     );

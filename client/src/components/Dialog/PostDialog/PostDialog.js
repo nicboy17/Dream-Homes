@@ -1,24 +1,22 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import { Redirect } from 'react-router-dom';
+import { bindActionCreators } from 'redux';
+import { getBoardsandPosts, addPost, createPost } from '../../../actions/profileActions';
+import { createFormData } from '../../../services/utils';
+import _ from 'lodash';
+
 import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
-import { Chip } from '@material-ui/core';
-import { Redirect } from 'react-router-dom';
-import SnackBar from '../../SnackBar/SnackBar';
-// import CircularProgress from '@material-ui/core/CircularProgress';
-import CloseIcon from '@material-ui/icons/Close';
-import BoardList from './BoardList';
-import _ from 'lodash';
-
 import FormContent from './FormContent';
+import SnackBar from '../../SnackBar/SnackBar';
 import FileUploader from './FileUploader';
-import { bindActionCreators } from 'redux';
-import { getBoardsandPosts, addPost, createPost } from '../../../actions/profileActions';
-import { createFormData } from '../../../services/utils';
-// import { boardService } from '../../services/board';
+import BoardList from './BoardList';
+import { Chip } from '@material-ui/core';
+import CloseIcon from '@material-ui/icons/Close';
 
 import '../../../pages/stylesheet/Dialog.css';
 
@@ -137,10 +135,8 @@ class PostDialog extends React.Component {
         } else {
             const formData = createFormData({ title, link, description, image, tags });
             image.forEach(file => formData.append('image', file));
-            // this.props.addPost(this.state, username);
             this.props.createPost(formData, username, board);
-            // console.log(formData)
-            // this.onCloseClick();
+            this.onCloseClick();
         }
     };
 
@@ -167,6 +163,7 @@ class PostDialog extends React.Component {
             image,
             imageError
         } = this.state;
+        
         // Redirect user to profile if not authorized
         if (userStore.authenticated) {
             if (userStore.user.username !== params.username) {
@@ -180,7 +177,6 @@ class PostDialog extends React.Component {
                 onClose={this.handleClose}
                 aria-labelledby="form-dialog-title"
                 onClick={() => this.onCloseClick()}
-                
             >
                 <div onClick={e => e.stopPropagation()}>
                     <CloseIcon
@@ -216,7 +212,7 @@ class PostDialog extends React.Component {
                             </DialogContent>
                         </div>
                         <div className="splitContainer">
-                            <DialogContent >
+                            <DialogContent>
                                 <div className="fileUpload" onClick={() => {}}>
                                     <FileUploader
                                         onUploadImages={this.onUploadImages}
@@ -229,9 +225,9 @@ class PostDialog extends React.Component {
                         </div>
                     </div>
 
-                    <div className = 'dialogAction'>
+                    <div className="dialogAction">
                         <DialogActions>
-                            <Button onClick={this.onCreatePress} color="primary" className = 'create'>
+                            <Button onClick={this.onCreatePress} color="primary" className="create">
                                 Create
                             </Button>
                         </DialogActions>

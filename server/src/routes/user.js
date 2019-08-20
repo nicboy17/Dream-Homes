@@ -175,10 +175,10 @@ router.post('/:username/posts', [upload.array('image', 5), UserValidation.addPos
         return res.status(404).json({ success: false, message: 'no user found' });
     }
 
-    if (req.decoded.username !== req.params.username) {
-        return res.status(403).json({ success: false, message: 'Cannot create posts for other users'});
-    }
-    
+    // if (req.decoded.username !== req.params.username) {
+    //     return res.status(403).json({ success: false, message: 'Cannot create posts for other users'});
+    // }
+
     if (req.files) {
         try {
             const filesArr = req.files.map(file => file.location);

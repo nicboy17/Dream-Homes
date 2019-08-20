@@ -17,7 +17,8 @@ import {
     ADD_POST_ERROR,
     ADD_POST_SUCCESS,
     EDIT_PROFILE_SUCCESS,
-    EDIT_PROFILE_FAIL
+    EDIT_PROFILE_FAIL,
+    CLEAR_ERROR
 } from '../actions/types';
 import axios from 'axios';
 import _ from 'lodash';
@@ -148,11 +149,12 @@ export const createPost = (formData, username, board) => async dispatch => {
         }
         dispatch({
             type: ADD_POST_SUCCESS,
-            response: res.data
+            response: { post: res.data, error: { message: 'Succesfully created a post', status: 'success' } }
         });
     } catch (err) {
         dispatch({
-            type: ADD_POST_ERROR
+            type: ADD_POST_ERROR,
+            err: { message: 'Failed to create post', status: 'error' }
         });
     }
 };
@@ -171,3 +173,7 @@ export const editProfile = (formData, username) => async dispatch => {
         });
     }
 };
+
+export const clearError = () => ({
+    type: CLEAR_ERROR
+});
