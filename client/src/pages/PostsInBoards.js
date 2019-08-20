@@ -1,7 +1,5 @@
 import React, {Component} from 'react'
 import Masonry from 'react-masonry-component';
-import house from './house.jpg'
-import house1 from './house1.jpg'
 
 class PostInBoards extends Component {
     constructor() {
@@ -12,7 +10,7 @@ class PostInBoards extends Component {
     }
 
     renderPosts = () => {
-        const postsArray = [house1, house, house, house, house1, house1, house1, house]
+        const postsArray = []
         let posts = postsArray.map(function(el) {
             return (
                 <img src={el} style={{
