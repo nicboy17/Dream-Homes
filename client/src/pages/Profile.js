@@ -20,6 +20,7 @@ import _ from 'lodash';
 import './stylesheet/Profile.css';
 import Masonry from 'react-masonry-component';
 
+
 class Profile extends Component {
     state = {
         username: '',
@@ -107,15 +108,17 @@ class Profile extends Component {
             this.props.profileStore.profileInfo.boards.map((board, i) => {
                 return (
                     <Card key={i} className='card'>
-                        <CardActionArea className='card'>
-                            <CardMedia className='cardImg' image={house} />
-                            <Typography variant='h6' className='cardHeader'>
-                                {board['title']}
-                            </Typography>
-                            <Typography variant='body1' className='cardHeader'>
-                                {board['posts'].length} posts
-                            </Typography>
-                        </CardActionArea>
+                        <Link to='/board/posts_in_board' className='boardLink'>
+                            <CardActionArea>
+                                <CardMedia className='cardImg' image={house} />
+                                <Typography variant='h6' className='cardHeader'>
+                                    {board['title']}
+                                </Typography>
+                                <Typography variant='body1' className='cardHeader'>
+                                    {board['posts'].length} posts
+                                </Typography>
+                            </CardActionArea>
+                        </Link>
                     </Card>
                 );
             })

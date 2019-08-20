@@ -15,6 +15,8 @@ import Profile from './pages/Profile.js';
 import PostPage from './pages/Post/PostPage';
 import { getToken } from './actions/userActions';
 
+import PostInBoards from './pages/PostsInBoards'
+
 import NavBar from './components/Navbar/Navbar';
 
 class App extends Component {
@@ -34,6 +36,7 @@ class App extends Component {
                         <Route path='/posts/:id' component={PostPage}/>
                         <Route path='/profile/:username' component={Profile} />
                         <Route exact path='/signup' component={SignUp} />
+                        <Route path='/board/posts_in_board' component={PostInBoards}/>
                     </Switch>
                 </BrowserRouter>
             </MuiThemeProvider>
