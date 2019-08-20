@@ -1,4 +1,5 @@
-import { axios, createFormData } from './utils';
+import axios from 'axios';
+import { createFormData } from './utils';
 
 export const postService = {
     addPost: ({ post, username }) => {
@@ -9,16 +10,6 @@ export const postService = {
             data: formData,
             headers: { 'Content-Type': 'multipart/form-data' }
         }).then(res => {
-            return res.data;
-        }).catch(err => {
-            throw err;
-        });
-    },
-    // eslint-disable-next-line camelcase
-    searchPosts: ({ search_filter, easy_filters, userId }) => {
-        return axios.get(
-            // eslint-disable-next-line camelcase
-            `/posts?userId=${userId}&search_filter=${search_filter}&easy_filters=${easy_filters}`).then(res => {
             return res.data;
         }).catch(err => {
             throw err;

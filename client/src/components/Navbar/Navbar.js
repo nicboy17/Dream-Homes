@@ -1,21 +1,33 @@
+/* eslint-disable space-before-function-paren */
 import React from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators, compose } from 'redux';
 import { makeStyles } from '@material-ui/styles';
 import { Link, withRouter } from 'react-router-dom';
-import queryString from 'query-string';
+import Menu from '@material-ui/core/Menu';
+import MenuItem from '@material-ui/core/MenuItem';
+import face from '../../assets/face.jpg';
 import { logout } from '../../actions/userActions';
-import NavMenu from './NavMenu';
-import NavSearch from './NavSearch';
-import { searchPosts } from '../../actions/post';
 
 const useStyles = makeStyles(theme => ({
     header: {
         display: 'grid',
         gridTemplateColumns: '5fr 3fr 6fr 2.5fr 2.5fr 0fr 3fr',
-        minHeight: '16vh',
+        minHeight: '6rem',
         justifyItems: 'center',
         alignItems: 'center'
+    },
+    cornerIcon: {
+        width: '50px',
+        height: '50px',
+        borderRadius: '50px'
+    },
+    headerSearch: {
+        width: '35vw',
+        minHeight: '40px',
+        borderRadius: '50px',
+        border: '1px solid lightgrey',
+        paddingLeft: '15px'
     },
     headerBottomBorder: {
         minHeight: '5px',
@@ -27,50 +39,83 @@ const useStyles = makeStyles(theme => ({
         zIndex: '10'
     },
     placeholderHeader: {
-        minHeight: '16vh',
-        height: '16vh'
+        minHeight: '14vh',
+        height: '14vh'
+    },
+    menu: {
+        marginTop: '4rem'
     }
 }));
 
-const Navbar = ({ userStore, logout, history, location, searchPosts }) => {
-    const [search, setSearch] = React.useState('');
-    const classes = useStyles();
+const Navbar = ({ userStore, logout, history }) => {
+    const [open, setMenu] = React.useState(null);
 
-    function handleLogOutClicked () {
+    const style = useStyles();
+
+    function handleClick(event) {
+        setMenu(event.currentTarget);
+    }
+
+    function handleClose() {
+        setMenu(null);
+    }
+
+    function handleLogOutClicked() {
         logout();
-        history.replace('/');
-    }
-
-    function handleSearch (event) {
-        event.preventDefault();
-        // eslint-disable-next-line camelcase
-        const { easy_filters = '' } = queryString.parse(location.search);
-        if (userStore.authenticated) {
-            searchPosts(search, easy_filters, userStore.user._id);
-        } else {
-            searchPosts(search, easy_filters, '');
-        }
         history.push('/');
+        window.location.reload();
     }
 
-    function handleSearchChange (event) {
-        setSearch(event.target.value);
-    }
-
-    function clearSearch () {
-        setSearch('');
+    function loggedInMenu() {
+        if (userStore.authenticated) {
+            return (
+            <>
+                <div onClick={handleClick}>
+                    <img className={style.cornerIcon} src={face} alt='' />
+                </div>
+                <Menu
+                    id='simple-menu'
+                    anchorEl={open}
+                    keepMounted
+                    open={Boolean(open)}
+                    onClose={handleClose}
+                    className={style.menu}
+                >
+                    <MenuItem component={Link} to={'/profile/' + userStore.user.username}>
+                        Profile
+                    </MenuItem>
+                    <MenuItem
+                        component={Link}
+                        to='/'
+                        onClick={() => handleLogOutClicked()}
+                    >
+                        Logout
+                    </MenuItem>
+                </Menu>
+            </>
+            );
+        } else {
+            return (
+                <>
+                <h5>
+                    <Link to='/login'>Log In</Link>
+                </h5>
+                </>
+            );
+        }
     }
 
     return (
         <div>
-            <div className={classes.headerContainer}>
-                <div className={classes.header}>
+            <div className={style.headerContainer}>
+                <div className={style.header}>
                     <div>
                         <h3>Dream Home</h3>
                     </div>
                     <div />
-                    <NavSearch search={search} handleSearch={handleSearch} handleChange={handleSearchChange}
-                        clear={clearSearch}/>
+                    <div>
+                        <input className={style.headerSearch} placeholder='Search' />
+                    </div>
                     <div>
                         <h5>
                             <Link to='/'>Home</Link>
@@ -80,12 +125,11 @@ const Navbar = ({ userStore, logout, history, location, searchPosts }) => {
                         <h5>Following</h5>
                     </div>
                     <div />
-                    <NavMenu user={userStore.user} handleLogOutClicked={handleLogOutClicked}
-                        authenticated={userStore.authenticated}/>
+                    {loggedInMenu()}
                 </div>
-                <div className={classes.headerBottomBorder}/>
+                <div className={style.headerBottomBorder} />
             </div>
-            <div className={classes.placeholderHeader}>placeholder</div>
+            <div className={style.placeholderHeader}>placeholder</div>
         </div>
     );
 };
@@ -94,11 +138,10 @@ const mapStateToProps = state => ({
     userStore: state.UserStore
 });
 
-function mapDispatchToProps (dispatch) {
+function mapDispatchToProps(dispatch) {
     return bindActionCreators(
         {
-            logout,
-            searchPosts
+            logout
         },
         dispatch
     );

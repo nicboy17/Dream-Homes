@@ -108,7 +108,6 @@ class EditPicUserDialog extends Component {
                 });
                 console.log(res);
                 this.props.history.push(`/profile/${this.state.username}`);
-                window.location.reload();
             } catch (err) {
                 console.log('Something went wrong with editing user pic and username');
             }
