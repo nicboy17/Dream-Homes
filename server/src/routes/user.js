@@ -222,12 +222,28 @@ router.post('/:username/posts', [upload.array('image', 5), UserValidation.addPos
 // @access   Private
 router.post ('/:username/favourite', [UserValidation.addPostToFavourites, async (req, res) => {
     try {
-        const user = await User.findByIdAndUpdate (req.decoded._id, { '$addToSet': { favourites: req.body.post } }, { 'new': true }).lean ();
+        const user = await User.findByIdAndUpdate (req.decoded._id, { '$addToSet': { favourites: req.body.post } }).lean ();
         if (!user) {
             return res.status (404).json ({ success: false, message: 'User not found' });
         }
 
         res.status (201).json ({ success: true });
+    } catch (err) {
+        return res.status (400).json ({ success: false, err });
+    }
+}]);
+
+// @route    POST users/:username/favourite
+// @desc     Add post to user's favourites
+// @access   Private
+router.post ('/:username/unfavourite', [UserValidation.removePostFromFavourites, async (req, res) => {
+    try {
+        const user = await User.findByIdAndUpdate (req.decoded._id, { 'pull': { favourites: req.body.post } }).lean ();
+        if (!user) {
+            return res.status (404).json ({ success: false, message: 'User not found' });
+        }
+
+        res.status (200).json ({ success: true });
     } catch (err) {
         return res.status (400).json ({ success: false, err });
     }

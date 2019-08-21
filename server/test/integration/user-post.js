@@ -97,4 +97,42 @@ describe('User Post Routes', () => {
                 });
         });
     });
+
+    describe ('Remove Post from User Favourites', () => {
+        it ('Should need return unauthorized', () => {
+            return request
+                .post ('/users/test/unfavourite')
+                .expect (401)
+                .then ((res) => {
+                    expect (res.body.success).to.be.false;
+                });
+        });
+
+        it ('Should need return missing field', () => {
+            return request
+                .post ('/users/test/unfavourite')
+                .set ({ 'access-token': global['token'] })
+                .send ({
+                    post: 'test'
+                })
+                .expect (422)
+                .then ((res) => {
+                    expect (res.body.success).to.be.false;
+                });
+        });
+
+        //need abs path to file
+        it ('Should return valid', () => {
+            return request
+                .post ('/users/test/unfavourite')
+                .set ({ 'access-token': global['token'] })
+                .send ({
+                    post: global.post._id
+                })
+                .expect (200)
+                .then ((res) => {
+                    expect (res.body.success).to.be.true;
+                });
+        });
+    });
 });

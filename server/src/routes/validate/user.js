@@ -41,20 +41,26 @@ module.exports = {
     },
 
     followUser: (req, res, next) => {
-        req.checkBody ('followee', 'No followee provided').exists ().notEmpty ();
+        req.checkBody ('followee', 'No followee provided').exists ().isMongoId ();
 
         validationHandler (req, res, next);
     },
 
     unfollowUser: (req, res, next) => {
-        req.checkBody ('followee', 'No followee provided').exists ().notEmpty ();
+        req.checkBody ('followee', 'No followee provided').exists ().isMongoId ();
 
         validationHandler (req, res, next);
     },
 
     addPostToFavourites: (req, res, next) => {
-        req.checkBody ('post', 'No Post provided').exists ().notEmpty ();
+        req.checkBody ('post', 'No Post provided').exists ().isMongoId ();
+
+        validationHandler (req, res, next);
+    },
+
+    removePostFromFavourites: (req, res, next) => {
+        req.checkBody ('post', 'No Post provided').exists ().isMongoId ();
 
         validationHandler(req, res, next);
-    }
+    },
 };
