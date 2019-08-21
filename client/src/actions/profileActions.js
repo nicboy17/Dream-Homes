@@ -13,10 +13,15 @@ import {
     FETCH_FOLLOWERS_FAIL,
     FETCH_PROFILE_SUCCESS,
     FETCH_PROFILE_FAIL,
+    CREATE_POST_LOADING,
+    ADD_POST_ERROR,
+    ADD_POST_SUCCESS,
     EDIT_PROFILE_SUCCESS,
-    EDIT_PROFILE_FAIL
+    EDIT_PROFILE_FAIL,
+    CLEAR_ERROR
 } from '../actions/types';
 import axios from 'axios';
+import _ from 'lodash';
 
 export const getBoardsandPosts = username => ({
     type: GET_USER_BOARDS_POSTS,
@@ -128,6 +133,32 @@ export const fetchFollowers = username => async dispatch => {
     }
 };
 
+export const createPost = (formData, username, board) => async dispatch => {
+    try {
+        dispatch({
+            type: CREATE_POST_LOADING
+        });
+        const res = await axios({
+            url: '/users/' + username + '/posts',
+            method: 'POST',
+            data: formData,
+            headers: { 'Content-Type': 'multipart/form-data' }
+        });
+        if (!_.isEmpty(board)) {
+            await axios.put(`/users/board/${board}`, { _id: res.data.post._id });
+        }
+        dispatch({
+            type: ADD_POST_SUCCESS,
+            response: { post: res.data, error: { message: 'Succesfully created a post', status: 'success' } }
+        });
+    } catch (err) {
+        dispatch({
+            type: ADD_POST_ERROR,
+            err: { message: 'Failed to create post', status: 'error' }
+        });
+    }
+};
+
 export const editProfile = (formData, username) => async dispatch => {
     try {
         const res = await axios.put(`/users/${username}`, formData);
@@ -143,6 +174,10 @@ export const editProfile = (formData, username) => async dispatch => {
     }
 };
 
+export const clearError = () => ({
+    type: CLEAR_ERROR
+});
+
 export const favouritePost = (username, post) => async dispatch => {
     try {
         await axios.post(`/users/${username}/favourite`, { post });
@@ -150,3 +185,4 @@ export const favouritePost = (username, post) => async dispatch => {
         console.log('Something went wrong with favouriting this post');
     }
 };
+
