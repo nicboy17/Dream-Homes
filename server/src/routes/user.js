@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 
 const UserValidation = require('./validate/user');
+const BoardValidation = require ('./validate/board');
 const { User, Board, Post, Follow } = require ('../models');
 const upload = require('../services/file-upload');
 const { auth, pub } = require ('../middleware');
@@ -49,7 +50,7 @@ router.post('/login', [UserValidation.login, async (req, res) => {
 // @route    GET users/:username
 // @desc     Get user profile with all their posts and boards
 // @access   Public
-router.get ('/:username', [pub,async (req, res) => {
+router.get ('/:username', [pub, async (req, res) => {
     try {
         const user = await User.findOne({ username: req.params.username }).select('-password').populate('boards').populate('posts').lean();
         if (!user) {
@@ -60,6 +61,28 @@ router.get ('/:username', [pub,async (req, res) => {
         return res.status(400).json({ success: false, message: err });
     }
 }]);
+
+// @route    GET users/:user_id/board/:board_id
+// @desc     gets posts from user id and board id
+// @access   Public
+router.get ('/:user_id/board/:board_id', [BoardValidation.getPosts, async (req, res) => {
+    try {
+        const board = await Board.findOne ({
+            _id: req.params.board_id,
+            user: req.params.user_id
+        }).populate ('posts', 'title image description tags').lean ();
+        if (!board) {
+            return res.status (404).json ({ success: false, message: 'no board found' });
+        } else if (!board.posts.length) {
+            return res.status (404).json ({ success: false, message: 'no posts found' });
+        }
+
+        return res.status (200).json ({ success: true, posts: board.posts });
+    } catch (err) {
+        return res.status (400).json ({ success: false, err });
+    }
+}]);
+
 
 //authenticated routes below this middleware
 router.use (auth);
