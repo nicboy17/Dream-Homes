@@ -11,6 +11,7 @@ const useStyles = makeStyles(theme => ({
         justifyContent: 'center'
     },
     title: {
+        display: 'none',
         marginLeft: '15px',
         padding: '10px 0 10px 0',
         fontWeight: 'bold',
@@ -25,6 +26,7 @@ const useStyles = makeStyles(theme => ({
         borderRadius: '25px'
     },
     deleteIconContainer: {
+        display: 'none',
         float: 'right',
         position: 'absolute',
         right: 10,
@@ -36,7 +38,13 @@ const useStyles = makeStyles(theme => ({
     },
     imageContainer: {
         marginBottom: '7.5px',
-        marginTop: '7.5px'
+        marginTop: '7.5px',
+        '&:hover $title': {
+            display: 'block'
+        },
+        '&:hover $deleteIconContainer': {
+            display: 'block'
+        }
     },
     image: {
         width: '20vw',
