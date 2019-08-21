@@ -60,7 +60,10 @@ const PostDetails = ({ post, profileImage, history, favouritePost, match }) => {
                 <Typography className={classes.user}>{post.user.name}</Typography>
             </Grid>
             <Grid className={classes.content}>
-                <Typography variant="h5" component="h5" className={classes.title}>
+                <Typography
+                    variant="h5"
+                    component="h5"
+                    className={classes.title}>
                     {post.title}
                 </Typography>
                 <Typography className={classes.text}>{post.description}</Typography>
