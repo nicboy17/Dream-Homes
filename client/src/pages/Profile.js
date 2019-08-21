@@ -25,7 +25,6 @@ import _ from 'lodash';
 import './stylesheet/Profile.css';
 import Masonry from 'react-masonry-component';
 
-
 class Profile extends Component {
     state = {
         username: '',
@@ -40,15 +39,15 @@ class Profile extends Component {
     }
 
     togglePosts = () => {
-        this.setState({activePanel: 'post'})
+        this.setState({ activePanel: 'post' });
     };
 
     toggleBoards = () => {
-        this.setState({activePanel: 'board'})
+        this.setState({ activePanel: 'board' });
     };
 
     toggleFavorites = () => {
-        this.setState({activePanel: 'favorite'})
+        this.setState({ activePanel: 'favorite' });
     };
 
     onCreateBoardPress = () => {
@@ -140,12 +139,12 @@ class Profile extends Component {
     };
 
     renderFavorites = () => {
-        const favoritePosts = []
-        let favorites = favoritePosts.map(function(el) {
+        const favoritePosts = [];
+        const favorites = favoritePosts.map(function (el) {
             return (
-                <img className='favoritePost' src={el}></img>
-            )
-        })
+                <img className='favoritePost' src={el} key={el}></img>
+            );
+        });
         return favoritePosts.length === 0 ? (
             <h2>You have no favorite posts</h2>
         ) : (
@@ -156,7 +155,7 @@ class Profile extends Component {
             >
                 {favorites}
             </Masonry>
-        )
+        );
     }
 
     renderCreateButtons = () => {
@@ -245,30 +244,30 @@ class Profile extends Component {
                 <div style={{ display: this.state.activePanel === 'board' ? 'grid' : 'none' }}>
                     <div className='tabSection'>
                         <div>
-                            <Button 
-                            color='primary' 
-                            variant={'contained'}
-                            style={{
-                                margin: '10px'
-                            }}
+                            <Button
+                                color='primary'
+                                variant={'contained'}
+                                style={{
+                                    margin: '10px'
+                                }}
                             >
                                 Boards
                             </Button>
-                            <Button 
-                            color='primary' 
-                            onClick={() => this.togglePosts()}
-                            style={{
-                                margin: '10px'
-                            }}
+                            <Button
+                                color='primary'
+                                onClick={() => this.togglePosts()}
+                                style={{
+                                    margin: '10px'
+                                }}
                             >
                                 Posts
                             </Button>
-                            <Button 
-                            color='primary' 
-                            onClick={() => this.toggleFavorites()}
-                            style={{
-                                margin: '10px'
-                            }}
+                            <Button
+                                color='primary'
+                                onClick={() => this.toggleFavorites()}
+                                style={{
+                                    margin: '10px'
+                                }}
                             >
                                 Favorites
                             </Button>
@@ -288,30 +287,30 @@ class Profile extends Component {
                 <div style={{ display: this.state.activePanel === 'post' ? 'grid' : 'none' }}>
                     <div className='tabSection'>
                         <div>
-                            <Button 
-                            color='primary' 
-                            onClick={() => this.toggleBoards()}
-                            style={{
-                                margin: '10px'
-                            }}
+                            <Button
+                                color='primary'
+                                onClick={() => this.toggleBoards()}
+                                style={{
+                                    margin: '10px'
+                                }}
                             >
                                 Boards
                             </Button>
-                            <Button 
-                            color='primary' 
-                            variant={'contained'}
-                            style={{
-                                margin: '10px'
-                            }}
+                            <Button
+                                color='primary'
+                                variant={'contained'}
+                                style={{
+                                    margin: '10px'
+                                }}
                             >
                                 Posts
                             </Button>
-                            <Button 
-                            color='primary' 
-                            onClick={() => this.toggleFavorites()}
-                            style={{
-                                margin: '10px'
-                            }}
+                            <Button
+                                color='primary'
+                                onClick={() => this.toggleFavorites()}
+                                style={{
+                                    margin: '10px'
+                                }}
                             >
                                 Favorites
                             </Button>
@@ -333,32 +332,32 @@ class Profile extends Component {
                     </div>
                 </div>
                 <div style={{ display: this.state.activePanel === 'favorite' ? 'grid' : 'none' }}>
-                <div className='tabSection'>
+                    <div className='tabSection'>
                         <div>
-                            <Button 
-                            color='primary' 
-                            onClick={() => this.toggleBoards()}
-                            style={{
-                                margin: '10px'
-                            }}
+                            <Button
+                                color='primary'
+                                onClick={() => this.toggleBoards()}
+                                style={{
+                                    margin: '10px'
+                                }}
                             >
                                 Boards
                             </Button>
-                            <Button 
-                            color='primary' 
-                            onClick={() => this.togglePosts()}
-                            style={{
-                                margin: '10px'
-                            }}
+                            <Button
+                                color='primary'
+                                onClick={() => this.togglePosts()}
+                                style={{
+                                    margin: '10px'
+                                }}
                             >
                                 Posts
                             </Button>
-                            <Button 
-                            color='primary' 
-                            variant={'contained'}
-                            style={{
-                                margin: '10px'
-                            }}
+                            <Button
+                                color='primary'
+                                variant={'contained'}
+                                style={{
+                                    margin: '10px'
+                                }}
                             >
                                 Favorites
                             </Button>

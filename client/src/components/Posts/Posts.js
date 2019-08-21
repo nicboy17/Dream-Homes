@@ -6,7 +6,7 @@ import Masonry from 'react-masonry-component';
 const useStyles = makeStyles(theme => ({
     root: {
         display: 'grid',
-        justifyContent: 'center',
+        justifyContent: 'center'
     },
     title: {
         padding: '1rem 0 1rem 0',

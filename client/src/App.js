@@ -15,7 +15,7 @@ import Profile from './pages/Profile.js';
 import PostPage from './pages/Post/PostPage';
 import { getToken } from './actions/userActions';
 
-import PostInBoards from './pages/PostsInBoards'
+import PostInBoards from './pages/PostsInBoards';
 
 import NavBar from './components/Navbar/Navbar';
 

@@ -24,7 +24,7 @@ const useStyles = makeStyles(theme => ({
         fontSize: 10,
         marginBottom: '1rem',
         fontStyle: 'oblique'
-    },
+    }
 }));
 
 const PostDetails = ({ post, profileImage }) => {

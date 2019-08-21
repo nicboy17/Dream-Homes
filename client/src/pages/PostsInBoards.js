@@ -1,29 +1,32 @@
-import React, {Component} from 'react'
+import React, { Component } from 'react';
 import Masonry from 'react-masonry-component';
 
 class PostInBoards extends Component {
-    constructor() {
-        super()
+    constructor () {
+        super();
         this.state = {
-            placeholder: '',
-        }
+            placeholder: ''
+        };
     }
 
     renderPosts = () => {
-        const postsArray = []
-        let posts = postsArray.map(function(el) {
+        const postsArray = [];
+        const posts = postsArray.map(function (el) {
             return (
-                <img src={el} style={{
-                    width: '20vw',
-                    height: 'auto',
-                    borderRadius: '15px',
-                    marginBottom: '15px',
-                }}></img>
-            )
-        })
+                <img
+                    src={el}
+                    key = {el}
+                    style={{
+                        width: '20vw',
+                        height: 'auto',
+                        borderRadius: '15px',
+                        marginBottom: '15px'
+                    }}></img>
+            );
+        });
         return postsArray.length === 0 ? (
             <h2 style={{
-                textAlign: 'center',
+                textAlign: 'center'
             }}>
                 You have no posts in this board :(
             </h2>
@@ -34,27 +37,27 @@ class PostInBoards extends Component {
             >
                 {posts}
             </Masonry>
-        )
+        );
     }
 
-    render() {
+    render () {
         return (
             <div>
                 <h1 style={{
                     textAlign: 'center',
                     textDecoration: 'underline',
-                    margin: '35px',
+                    margin: '35px'
                 }}>
                     Placeholder Name of Board
                 </h1>
                 <div style={{
                     display: 'grid',
-                    justifyContent: 'center',
+                    justifyContent: 'center'
                 }}>
                     {this.renderPosts()}
                 </div>
             </div>
-        )
+        );
     }
 }
 

@@ -65,7 +65,7 @@ class Search extends Component {
                     </div>
                 </div>
                 <div>
-                        {this.renderPosts()}
+                    {this.renderPosts()}
                 </div>
                 <div>
                     {this.renderEmptyError()}
