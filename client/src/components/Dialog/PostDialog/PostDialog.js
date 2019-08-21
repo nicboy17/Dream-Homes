@@ -110,7 +110,7 @@ class PostDialog extends React.Component {
                 <div className="smallText">
                     <div style={{ textAlign: 'center', fontSize: 14 }}>
                         <h1 style={{ fontSize: 14 }}>Maximum 5 files</h1>
-                        Use high-quality jpg/png files <br /> less than 32mb
+                        Use high-quality jpg files <br /> less than 32mb
                     </div>
                 </div>
             );
@@ -119,20 +119,23 @@ class PostDialog extends React.Component {
 
     // Create post
     onCreatePress = async e => {
-        const { title, link, description, username, image, board, tags } = this.state;
+        const {
+            title, link, description, username, image, board, tags,
+            titleError, linkError, descriptionError
+        } = this.state;
         e.preventDefault();
         if (image.length < 1) {
             this.setState({ imageError: 'Please include atleast one image', SnackBar: true });
         }
-        else if (title.length < 3 || title.length > 15) {
+        if (title.length < 3 || title.length > 15) {
             this.setState({ titleError: 'Must be atleast 3 or less than 15 characters' });
         }
-        else if (link.length < 3 || link.length > 15) {
+        if (link.length < 3 || link.length > 15) {
             this.setState({ linkError: 'Must be atleast 3 or less than 15 characters' });
         }
-        else if (description.length < 3 || description.length > 200) {
+        if (description.length < 3 || description.length > 200) {
             this.setState({ descriptionError: 'Must be atleast 3 to 200 characters' });
-        } else {
+        } else if (image.length >= 1 && titleError && linkError && descriptionError) {
             const formData = createFormData({ title, link, description, image, tags });
             image.forEach(file => formData.append('image', file));
             this.props.createPost(formData, username, board);
@@ -163,7 +166,7 @@ class PostDialog extends React.Component {
             image,
             imageError
         } = this.state;
-        
+
         // Redirect user to profile if not authorized
         if (userStore.authenticated) {
             if (userStore.user.username !== params.username) {
