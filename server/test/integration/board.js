@@ -28,7 +28,7 @@ describe ('User Board Routes', () => {
                 .expect (200)
                 .then ((res) => {
                     expect (res.body.success).to.be.true;
-                    expect (res.body.posts[0].title).to.be.equal ('valid');
+                    expect(res.body.board.posts[0].title).to.be.equal('valid');
                 });
         });
 

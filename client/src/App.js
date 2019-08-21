@@ -42,7 +42,7 @@ class App extends Component {
                                 )}
                             />
                             <Route exact path='/signup' component={SignUp} />
-                            <Route path='/board/posts_in_board' component={PostInBoards}/>
+                            <Route path='/board/:id' component={PostInBoards}/>
                         </Switch>
                     </div>
                 </BrowserRouter>

@@ -18,8 +18,7 @@ router.get ('/:id/posts', [BoardValidation.getPosts, async (req, res) => {
         } else if (!board.posts.length) {
             return res.status (404).json ({ success: false, message: 'no posts found' });
         }
-
-        return res.status (200).json ({ success: true, posts: board.posts });
+        return res.status (200).json ({ success: true, board });
     } catch (err) {
         return res.status (400).json ({ success: false, err });
     }

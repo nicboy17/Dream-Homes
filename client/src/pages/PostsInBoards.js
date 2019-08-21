@@ -1,65 +1,87 @@
 import React, { Component } from 'react';
 import Masonry from 'react-masonry-component';
+import CircularProgress from '@material-ui/core/CircularProgress';
+import Tooltip from '@material-ui/core/Tooltip';
+
+import { connect } from 'react-redux';
+import { compose } from 'redux';
+import { fetchBoardPosts } from '../actions/boardActions';
+import { withRouter } from 'react-router-dom';
+import _ from 'lodash';
+
+import './stylesheet/Board.css';
 
 class PostInBoards extends Component {
-    constructor () {
-        super();
-        this.state = {
-            placeholder: ''
-        };
-    }
+    componentDidMount = () => {
+        const { fetchBoardPosts, match } = this.props;
+        fetchBoardPosts(match.params.id);
+    };
 
     renderPosts = () => {
-        const postsArray = [];
-        const posts = postsArray.map(function (el) {
+        const {
+            boardStore: { board },
+            history
+        } = this.props;
+        const posts = board.posts.map(post => {
             return (
-                <img
-                    src={el}
-                    key = {el}
-                    alt = ''
-                    style={{
-                        width: '20vw',
-                        height: 'auto',
-                        borderRadius: '15px',
-                        marginBottom: '15px'
-                    }}></img>
+                <Tooltip
+                    title={
+                        <div>
+                            <h1>{post.title}</h1>
+                            <p>{post.description}</p>
+                        </div>
+                    }
+                    key={post._id}
+                >
+                    <img
+                        src={post.image}
+                        alt=""
+                        className="postImg"
+                        onClick={() => history.push(`/posts/${post._id}`)}
+                    />
+                </Tooltip>
             );
         });
-        return postsArray.length === 0 ? (
-            <h2 style={{
-                textAlign: 'center'
-            }}>
+        return board.posts.length === 0 ? (
+            <h2
+                style={{
+                    textAlign: 'center'
+                }}
+            >
                 You have no posts in this board :(
             </h2>
         ) : (
-            <Masonry
-                elementType={'div'}
-                options={{ fitWidth: true, gutter: 15 }}
-            >
+            <Masonry elementType={'div'} options={{ fitWidth: true, gutter: 15 }}>
                 {posts}
             </Masonry>
         );
-    }
+    };
 
     render () {
+        const {
+            boardStore: { loading, board }
+        } = this.props;
+        if (loading || _.isEmpty(board)) {
+            return <CircularProgress className="spinner" />;
+        }
+        console.log(this.props.boardStore);
         return (
             <div>
-                <h1 style={{
-                    textAlign: 'center',
-                    textDecoration: 'underline',
-                    margin: '35px'
-                }}>
-                    Placeholder Name of Board
-                </h1>
-                <div style={{
-                    display: 'grid',
-                    justifyContent: 'center'
-                }}>
-                    {this.renderPosts()}
-                </div>
+                <h1 className="boardTitle">{board.title}</h1>
+                <div className="grid">{this.renderPosts()}</div>
             </div>
         );
     }
 }
 
-export default PostInBoards;
+const mapStateToProps = state => ({
+    boardStore: state.BoardStore
+});
+
+export default compose(
+    withRouter,
+    connect(
+        mapStateToProps,
+        { fetchBoardPosts }
+    )
+)(PostInBoards);
