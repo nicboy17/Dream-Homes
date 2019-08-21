@@ -27,21 +27,8 @@
     background: rgb(225, 225, 225)
 }
 
-.contentgrid {
-    display: grid;
-    justify-content: center;
-    max-width: 70vw;
-    margin: 0 auto;
-}
-
-.masonry {
-    margin: 0 auto;
-    position: relative;
-    text-align: center;
-}
-
 .img {
-    width: 200px;
+    width: 20vw;
     height: auto;
     border-radius: 15px;
     margin-bottom: 15px;
