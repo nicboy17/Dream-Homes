@@ -30,7 +30,6 @@ const NavMenu = ({ authenticated, user, handleLogOutClicked, history }) => {
 
     const onProfileClick = () => {
         history.push('/profile/' + user.username);
-        window.location.reload();
     };
 
     if (authenticated) {

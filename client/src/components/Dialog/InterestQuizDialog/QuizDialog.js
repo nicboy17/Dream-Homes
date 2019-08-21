@@ -57,7 +57,7 @@ class QuizDialog extends React.Component {
     async handleConfirm () {
         const username = this.props.match.params.username;
         axios.put(`/users/${username}/interests`, {
-            interests: this.state.interests
+            interests: this.state.selected
         })
             .then(res => console.log(res))
             .catch(err => console.log(err));
