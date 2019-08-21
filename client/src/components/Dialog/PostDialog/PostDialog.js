@@ -118,7 +118,7 @@ class PostDialog extends React.Component {
     };
 
     // Create post
-    onCreatePress = async e => {
+    onCreatePress = e => {
         const {
             title, link, description, username, image, board, tags,
             titleError, linkError, descriptionError
@@ -135,7 +135,7 @@ class PostDialog extends React.Component {
         }
         if (description.length < 3 || description.length > 200) {
             this.setState({ descriptionError: 'Must be atleast 3 to 200 characters' });
-        } else if (image.length >= 1 && titleError && linkError && descriptionError) {
+        } else if (image.length > 0 && !titleError && !linkError && !descriptionError) {
             const formData = createFormData({ title, link, description, image, tags });
             image.forEach(file => formData.append('image', file));
             this.props.createPost(formData, username, board);
