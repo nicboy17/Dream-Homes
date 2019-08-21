@@ -30,6 +30,9 @@ const useStyles = makeStyles(theme => ({
     placeholderHeader: {
         minHeight: '16vh',
         height: '16vh'
+    },
+    clear: {
+        cursor: 'pointer'
     }
 }));
 
@@ -70,8 +73,12 @@ const Navbar = ({ userStore, logout, history, location, searchPosts }) => {
                         <h3>Dream Home</h3>
                     </div>
                     <div />
-                    <NavSearch search={search} handleSearch={handleSearch} handleChange={handleSearchChange}
-                        clear={clearSearch}/>
+                    <NavSearch
+                        search={search}
+                        handleSearch={handleSearch}
+                        handleChange={handleSearchChange}
+                        clear={clearSearch}
+                    />
                     <div>
                         <h5>
                             <Link to='/' style={{
@@ -100,10 +107,13 @@ const Navbar = ({ userStore, logout, history, location, searchPosts }) => {
                         </Button>
                     </div>
                     <div />
-                    <NavMenu user={userStore.user} handleLogOutClicked={handleLogOutClicked}
-                        authenticated={userStore.authenticated}/>
+                    <NavMenu
+                        user={userStore.user}
+                        handleLogOutClicked={handleLogOutClicked}
+                        authenticated={userStore.authenticated}
+                    />
                 </div>
-                <div className={classes.headerBottomBorder}/>
+                <div className={classes.headerBottomBorder} />
             </div>
             <div className={classes.placeholderHeader}>placeholder</div>
         </div>
@@ -124,4 +134,10 @@ function mapDispatchToProps (dispatch) {
     );
 }
 
-export default compose(withRouter, connect(mapStateToProps, mapDispatchToProps))(Navbar);
+export default compose(
+    withRouter,
+    connect(
+        mapStateToProps,
+        mapDispatchToProps
+    )
+)(Navbar);

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { compose, bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-
+import SnackBar from '../components/SnackBar/SnackBar';
 import Avatar from '@material-ui/core/Avatar';
 import { Card, Typography } from '@material-ui/core';
 import CardMedia from '@material-ui/core/CardMedia';
@@ -14,7 +14,12 @@ import PostDialog from '../components/Dialog/PostDialog/PostDialog';
 import BoardDialog from '../components/Dialog/BoardDialog/BoardDialog';
 import EditPicUserDialog from '../components/Dialog/EditPicUserDialog/EditPicUserDialog';
 import Button from '@material-ui/core/Button';
-import { getBoardsandPosts, followUser, unfollowUser, fetchProfileInfo } from '../actions/profileActions';
+import {
+    getBoardsandPosts,
+    followUser,
+    unfollowUser,
+    fetchProfileInfo
+} from '../actions/profileActions';
 import Posts from '../components/Posts/Posts';
 import _ from 'lodash';
 import './stylesheet/Profile.css';
@@ -25,7 +30,7 @@ class Profile extends Component {
     state = {
         username: '',
         activePanel: 'board',
-        followedOrNot: false
+        SnackBar: !_.isEmpty(this.props.profileStore.error)
     };
 
     componentDidMount () {
@@ -84,10 +89,13 @@ class Profile extends Component {
     };
 
     checkFollowing = () => {
-        const { userStore: { user }, profileStore: { followers } } = this.props;
+        const {
+            userStore: { user },
+            profileStore: { profileInfo: { followers } }
+        } = this.props;
         const res = _.filter(followers, follower => follower._id === user._id);
         return _.isEmpty(res);
-    }
+    };
 
     renderFollowButton = () => {
         return this.checkFollowing() ? (
@@ -102,10 +110,11 @@ class Profile extends Component {
     };
 
     renderBoards = () => {
-        return this.props.profileStore.profileInfo.boards.length === 0 ? (
+        const { boards } = this.props.profileStore.profileInfo;
+        return boards.length === 0 ? (
             <h2>There are no boards</h2>
         ) : (
-            this.props.profileStore.profileInfo.boards.map((board, i) => {
+            boards.map((board, i) => {
                 return (
                     <Card key={i} className='card'>
                         <Link to='/board/posts_in_board' className='boardLink'>
@@ -126,11 +135,8 @@ class Profile extends Component {
     };
 
     renderPosts = () => {
-        return this.props.profileStore.profileInfo.posts.length === 0 ? (
-            <h2>There are no posts</h2>
-        ) : (
-            <Posts posts={this.props.profileStore.profileInfo.posts} />
-        );
+        const { posts } = this.props.profileStore.profileInfo;
+        return posts.length === 0 ? <h2>There are no posts</h2> : <Posts posts={posts} />;
     };
 
     renderFavorites = () => {
@@ -190,25 +196,46 @@ class Profile extends Component {
         );
     };
 
+    renderSnackBarError = () => {
+        const { profileStore } = this.props;
+        if (!_.isEmpty(profileStore.error)) {
+            return (
+                <SnackBar
+                    message= { profileStore.error }
+                    variant='error'
+                    open={this.state.SnackBar}
+                    onClose = {() => this.setState({ SnackBar: false })}
+                />
+            );
+        }
+    };
+
     render () {
-        const { profileStore: { profileInfo, following = [], followers = [] } } = this.props;
-        if (_.isEmpty(this.props.profileStore)) {
-            return <div><CircularProgress className = 'spinner' /></div>;
+        const {
+            profileStore: { profileInfo, loading }
+        } = this.props;
+        if (_.isUndefined(profileInfo) || loading) {
+            return <div><CircularProgress className='spinner' /></div>;
         }
         return (
             <div>
-                <Route path='/profile/:username/edit' component={EditPicUserDialog}/>
-                <Route path='/profile/:username/interest-quiz' component={InterestQuizDialog}/>
-                <Route path='/profile/:username/post/create' component={PostDialog}/>
-                <Route path='/profile/:username/board/create' component={BoardDialog}/>
+                <Route path='/profile/:username/edit' component={EditPicUserDialog} />
+                <Route path='/profile/:username/interest-quiz' component={InterestQuizDialog} />
+                <Route path='/profile/:username/post/create' component={PostDialog} />
+                <Route path='/profile/:username/board/create' component={BoardDialog} />
                 <div className='subHeader'>
                     <div className='nameContainer'>
-                        <Avatar className='subHeaderIcon' component={Link} src={profileInfo.profile}
-                            to={'/profile/' + profileInfo.username + '/edit'}/>
+                        <Avatar
+                            className='subHeaderIcon'
+                            component={Link}
+                            src={profileInfo.profile}
+                            to={'/profile/' + profileInfo.username + '/edit'}
+                        />
                         <div>
                             <h3 className='profileName'>{profileInfo.name}</h3>
                             <h5 className='profileFollowers'>
-                                {followers.length} Followers | {following.length} Following
+                                {profileInfo.followers.length} Followers |{' '}
+                                {profileInfo.following.length} Following
                             </h5>
                         </div>
                     </div>
@@ -251,9 +278,7 @@ class Profile extends Component {
                     <div className='activePanel'>
                         <div
                             className={
-                                profileInfo.boards.length === 0
-                                    ? 'gridContainer1'
-                                    : 'gridContainer'
+                                profileInfo.boards.length === 0 ? 'gridContainer1' : 'gridContainer'
                             }
                         >
                             {this.renderBoards()}
@@ -344,6 +369,7 @@ class Profile extends Component {
                         {this.renderFavorites()}
                     </div>
                 </div>
+                {this.renderSnackBarError()}
             </div>
         );
     }

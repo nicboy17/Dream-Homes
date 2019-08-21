@@ -4,7 +4,7 @@ import {
     LOGIN_RESPONSE,
     LOGIN_ERROR,
     GET_TOKEN_SUCCESS,
-    FOLLOW_SUCCESS
+    EDIT_PROFILE_SUCCESS
 } from '../actions/types';
 
 const initialState = {
@@ -26,8 +26,8 @@ export default (state = initialState, action) => {
         return { authenticated: false };
     case GET_TOKEN_SUCCESS:
         return { ...state, authenticated: true, user: action.user, token: action.token };
-    case FOLLOW_SUCCESS:
-        return { ...state, following: state.following + 1 };
+    case EDIT_PROFILE_SUCCESS:
+        return { ...state, user: { ...state.user, profile: action.payload.user.profile, name: action.payload.user.name } };
     default:
         return state;
     }

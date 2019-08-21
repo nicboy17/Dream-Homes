@@ -4,7 +4,7 @@ const router = express.Router();
 const UserValidation = require('./validate/user');
 const { User, Board, Post, Follow } = require ('../models');
 const upload = require('../services/file-upload');
-const token = require('../middleware/token');
+const { auth, pub } = require ('../middleware');
 
 
 // @route    POST users/register
@@ -48,7 +48,7 @@ router.post('/login', [UserValidation.login, async (req, res) => {
 // @route    GET users/:username
 // @desc     Get user profile with all their posts and boards
 // @access   Public
-router.get('/:username', async (req, res) => {
+router.get ('/:username', [pub,async (req, res) => {
     try {
         const user = await User.findOne({ username: req.params.username }).select('-password').populate('boards').populate('posts').lean();
         if (!user) {
@@ -58,10 +58,10 @@ router.get('/:username', async (req, res) => {
     } catch (err) {
         return res.status(400).json({ success: false, message: err });
     }
-});
+}]);
 
 //authenticated routes below this middleware
-router.use (token ());
+router.use (auth);
 
 // @route    PUT users/:username
 // @desc     Update user image and/or name
@@ -191,7 +191,7 @@ router.post('/:username/posts', [upload.single('image'), UserValidation.addPost,
 // @access   Private
 router.post ('/:username/favourite', [UserValidation.addPostToFavourites, async (req, res) => {
     try {
-        const user = await User.findByIdAndUpdate (req.decoded._id, { '$addToSet': { posts: req.body.post } }, { 'new': true }).lean ();
+        const user = await User.findByIdAndUpdate (req.decoded._id, { '$addToSet': { favourites: req.body.post } }, { 'new': true }).lean ();
         if (!user) {
             return res.status (404).json ({ success: false, message: 'User not found' });
         }

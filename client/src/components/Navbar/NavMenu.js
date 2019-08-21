@@ -1,6 +1,6 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/styles';
-import { Link } from 'react-router-dom';
+import { Link, withRouter } from 'react-router-dom';
 import Avatar from '@material-ui/core/Avatar';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
@@ -16,7 +16,7 @@ const useStyles = makeStyles(theme => ({
     }
 }));
 
-const NavMenu = ({ authenticated, user, handleLogOutClicked }) => {
+const NavMenu = ({ authenticated, user, handleLogOutClicked, history }) => {
     const [open, setMenu] = React.useState(null);
     const classes = useStyles();
 
@@ -27,6 +27,11 @@ const NavMenu = ({ authenticated, user, handleLogOutClicked }) => {
     function handleClose () {
         setMenu(null);
     }
+
+    const onProfileClick = () => {
+        history.push('/profile/' + user.username);
+        window.location.reload();
+    };
 
     if (authenticated) {
         return (
@@ -44,7 +49,7 @@ const NavMenu = ({ authenticated, user, handleLogOutClicked }) => {
                     onClose={handleClose}
                     className={classes.menu}
                 >
-                    <MenuItem component={Link} to={'/profile/' + user.username}>
+                    <MenuItem onClick = {() => onProfileClick()}>
                         Profile
                     </MenuItem>
                     <MenuItem component={Link} to={'/profile/' + user.username + '/interest-quiz'}>
@@ -64,11 +69,11 @@ const NavMenu = ({ authenticated, user, handleLogOutClicked }) => {
         return (
             <>
                 <h5>
-                    <Link to='/login'>Log In</Link>
+                    <Link to='/login' style={{ textDecoration: 'none', color: 'black' }}>Log In</Link>
                 </h5>
             </>
         );
     }
 };
 
-export default NavMenu;
+export default withRouter(NavMenu);

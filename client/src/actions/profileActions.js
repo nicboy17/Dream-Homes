@@ -6,12 +6,15 @@ import {
     FOLLOW_SUCCESS,
     UNFOLLOW_FAIL,
     UNFOLLOW_SUCCESS,
+    FETCHING_PROFILE,
     FETCH_FOLLOWINGS_SUCCESS,
     FETCH_FOLLOWINGS_FAIL,
     FETCH_FOLLOWERS_SUCCESS,
     FETCH_FOLLOWERS_FAIL,
     FETCH_PROFILE_SUCCESS,
-    FETCH_PROFILE_FAIL
+    FETCH_PROFILE_FAIL,
+    EDIT_PROFILE_SUCCESS,
+    EDIT_PROFILE_FAIL
 } from '../actions/types';
 import axios from 'axios';
 
@@ -32,8 +35,11 @@ export const addPost = (post, username) => ({
     username
 });
 
-export const fetchProfileInfo = (username) => async dispatch => {
+export const fetchProfileInfo = username => async dispatch => {
     try {
+        dispatch({
+            type: FETCHING_PROFILE
+        });
         const res = await axios.get(`/users/${username}`);
         const promises = [
             axios.get(`/users/${res.data.user._id}/following`),
@@ -43,9 +49,11 @@ export const fetchProfileInfo = (username) => async dispatch => {
         const following = results[0].data.following;
         const followers = results[1].data.followers;
         const profileInfo = res.data.user;
+        profileInfo['following'] = following;
+        profileInfo['followers'] = followers;
         dispatch({
             type: FETCH_PROFILE_SUCCESS,
-            payload: { profileInfo, following, followers }
+            payload: profileInfo
         });
     } catch (err) {
         dispatch({
@@ -85,7 +93,7 @@ export const unfollowUser = (followee, id) => async dispatch => {
     } catch (err) {
         dispatch({
             type: UNFOLLOW_FAIL,
-            payload: { error: 'Failed to unfollow user' }
+            payload: 'Failed to unfollow user'
         });
     }
 };
@@ -116,6 +124,21 @@ export const fetchFollowers = username => async dispatch => {
         dispatch({
             type: FETCH_FOLLOWERS_FAIL,
             payload: { error: 'Something went wrong with fetching followers' }
+        });
+    }
+};
+
+export const editProfile = (formData, username) => async dispatch => {
+    try {
+        const res = await axios.put(`/users/${username}`, formData);
+        dispatch({
+            type: EDIT_PROFILE_SUCCESS,
+            payload: res.data
+        });
+    } catch (err) {
+        dispatch({
+            type: EDIT_PROFILE_FAIL,
+            payload: { error: 'Something went wrong with updating the profile' }
         });
     }
 };

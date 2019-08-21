@@ -3,6 +3,8 @@ export const LOGIN = 'LOGIN';
 export const LOGIN_SUCCESS = 'LOGIN_SUCCESS';
 export const LOGIN_ERROR = 'LOGIN_ERROR';
 export const LOGIN_RESPONSE = 'LOGIN_RESPONSE';
+export const EDIT_PROFILE_SUCCESS = 'EDIT_PROFILE_SUCCESS';
+export const EDIT_PROFILE_FAIL = 'EDIT_PROFILE_FAIL';
 
 export const LOGOUT = 'LOGOUT';
 export const LOGOUT_SUCCESS = 'LOGOUT_SUCCESS';
@@ -11,6 +13,7 @@ export const GET_TOKEN = 'GET_TOKEN';
 export const GET_TOKEN_SUCCESS = 'GET_TOKEN_SUCCESS';
 
 // Pofile
+export const FETCHING_PROFILE = 'FETCHING_PROFILE';
 export const FETCH_PROFILE_SUCCESS = 'FETCH_PROFILE_SUCCESS';
 export const FETCH_PROFILE_FAIL = 'FETCH_PROFILE_FAIL';
 
@@ -27,6 +30,7 @@ export const ADD_POST_SUCCESS = 'ADD_POST_SUCCESS';
 export const ADD_POST_ERROR = 'ADD_POST_ERROR';
 
 // Post
+export const FETCHING_POSTS = 'FETCHING_POSTS';
 export const FETCH_POSTS_SUCCESS = 'FETCH_POSTS_SUCCESS';
 export const FETCH_POSTS_FAIL = 'FETCH_POSTS_FAIL';
 export const SEARCH_POSTS = 'SEARCH_POSTS';

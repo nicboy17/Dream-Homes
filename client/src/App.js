@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { MuiThemeProvider } from '@material-ui/core';
-import { BrowserRouter, Route, Switch } from 'react-router-dom';
+import { BrowserRouter, Route, Switch, withRouter } from 'react-router-dom';
 
 import { theme } from './themes/theme';
 import './App.css';
@@ -29,15 +29,22 @@ class App extends Component {
         return (
             <MuiThemeProvider theme={theme}>
                 <BrowserRouter>
-                    <NavBar/>
-                    <Switch>
-                        <Route exact path='/' component={Main}/>
-                        <Route exact path='/login' component={Login}/>
-                        <Route path='/posts/:id' component={PostPage}/>
-                        <Route path='/profile/:username' component={Profile} />
-                        <Route exact path='/signup' component={SignUp} />
-                        <Route path='/board/posts_in_board' component={PostInBoards}/>
-                    </Switch>
+                    <NavBar />
+                    <div>
+                        <Switch>
+                            <Route exact path='/' component={withRouter(Main)} />
+                            <Route exact path='/login' component={Login} />
+                            <Route path='/posts/:id' component={PostPage} />
+                            <Route
+                                path='/profile/:username'
+                                render={props => (
+                                    <Profile key={props.match.params.username} {...props} />
+                                )}
+                            />
+                            <Route exact path='/signup' component={SignUp} />
+                            <Route path='/board/posts_in_board' component={PostInBoards}/>
+                        </Switch>
+                    </div>
                 </BrowserRouter>
             </MuiThemeProvider>
         );
@@ -53,4 +60,7 @@ function mapDispatchToProps (dispatch) {
     );
 }
 
-export default connect(null, mapDispatchToProps)(App);
+export default connect(
+    null,
+    mapDispatchToProps
+)(App);
