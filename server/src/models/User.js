@@ -57,9 +57,13 @@ user.virtual('posts', {
 user.pre('save', function (next) {
     let user = this;
 
-    bcrypt.hash(user.password, 10, function(err, hash) {
+    if (!this.isModified ('password')) {
+        next ();
+    }
+
+    bcrypt.hash (user.password, 10, function (err, hash) {
         user.password = hash;
-        next();
+        next ();
     });
 });
 
