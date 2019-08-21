@@ -8,6 +8,7 @@ import { withRouter } from 'react-router-dom';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { favouritePost } from '../../actions/profileActions';
+import Button from '@material-ui/core/Button';
 
 const useStyles = makeStyles(theme => ({
     author: {
@@ -27,16 +28,6 @@ const useStyles = makeStyles(theme => ({
         fontSize: 10,
         marginBottom: '1rem',
         fontStyle: 'oblique'
-    },
-    favorite: {
-        background: 'white',
-        border: '1px solid lightgrey',
-        borderRadius: '25px',
-        padding: '15px',
-        '&:hover': {
-            background: 'rgb(225, 225, 225)',
-            cursor: 'pointer'
-        }
     }
 }));
 
@@ -77,9 +68,9 @@ const PostDetails = ({ post, profileImage, history, favouritePost, match }) => {
                 </Typography>
                 <Typography className={classes.text}>{post.description}</Typography>
                 <p className={classes.date}>{moment(post.date).format('MMMM Do YYYY, h:mm a')}</p>
-                <button className={classes.favorite} onClick={() => onFavouritePress()}>
+                <Button className={classes.favorite} onClick={() => onFavouritePress()}>
                     Favorite This Post!
-                </button>
+                </Button>
             </Grid>
         </div>
     );

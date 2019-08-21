@@ -64,7 +64,15 @@ class PostPage extends React.Component {
             getBoardsandPosts(user.username);
             return (
                 <div>
-                    <CircularProgress />
+                    <CircularProgress
+                        style={{
+                            position: 'absolute',
+                            top: '0',
+                            bottom: '0',
+                            right: '0',
+                            left: '0',
+                            margin: 'auto'
+                        }}/>
                 </div>
             );
         }
