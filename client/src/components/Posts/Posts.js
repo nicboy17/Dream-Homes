@@ -2,6 +2,8 @@ import React from 'react';
 import { makeStyles } from '@material-ui/styles';
 import { Link } from 'react-router-dom';
 import Masonry from 'react-masonry-component';
+import IconButton from '@material-ui/core/IconButton';
+import DeleteIcon from '@material-ui/icons/Delete';
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -9,15 +11,28 @@ const useStyles = makeStyles(theme => ({
         justifyContent: 'center'
     },
     title: {
-        padding: '1rem 0 1rem 0',
+        marginLeft: '15px',
+        padding: '10px 0 10px 0',
         fontWeight: 'bold',
         fontSize: 15,
         color: 'white',
         position: 'absolute',
-        bottom: 5,
-        left: 0,
-        width: '100%',
-        textAlign: 'center'
+        bottom: 0,
+        left: -5,
+        width: '60%',
+        textAlign: 'center',
+        backgroundColor: 'rgba(0, 0, 0, 0.6)',
+        borderRadius: '25px'
+    },
+    deleteIconContainer: {
+        float: 'right',
+        position: 'absolute',
+        right: 10,
+        top: 10,
+        backgroundColor: 'rgba(0,0,0,0.6)'
+    },
+    deleteIcon: {
+        color: 'white'
     },
     imageContainer: {
         marginBottom: '7.5px',
@@ -41,12 +56,15 @@ const Posts = ({ posts }) => {
 
     const images = posts.map((post, i) => {
         return (
-            <Link to={'/posts/' + post._id} key={i}>
-                <div className={classes.imageContainer}>
+            <div className={classes.imageContainer} key={i}>
+                <Link to={'/posts/' + post._id}>
                     <img src={post.image} alt={post.title} className={classes.image}/>
                     <p className={classes.title}>{post.title}</p>
-                </div>
-            </Link>
+                </Link>
+                <IconButton className={classes.deleteIconContainer} size="small">
+                    <DeleteIcon className={classes.deleteIcon}/>
+                </IconButton>
+            </div>
         );
     });
 
