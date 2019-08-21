@@ -3,10 +3,10 @@ const router = express.Router ();
 
 const BoardValidation = require ('./validate/board');
 const { Board } = require ('../models');
-const token = require ('../middleware/token');
+const { auth } = require ('../middleware');
 
 //authenticated routes below this middleware
-router.use (token ());
+router.use (auth);
 
 // @route    POST boards/:id/posts
 // @desc     gets posts from board id
