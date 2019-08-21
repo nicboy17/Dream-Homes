@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const { pub } = require ('../middleware');
-const ObjectId = require ('mongoose').ObjectId;
+const ObjectId = require('mongoose').Schema.ObjectId;
 const { User, Post } = require('../models');
 
 const _ = require('lodash');
