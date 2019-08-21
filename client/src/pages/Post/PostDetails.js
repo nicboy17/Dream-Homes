@@ -3,7 +3,9 @@ import { makeStyles } from '@material-ui/styles';
 import { Typography, Grid } from '@material-ui/core';
 import Avatar from '@material-ui/core/Avatar';
 import face from '../../assets/face.jpg';
+import Button from '@material-ui/core/Button';
 import moment from 'moment';
+
 import { withRouter } from 'react-router-dom';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
@@ -56,11 +58,7 @@ const PostDetails = ({ post, profileImage, history, favouritePost, match }) => {
                     component={'div'}
                     className={classes.avatar}
                 />
-                <Typography
-                    className={classes.user}
-                >
-                    {post.user.name}
-                </Typography>
+                <Typography className={classes.user}>{post.user.name}</Typography>
             </Grid>
             <Grid className={classes.content}>
                 <Typography variant="h5" component="h5" className={classes.title}>

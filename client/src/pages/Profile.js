@@ -317,7 +317,8 @@ class Profile extends Component {
                         </div>
                         <div />
                     </div>
-                    <div className='activePanel'>
+                    <div className='
+Panel'>
                         <div
                             className={
                                 profileInfo.posts.length === 0 ? 'postContainer1' : 'postContainer'
