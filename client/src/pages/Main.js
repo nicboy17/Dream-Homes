@@ -10,7 +10,6 @@ import _ from 'lodash';
 import Posts from '../components/Posts/Posts';
 import SnackBar from '../components/SnackBar/SnackBar';
 import { CircularProgress } from '@material-ui/core';
-import Masonry from 'react-masonry-component';
 import Button from '@material-ui/core/Button';
 
 import './stylesheet/Content.css';
@@ -66,14 +65,11 @@ class Search extends Component {
                     </div>
                 </div>
                 <div>
-                    <Masonry
-                        elementType={'div'}
-                        options={{ fitWidth: true, gutter: 15 }}
-                    >
                         {this.renderPosts()}
-                    </Masonry>
                 </div>
-                <div>{this.renderEmptyError()}</div>
+                <div>
+                    {this.renderEmptyError()}
+                </div>
             </div>
         );
     }

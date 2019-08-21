@@ -299,7 +299,11 @@ class Profile extends Component {
                                 profileInfo.posts.length === 0 ? 'postContainer1' : 'postContainer'
                             }
                         >
-                            {this.renderPosts()}
+                            <div style={{
+                                width: '90vw'
+                            }}>
+                                {this.renderPosts()}
+                            </div>
                         </div>
                     </div>
                 </div>
