@@ -2,7 +2,6 @@ const express = require('express');
 const router = express.Router();
 
 const UserValidation = require('./validate/user');
-const BoardValidation = require ('./validate/board');
 const { User, Board, Post, Follow } = require ('../models');
 const upload = require('../services/file-upload');
 const { auth, pub } = require ('../middleware');
@@ -61,28 +60,6 @@ router.get ('/:username', [pub, async (req, res) => {
         return res.status(400).json({ success: false, message: err });
     }
 }]);
-
-// @route    GET users/:user_id/board/:board_id
-// @desc     gets posts from user id and board id
-// @access   Public
-router.get ('/:user_id/board/:board_id', [BoardValidation.getPosts, async (req, res) => {
-    try {
-        const board = await Board.findOne ({
-            _id: req.params.board_id,
-            user: req.params.user_id
-        }).populate ('posts', 'title image description tags').lean ();
-        if (!board) {
-            return res.status (404).json ({ success: false, message: 'no board found' });
-        } else if (!board.posts.length) {
-            return res.status (404).json ({ success: false, message: 'no posts found' });
-        }
-
-        return res.status (200).json ({ success: true, posts: board.posts });
-    } catch (err) {
-        return res.status (400).json ({ success: false, err });
-    }
-}]);
-
 
 //authenticated routes below this middleware
 router.use (auth);
@@ -194,7 +171,7 @@ router.post('/:username/board', [UserValidation.addBoard, async (req, res) => {
 // @access   Private
 router.post('/:username/posts', [upload.array('image', 5), UserValidation.addPost, async (req, res) => {
     const user = await User.findOne({ username: req.params.username }).select('_id').lean();
-    
+
     if (req.decoded.username !== req.params.username) {
         return res.status(403).json({ success: false, message: 'Cannot create posts for other users'});
     }
@@ -271,39 +248,6 @@ router.put('/:username/interests', async (req,res) => {
             return res.status(404).json({msg: 'The user does not exist'});
         }
         return res.status(500).send('Server Error');
-    }
-});
-
-
-// TODO: add to board route ?
-// @route    PUT users/board/:id
-// @desc     Update posts in a board
-// @access   Private
-router.put('/board/:id', async (req,res) => {
-    try {
-        const board = await Board.findById(req.params.id);
-        if (board.user.toString () !== req.decoded._id.toString ()) {
-            return res.status (403).json ({ msg: 'You do not have the authorization to add to this board' });
-        }
-        // Check to see if there is a board with that id
-        if(!board) {
-            return res.status(404).json({msg: 'Board not found'});
-        }
-        // Check to see if post has already been added to board
-        if (
-            board.posts.filter(post => post.toString() === req.body._id).length > 0
-        ) {
-            return res.status(400).json({ msg: 'Post has already been added to the board' });
-        }
-        board.posts.unshift(req.body._id);
-        await board.save();
-        res.json(board);
-    } catch (err) {
-        // Check to see if it is a valid object id 
-        if(err.kind === 'ObjectId') {
-            return res.status(404).json({msg: 'The board or post does not exist'});
-        }
-        return res.status (500).send (err);
     }
 });
 
