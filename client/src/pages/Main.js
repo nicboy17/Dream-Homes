@@ -10,7 +10,7 @@ import _ from 'lodash';
 import Posts from '../components/Posts/Posts';
 import SnackBar from '../components/SnackBar/SnackBar';
 import { CircularProgress } from '@material-ui/core';
-import Masonry from 'react-masonry-component';
+import Button from '@material-ui/core/Button';
 
 import './stylesheet/Content.css';
 
@@ -55,25 +55,21 @@ class Search extends Component {
                 <div className='placeholder' />
                 <div className='buttonmenu'>
                     <div className='buttongrid'>
-                        <button className='option'>Cozy</button>
-                        <button className='option'>Bohemian</button>
-                        <button className='option'>Contemporary</button>
-                        <button className='option'>Eclectic</button>
-                        <button className='option'>Boho</button>
-                        <button className='option'>Traditional</button>
-                        <button className='option'>Simple</button>
+                        <Button className='option'>Cozy</Button>
+                        <Button className='option'>Bohemian</Button>
+                        <Button className='option'>Contemporary</Button>
+                        <Button className='option'>Eclectic</Button>
+                        <Button className='option'>Boho</Button>
+                        <Button className='option'>Traditional</Button>
+                        <Button className='option'>Simple</Button>
                     </div>
                 </div>
-                <div className='contentgrid'>
-                    <Masonry
-                        className='masonry'
-                        elementType={'div'}
-                        options={{ fitWidth: true, gutter: 15 }}
-                    >
-                        {this.renderPosts()}
-                    </Masonry>
+                <div>
+                    {this.renderPosts()}
                 </div>
-                <div>{this.renderEmptyError()}</div>
+                <div>
+                    {this.renderEmptyError()}
+                </div>
             </div>
         );
     }

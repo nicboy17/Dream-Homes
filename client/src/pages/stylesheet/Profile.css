@@ -1,26 +1,30 @@
 .subHeader {
-    min-height: 30vh;
+    height: 30vh;
     display: grid;
     grid-template-columns: 5fr 2fr 5fr;
     align-items: center;
     justify-items: center;
     border-bottom: 1px solid lightgrey;
 }
+
 .subHeaderIcon {
     width: 100px !important;
     height: 100px !important;
     border-radius: 50px !important;
 }
+
 .nameContainer {
     display: grid;
     grid-template-columns: 1fr 1fr;
     justify-items: center;
     align-items: center;
 }
+
 .profileName {
     margin: 0;
     padding: 0;
 }
+
 .profileFollowers {
     margin: 0;
     padding: 0;
@@ -45,13 +49,15 @@
 .buttonStyle {
     margin: 0 0.5rem;
 }
+
 .tabSection {
     min-height: 25vh;
     display: grid;
-    grid-template-columns: 1fr 1.9fr;
+    grid-template-columns: 1fr 1fr;
     align-items: center;
     justify-items: center;
 }
+
 .tab {
     background: white;
     border: 1px solid lightgrey;
@@ -60,6 +66,7 @@
     font-weight: bold;
     margin-right: 10px;
 }
+
 .activeTab {
     background: black;
     color: white;
@@ -69,23 +76,29 @@
     font-weight: bold;
     margin-right: 10px;
 }
+
 .activeTab:hover {
     cursor: pointer;
 }
+
 .activeTab:focus {
     outline: none;
 }
+
 .tab:hover {
     cursor: pointer;
 }
+
 .tab:focus {
     outline: none;
 }
+
 .activePanel {
     display: grid;
     justify-items: center;
     margin-bottom: 50px;
 }
+
 .gridContainer {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
@@ -98,38 +111,25 @@
     justify-items: center;
     grid-gap: 20px;
 }
+
 .card {
-    padding-bottom: 1vh;
-    height: 40vh;
+    height: 42vh;
     width: 26vw;
 }
+
 .cardImg {
     height: 32vh;
 }
+
 .cardHeader {
-    margin-left: 20px;
+    padding-left: 10px;
 }
-.postContainer {
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
-    justify-items: center;
-    grid-gap: 10px;
-}
+
 .postContainer1 {
     display: grid;
     grid-template-columns: 1fr;
     justify-items: center;
     grid-gap: 10px;
-}
-.postImg {
-    width: 16vw;
-    min-height: 50vh;
-}
-.postLink {
-    font-size: 16px;
-    text-align: center;
-    padding: 0;
-    margin: 0;
 }
 
 .spinner {
@@ -139,4 +139,16 @@
     right: 0;
     left: 0;
     margin: auto
+}
+
+.favoritePost {
+    width: 200px;
+    height: auto;
+    border-radius: 15px;
+    margin-bottom: 15px;
+}
+
+.boardLink {
+    text-decoration: none;
+    color: black;
 }

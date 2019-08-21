@@ -1,4 +1,4 @@
-const { User, Follow } = require ('../../src/models');
+const { User, Follow, Board, Post } = require ('../../src/models');
 const { request, authentication_setup, addBoardandPost, addUser } = require ('../utils/common');
 
 const chai = require('chai');
@@ -17,6 +17,8 @@ describe('User Authenticated Routes', () => {
     after(async () => {
         User.collection.drop();
         Follow.collection.drop ();
+        Board.collection.drop ();
+        Post.collection.drop ();
     });
 
     describe('Update profile', () => {

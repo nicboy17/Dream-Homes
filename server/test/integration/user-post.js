@@ -1,4 +1,4 @@
-const { User }  = require('../../src/models');
+const { User, Board, Post } = require ('../../src/models');
 const { request, authentication_setup, addBoardandPost } = require ('../utils/common');
 
 const chai = require('chai');
@@ -14,6 +14,8 @@ describe('User Post Routes', () => {
 
     after(async () => {
         User.collection.drop();
+        Board.collection.drop ();
+        Post.collection.drop ();
     });
 
     describe('Create User Post', () => {

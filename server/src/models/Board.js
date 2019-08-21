@@ -14,7 +14,7 @@ const BoardSchema = new Schema({
     posts: [
         {
             type: Schema.Types.ObjectId,
-            ref:'post'
+            ref: 'posts'
         }
     ],
     date: {
