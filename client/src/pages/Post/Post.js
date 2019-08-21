@@ -27,11 +27,11 @@ const Post = ({ post, boards, handleSelectBoard, handleSave, value, profileImage
     return (
         <Grid container direction="row" justify="center">
             <Grid item xs={6}>
-                <img src={post.image} alt={post.title} className={classes.image}/>
+                <img src={post.image} alt={post.title} className={classes.image} />
             </Grid>
             <Grid item xs={6}>
                 <div className={classes.info}>
-                    <PostDetails post={post} profileImage = {profileImage} />
+                    <PostDetails post={post} profileImage={profileImage}/>
                     <BoardList
                         boards={boards}
                         value={value}
