@@ -69,6 +69,18 @@
     font-weight: bold;
     margin-right: 10px;
 }
+.activeTab:hover {
+    cursor: pointer;
+}
+.activeTab:focus {
+    outline: none;
+}
+.tab:hover {
+    cursor: pointer;
+}
+.tab:focus {
+    outline: none;
+}
 .activePanel {
     display: grid;
     justify-items: center;

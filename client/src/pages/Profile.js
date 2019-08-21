@@ -240,7 +240,7 @@ class Profile extends Component {
                                 Boards
                             </button>
                             <button className='activeTab' onClick={() => this.toggle()}>
-                                My Posts
+                                Posts
                             </button>
                         </div>
                         <div />
