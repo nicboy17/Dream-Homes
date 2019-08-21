@@ -22,17 +22,17 @@ const useStyles = makeStyles(theme => ({
         width: '60%',
         textAlign: 'center',
         backgroundColor: 'rgba(0, 0, 0, 0.6)',
-        borderRadius: '25px',
+        borderRadius: '25px'
     },
     deleteIconContainer: {
         float: 'right',
         position: 'absolute',
         right: 10,
         top: 10,
-        backgroundColor: 'rgba(0,0,0,0.6)',
+        backgroundColor: 'rgba(0,0,0,0.6)'
     },
     deleteIcon: {
-        color: 'white',
+        color: 'white'
     },
     imageContainer: {
         marginBottom: '7.5px',
@@ -41,7 +41,7 @@ const useStyles = makeStyles(theme => ({
     image: {
         width: '20vw',
         height: 'auto',
-        borderRadius: '1vw',
+        borderRadius: '1vw'
     },
     masonry: {
         margin: '0 auto',
@@ -56,15 +56,15 @@ const Posts = ({ posts }) => {
 
     const images = posts.map((post, i) => {
         return (
-                <div className={classes.imageContainer}>
-                    <Link to={'/posts/' + post._id} key={i}>
-                        <img src={post.image} alt={post.title} className={classes.image}/>
-                        <p className={classes.title}>{post.title}</p>
-                    </Link>
-                    <IconButton className={classes.deleteIconContainer} size="small">
-                        <DeleteIcon className={classes.deleteIcon}/>
-                    </IconButton>
-                </div>
+            <div className={classes.imageContainer} key={i}>
+                <Link to={'/posts/' + post._id}>
+                    <img src={post.image} alt={post.title} className={classes.image}/>
+                    <p className={classes.title}>{post.title}</p>
+                </Link>
+                <IconButton className={classes.deleteIconContainer} size="small">
+                    <DeleteIcon className={classes.deleteIcon}/>
+                </IconButton>
+            </div>
         );
     });
 

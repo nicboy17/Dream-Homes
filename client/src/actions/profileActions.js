@@ -185,4 +185,3 @@ export const favouritePost = (username, post) => async dispatch => {
         console.log('Something went wrong with favouriting this post');
     }
 };
-

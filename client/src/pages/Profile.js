@@ -128,7 +128,7 @@ class Profile extends Component {
                         </Link>
                         <div style={{
                             display: 'grid',
-                            gridTemplateColumns: '1fr 1fr',
+                            gridTemplateColumns: '1fr 1fr'
                         }}
                         >
                             <div>
@@ -142,13 +142,13 @@ class Profile extends Component {
                             <div style={{
                                 display: 'grid',
                                 alignContent: 'center',
-                                justifyContent: 'end',
+                                justifyContent: 'end'
                             }}>
                                 <IconButton
-                                size='medium'
-                                style={{
-                                    marginRight: '10px',
-                                }}
+                                    size='medium'
+                                    style={{
+                                        marginRight: '10px'
+                                    }}
                                 >
                                     <DeleteIcon/>
                                 </IconButton>
@@ -162,7 +162,7 @@ class Profile extends Component {
 
     renderPosts = () => {
         const { posts } = this.props.profileStore.profileInfo;
-        return posts.length === 0 ? <h2>There are no posts</h2> : <div style={{width: '100vw'}}><Posts posts={posts} /></div>;
+        return posts.length === 0 ? <h2>There are no posts</h2> : <div style={{ width: '100vw' }}><Posts posts={posts} /></div>;
     };
 
     renderFavorites = () => {
