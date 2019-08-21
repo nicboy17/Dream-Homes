@@ -119,7 +119,7 @@ class Profile extends Component {
             boards.map((board, i) => {
                 return (
                     <Card key={i} className='card'>
-                        <Link to='/board/posts_in_board' className='boardLink'>
+                        <Link to={{ pathname: `/board/${board._id}`, state: { board } }} className='boardLink'>
                             <CardActionArea>
                                 <CardMedia className='cardImg' image={house} />
                                 <Typography variant='h6' className='cardHeader'>
