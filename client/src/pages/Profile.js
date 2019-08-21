@@ -25,6 +25,7 @@ import Posts from '../components/Posts/Posts';
 import _ from 'lodash';
 import './stylesheet/Profile.css';
 import Masonry from 'react-masonry-component';
+import Tooltip from '@material-ui/core/Tooltip';
 
 class Profile extends Component {
     state = {
@@ -101,11 +102,16 @@ class Profile extends Component {
 
     renderFollowButton = () => {
         return this.checkFollowing() ? (
-            <Button className='followButton' color='primary' onClick={() => this.onFollowPress()}>
+            <Button className="followButton" color="primary" onClick={() => this.onFollowPress()}>
                 Follow!
             </Button>
         ) : (
-            <Button className='followButton' color='primary' variant={'contained'} onClick={() => this.onUnfollowPress()}>
+            <Button
+                className="followButton"
+                color="primary"
+                variant={'contained'}
+                onClick={() => this.onUnfollowPress()}
+            >
                 Stop Following!
             </Button>
         );
@@ -118,14 +124,17 @@ class Profile extends Component {
         ) : (
             boards.map((board, i) => {
                 return (
-                    <Card key={i} className='card'>
-                        <Link to={{ pathname: `/board/${board._id}`, state: { board } }} className='boardLink'>
+                    <Card key={i} className="card">
+                        <Link
+                            to={{ pathname: `/board/${board._id}`, state: { board } }}
+                            className="boardLink"
+                        >
                             <CardActionArea>
-                                <CardMedia className='cardImg' image={house} />
-                                <Typography variant='h6' className='cardHeader'>
+                                <CardMedia className="cardImg" image={house} />
+                                <Typography variant="h6" className="cardHeader">
                                     {board['title']}
                                 </Typography>
-                                <Typography variant='body1' className='cardHeader'>
+                                <Typography variant="body1" className="cardHeader">
                                     {board['posts'].length} posts
                                 </Typography>
                             </CardActionArea>
@@ -144,22 +153,20 @@ class Profile extends Component {
     renderFavorites = () => {
         const favoritePosts = [];
         const favorites = favoritePosts.map(function (el) {
-            return (
-                <img className='favoritePost' alt = '' src={el} key={el}></img>
-            );
+            return <img className="favoritePost" alt="" src={el} key={el} />;
         });
         return favoritePosts.length === 0 ? (
             <h2>You have no favorite posts</h2>
         ) : (
             <Masonry
-                className='masonry'
+                className="masonry"
                 elementType={'div'}
                 options={{ fitWidth: true, gutter: 15 }}
             >
                 {favorites}
             </Masonry>
         );
-    }
+    };
 
     renderCreateButtons = () => {
         const {
@@ -176,7 +183,7 @@ class Profile extends Component {
         return (
             <>
                 <Button
-                    color='primary'
+                    color="primary"
                     onClick={() => this.onCreateBoardPress()}
                     style={{
                         margin: '10px'
@@ -185,7 +192,7 @@ class Profile extends Component {
                     Create Board
                 </Button>
                 <Button
-                    color='primary'
+                    color="primary"
                     variant={'contained'}
                     onClick={() => this.onCreatePostPress()}
                     style={{
@@ -236,12 +243,14 @@ class Profile extends Component {
                 <Route path="/profile/:username/board/create" component={BoardDialog} />
                 <div className="subHeader">
                     <div className="nameContainer">
-                        <Avatar
-                            className="subHeaderIcon"
-                            component={Link}
-                            src={profileInfo.profile}
-                            to={'/profile/' + profileInfo.username + '/edit'}
-                        />
+                        <Tooltip title="Edit Profile">
+                            <Avatar
+                                className="subHeaderIcon"
+                                component={Link}
+                                src={profileInfo.profile}
+                                to={'/profile/' + profileInfo.username + '/edit'}
+                            />
+                        </Tooltip>
                         <div>
                             <h3 className="profileName">{profileInfo.name}</h3>
                             <h5 className="profileFollowers">
@@ -257,7 +266,7 @@ class Profile extends Component {
                     <div className="tabSection">
                         <div>
                             <Button
-                                color='primary'
+                                color="primary"
                                 variant={'contained'}
                                 style={{
                                     margin: '10px'
@@ -266,7 +275,7 @@ class Profile extends Component {
                                 Boards
                             </Button>
                             <Button
-                                color='primary'
+                                color="primary"
                                 onClick={() => this.togglePosts()}
                                 style={{
                                     margin: '10px'
@@ -275,7 +284,7 @@ class Profile extends Component {
                                 Posts
                             </Button>
                             <Button
-                                color='primary'
+                                color="primary"
                                 onClick={() => this.toggleFavorites()}
                                 style={{
                                     margin: '10px'
@@ -300,7 +309,7 @@ class Profile extends Component {
                     <div className="tabSection">
                         <div>
                             <Button
-                                color='primary'
+                                color="primary"
                                 onClick={() => this.toggleBoards()}
                                 style={{
                                     margin: '10px'
@@ -309,7 +318,7 @@ class Profile extends Component {
                                 Boards
                             </Button>
                             <Button
-                                color='primary'
+                                color="primary"
                                 variant={'contained'}
                                 style={{
                                     margin: '10px'
@@ -318,7 +327,7 @@ class Profile extends Component {
                                 Posts
                             </Button>
                             <Button
-                                color='primary'
+                                color="primary"
                                 onClick={() => this.toggleFavorites()}
                                 style={{
                                     margin: '10px'
@@ -329,25 +338,27 @@ class Profile extends Component {
                         </div>
                         <div />
                     </div>
-                    <div className='Panel'>
+                    <div className="Panel">
                         <div
                             className={
                                 profileInfo.posts.length === 0 ? 'postContainer1' : 'postContainer'
                             }
                         >
-                            <div style={{
-                                width: '90vw'
-                            }}>
+                            <div
+                                style={{
+                                    width: '90vw'
+                                }}
+                            >
                                 {this.renderPosts()}
                             </div>
                         </div>
                     </div>
                 </div>
                 <div style={{ display: this.state.activePanel === 'favorite' ? 'grid' : 'none' }}>
-                    <div className='tabSection'>
+                    <div className="tabSection">
                         <div>
                             <Button
-                                color='primary'
+                                color="primary"
                                 onClick={() => this.toggleBoards()}
                                 style={{
                                     margin: '10px'
@@ -356,7 +367,7 @@ class Profile extends Component {
                                 Boards
                             </Button>
                             <Button
-                                color='primary'
+                                color="primary"
                                 onClick={() => this.togglePosts()}
                                 style={{
                                     margin: '10px'
@@ -365,7 +376,7 @@ class Profile extends Component {
                                 Posts
                             </Button>
                             <Button
-                                color='primary'
+                                color="primary"
                                 variant={'contained'}
                                 style={{
                                     margin: '10px'
@@ -376,9 +387,7 @@ class Profile extends Component {
                         </div>
                         <div />
                     </div>
-                    <div className='activePanel'>
-                        {this.renderFavorites()}
-                    </div>
+                    <div className="activePanel">{this.renderFavorites()}</div>
                 </div>
                 {this.renderSnackBarError()}
                 {/* <SnackBar variant = 'success' message = 'hello' open ={this.state.SnackBar}/> */}
