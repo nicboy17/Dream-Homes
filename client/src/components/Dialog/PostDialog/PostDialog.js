@@ -124,13 +124,13 @@ class PostDialog extends React.Component {
         if (image.length < 1) {
             this.setState({ imageError: 'Please include atleast one image', SnackBar: true });
         }
-        if (title.length < 3 || title.length > 15) {
+        else if (title.length < 3 || title.length > 15) {
             this.setState({ titleError: 'Must be atleast 3 or less than 15 characters' });
         }
-        if (link.length < 3 || link.length > 15) {
+        else if (link.length < 3 || link.length > 15) {
             this.setState({ linkError: 'Must be atleast 3 or less than 15 characters' });
         }
-        if (description.length < 3 || description.length > 200) {
+        else if (description.length < 3 || description.length > 200) {
             this.setState({ descriptionError: 'Must be atleast 3 to 200 characters' });
         } else {
             const formData = createFormData({ title, link, description, image, tags });
