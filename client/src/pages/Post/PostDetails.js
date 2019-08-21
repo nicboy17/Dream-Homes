@@ -10,7 +10,6 @@ import { withRouter } from 'react-router-dom';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { favouritePost } from '../../actions/profileActions';
-import Button from '@material-ui/core/Button';
 
 const useStyles = makeStyles(theme => ({
     author: {
