@@ -4,6 +4,7 @@ import { Typography, Grid } from '@material-ui/core';
 import Avatar from '@material-ui/core/Avatar';
 import face from '../../assets/face.jpg';
 import moment from 'moment';
+import Button from '@material-ui/core/Button';
 
 const useStyles = makeStyles(theme => ({
     author: {
@@ -23,16 +24,6 @@ const useStyles = makeStyles(theme => ({
         fontSize: 10,
         marginBottom: '1rem',
         fontStyle: 'oblique'
-    },
-    favorite: {
-        background: 'white',
-        border: '1px solid lightgrey',
-        borderRadius: '25px',
-        padding: '15px',
-        '&:hover': {
-            background: 'rgb(225, 225, 225)',
-            cursor: 'pointer'
-        }
     }
 }));
 
@@ -51,7 +42,7 @@ const PostDetails = ({ post, profileImage }) => {
                 <Typography variant="subtitle2" component="subtitle"
                     className={classes.text}>{post.description}</Typography>
                 <p className={classes.date}>{moment(post.date).format('MMMM Do YYYY, h:mm a')}</p>
-                <button className={classes.favorite}>Favorite This Post!</button>
+                <Button>Favorite This Post!</Button>
             </Grid>
         </div>
     );

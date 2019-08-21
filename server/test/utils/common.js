@@ -35,15 +35,23 @@ module.exports = {
 
         return { board, post };
     },
-    addUser: async () => {
-        const user = await User.create ({
-            name: 'test user',
-            username: 'testing123',
-            email: 'testing123@gmail.com',
-            password: 'Password2'
+    addPostToBoard: async (id) => {
+        const post = await Post.create ({
+            title: 'valid',
+            description: 'valid post',
+            link: 'valid link',
+            tags: [],
+            user: id,
+            image: 'image'
         });
 
-        return user._id;
+        const board = await Board.create ({
+            title: 'valid board',
+            user: id,
+            posts: [post._id]
+        });
+
+        return { board, post };
     },
     addUser: async () => {
         const user = await User.create ({
