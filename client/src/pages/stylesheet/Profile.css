@@ -6,21 +6,25 @@
     justify-items: center;
     border-bottom: 1px solid lightgrey;
 }
+
 .subHeaderIcon {
     width: 100px !important;
     height: 100px !important;
     border-radius: 50px !important;
 }
+
 .nameContainer {
     display: grid;
     grid-template-columns: 1fr 1fr;
     justify-items: center;
     align-items: center;
 }
+
 .profileName {
     margin: 0;
     padding: 0;
 }
+
 .profileFollowers {
     margin: 0;
     padding: 0;
@@ -45,12 +49,32 @@
 .buttonStyle {
     margin: 0 0.5rem;
 }
+
 .tabSection {
     min-height: 25vh;
     display: grid;
     grid-template-columns: 1fr 1fr;
     align-items: center;
     justify-items: center;
+}
+
+.tab {
+    background: white;
+    border: 1px solid lightgrey;
+    border-radius: 25px;
+    padding: 10px 20px 10px 20px;
+    font-weight: bold;
+    margin-right: 10px;
+}
+
+.activeTab {
+    background: black;
+    color: white;
+    border: none;
+    border-radius: 25px;
+    padding: 10px 20px 10px 20px;
+    font-weight: bold;
+    margin-right: 10px;
 }
 
 .activePanel {
@@ -71,13 +95,16 @@
     justify-items: center;
     grid-gap: 20px;
 }
+
 .card {
     height: 42vh;
     width: 26vw;
 }
+
 .cardImg {
     height: 32vh;
 }
+
 .cardHeader {
     padding-left: 10px;
 }

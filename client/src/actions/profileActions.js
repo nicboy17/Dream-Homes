@@ -142,3 +142,11 @@ export const editProfile = (formData, username) => async dispatch => {
         });
     }
 };
+
+export const favouritePost = (username, post) => async dispatch => {
+    try {
+        await axios.post(`/users/${username}/favourite`, { post });
+    } catch (err) {
+        console.log('Something went wrong with favouriting this post');
+    }
+};

@@ -142,7 +142,7 @@ class Profile extends Component {
         const favoritePosts = [];
         const favorites = favoritePosts.map(function (el) {
             return (
-                <img className='favoritePost' src={el} key={el}></img>
+                <img className='favoritePost' alt = '' src={el} key={el}></img>
             );
         });
         return favoritePosts.length === 0 ? (
@@ -317,7 +317,8 @@ class Profile extends Component {
                         </div>
                         <div />
                     </div>
-                    <div className='activePanel'>
+                    <div className='
+Panel'>
                         <div
                             className={
                                 profileInfo.posts.length === 0 ? 'postContainer1' : 'postContainer'
