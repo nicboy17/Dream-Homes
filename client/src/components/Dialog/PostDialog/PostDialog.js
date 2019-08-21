@@ -109,7 +109,7 @@ class PostDialog extends React.Component {
             return (
                 <div className="smallText">
                     <div style={{ textAlign: 'center', fontSize: 14 }}>
-                        <h1 style={{ fontSize: 14 }}>Maximum 5 files</h1>
+                        {/* <h1 style={{ fontSize: 14 }}>Maximum 5 files</h1> */}
                         Use high-quality jpg files <br /> less than 32mb
                     </div>
                 </div>
@@ -120,8 +120,16 @@ class PostDialog extends React.Component {
     // Create post
     onCreatePress = e => {
         const {
-            title, link, description, username, image, board, tags,
-            titleError, linkError, descriptionError
+            title,
+            link,
+            description,
+            username,
+            image,
+            board,
+            tags,
+            titleError,
+            linkError,
+            descriptionError
         } = this.state;
         e.preventDefault();
         if (image.length < 1) {
@@ -136,8 +144,9 @@ class PostDialog extends React.Component {
         if (description.length < 3 || description.length > 200) {
             this.setState({ descriptionError: 'Must be atleast 3 to 200 characters' });
         } else if (image.length > 0 && !titleError && !linkError && !descriptionError) {
-            const formData = createFormData({ title, link, description, image, tags });
-            image.forEach(file => formData.append('image', file));
+            console.log(image);
+            const formData = createFormData({ title, link, description, image: image[0], tags });
+            // image.forEach(file => formData.append('image', file));
             this.props.createPost(formData, username, board);
             this.onCloseClick();
         }
@@ -174,6 +183,7 @@ class PostDialog extends React.Component {
                 return <Redirect to={redirect} />;
             }
         }
+        console.log(this.state.image);
         return (
             <Dialog
                 open={true}
