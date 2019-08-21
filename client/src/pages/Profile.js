@@ -14,6 +14,8 @@ import PostDialog from '../components/Dialog/PostDialog/PostDialog';
 import BoardDialog from '../components/Dialog/BoardDialog/BoardDialog';
 import EditPicUserDialog from '../components/Dialog/EditPicUserDialog/EditPicUserDialog';
 import Button from '@material-ui/core/Button';
+import IconButton from '@material-ui/core/IconButton';
+import DeleteIcon from '@material-ui/icons/Delete';
 import {
     getBoardsandPosts,
     followUser,
@@ -130,15 +132,37 @@ class Profile extends Component {
                             className="boardLink"
                         >
                             <CardActionArea>
-                                <CardMedia className="cardImg" image={house} />
-                                <Typography variant="h6" className="cardHeader">
+                                <CardMedia className='cardImg' image={house} />
+                            </CardActionArea>
+                        </Link>
+                        <div style={{
+                            display: 'grid',
+                            gridTemplateColumns: '1fr 1fr'
+                        }}
+                        >
+                            <div>
+                                <Typography variant='h6' className='cardHeader'>
                                     {board['title']}
                                 </Typography>
                                 <Typography variant="body1" className="cardHeader">
                                     {board['posts'].length} posts
                                 </Typography>
-                            </CardActionArea>
-                        </Link>
+                            </div>
+                            <div style={{
+                                display: 'grid',
+                                alignContent: 'center',
+                                justifyContent: 'end'
+                            }}>
+                                <IconButton
+                                    size='medium'
+                                    style={{
+                                        marginRight: '10px'
+                                    }}
+                                >
+                                    <DeleteIcon/>
+                                </IconButton>
+                            </div>
+                        </div>
                     </Card>
                 );
             })
@@ -147,7 +171,7 @@ class Profile extends Component {
 
     renderPosts = () => {
         const { posts } = this.props.profileStore.profileInfo;
-        return posts.length === 0 ? <h2>There are no posts</h2> : <Posts posts={posts} />;
+        return posts.length === 0 ? <h2>There are no posts</h2> : <div style={{ width: '100vw' }}><Posts posts={posts} /></div>;
     };
 
     renderFavorites = () => {
