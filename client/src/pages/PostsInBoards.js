@@ -16,6 +16,7 @@ class PostInBoards extends Component {
                 <img
                     src={el}
                     key = {el}
+                    alt = ''
                     style={{
                         width: '20vw',
                         height: 'auto',
