@@ -61,7 +61,7 @@ router.put('/:id/post', async (req, res) => {
 // @route    PUT boards/:id/remove
 // @desc     Add post to a board
 // @access   Private
-router.put('/:id/remove', [BoardValidation.getPosts, async (req, res) => {
+router.put('/:id/remove', [BoardValidation.removePost, async (req, res) => {
     try {
         const board = await Board.findOneAndUpdate({
             _id: req.params.id,

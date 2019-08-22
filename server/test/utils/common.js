@@ -63,5 +63,8 @@ module.exports = {
 
         return user._id;
     },
+    getBoard: async (id) => {
+        return await Board.findById(id).lean();
+    },
     request
 };
