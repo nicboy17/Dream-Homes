@@ -147,7 +147,7 @@ export const createPost = (formData, username, board) => async dispatch => {
             headers: { 'Content-Type': 'multipart/form-data' }
         });
         if (!_.isEmpty(board)) {
-            await axios.put(`/boards/${board}/post`);
+            await axios.put(`/boards/${board}/post`, { _id: res.data.post._id });
         }
         dispatch({
             type: ADD_POST_SUCCESS,
