@@ -22,26 +22,28 @@ class PostInBoards extends Component {
             boardStore: { board },
             history
         } = this.props;
-        const posts = board.posts.map(post => {
-            return (
-                <Tooltip
-                    title={
-                        <div>
-                            <h1>{post.title}</h1>
-                            <p>{post.description}</p>
-                        </div>
-                    }
-                    key={post._id}
-                >
-                    <img
-                        src={post.image}
-                        alt=""
-                        className="postImg"
-                        onClick={() => history.push(`/posts/${post._id}`)}
-                    />
-                </Tooltip>
-            );
-        });
+        const posts = _.isEmpty(board.posts)
+            ? []
+            : board.posts.map(post => {
+                return (
+                    <Tooltip
+                        title={
+                            <div>
+                                <h1>{post.title}</h1>
+                                <p>{post.description}</p>
+                            </div>
+                        }
+                        key={post._id}
+                    >
+                        <img
+                            src={post.image}
+                            alt=""
+                            className="postImg"
+                            onClick={() => history.push(`/posts/${post._id}`)}
+                        />
+                    </Tooltip>
+                );
+            });
         return board.posts.length === 0 ? (
             <h2
                 style={{
@@ -61,10 +63,9 @@ class PostInBoards extends Component {
         const {
             boardStore: { loading, board }
         } = this.props;
-        if (loading || _.isEmpty(board)) {
+        if (loading) {
             return <CircularProgress className="spinner" />;
         }
-        console.log(this.props.boardStore);
         return (
             <div>
                 <h1 className="boardTitle">{board.title}</h1>
