@@ -38,7 +38,6 @@ class App extends Component {
                             <Route exact path='/login' component={Login} />
                             <Route path='/posts/:id' component={PostPage} />
                             <Route
-                                exact
                                 path='/profile/:username'
                                 render={props => (
                                     <Profile key={props.match.params.username} {...props} />
