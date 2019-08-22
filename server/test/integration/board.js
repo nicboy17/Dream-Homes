@@ -52,4 +52,33 @@ describe ('User Board Routes', () => {
                 });
         });
     });
+
+    describe ('Delete board', () => {
+        it ('Should return valid', async () => {
+            return request
+                .delete (`/boards/${global['board']._id}`)
+                .set ({ 'access-token': global['token'] })
+                .expect (204);
+        });
+
+        it ('Should return no board', () => {
+            return request
+                .delete (`/boards/${global['board']._id}`)
+                .set ({ 'access-token': global['token'] })
+                .expect (404)
+                .then ((res) => {
+                    expect (res.body.success).to.be.false;
+                });
+        });
+
+        it ('Should return invalid', () => {
+            return request
+                .delete ('/boards/test')
+                .set ({ 'access-token': global['token'] })
+                .expect (422)
+                .then ((res) => {
+                    expect (res.body.success).to.be.false;
+                });
+        });
+    });
 });

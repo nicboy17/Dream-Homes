@@ -77,4 +77,20 @@ router.put('/:id/remove', [BoardValidation.getPosts, async (req, res) => {
     }
 }]);
 
+router.delete ('/:id', [BoardValidation.delete, async (req, res) => {
+    try {
+        const board = await Board.findOneAndDelete ({
+            _id: req.params.id,
+            user: req.decoded._id
+        }).lean ();
+        if (!board) {
+            return res.status (404).json ({ success: false, message: 'no board found' });
+        }
+
+        return res.status (204).json ({});
+    } catch (err) {
+        return res.status (400).json ({ success: false, err });
+    }
+}]);
+
 module.exports = router;
