@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import Masonry from 'react-masonry-component';
 import IconButton from '@material-ui/core/IconButton';
 import DeleteIcon from '@material-ui/icons/Delete';
+import DeleteButton from '../Buttons/DeleteButton';
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -66,12 +67,15 @@ const Posts = ({ posts }) => {
         return (
             <div className={classes.imageContainer} key={i}>
                 <Link to={'/posts/' + post._id}>
-                    <img src={post.image} alt={post.title} className={classes.image}/>
+                    <img src={post.image} alt={post.title} className={classes.image} />
                     <p className={classes.title}>{post.title}</p>
                 </Link>
-                <IconButton className={classes.deleteIconContainer} size="small">
-                    <DeleteIcon className={classes.deleteIcon}/>
-                </IconButton>
+                <DeleteButton
+                    item="posts"
+                    id={post._id}
+                    title={post.title}
+                    className={classes.deleteIconContainer}
+                />
             </div>
         );
     });
