@@ -19,7 +19,9 @@ import {
     EDIT_PROFILE_FAIL,
     FETCHING_PROFILE,
     CREATE_POST_LOADING,
-    CLEAR_ERROR
+    CLEAR_ERROR,
+    DELETE_FAIL,
+    DELETE_SUCCESS
 } from '../actions/types';
 import _ from 'lodash';
 
@@ -33,7 +35,7 @@ export default (state = INITIAL_STATE, action) => {
     switch (action.type) {
     case FETCHING_PROFILE:
     case CREATE_POST_LOADING:
-        return { ...state, loading: true };
+        return { ...state, loading: true, error: {} };
     case FETCH_PROFILE_SUCCESS:
         return { ...state, profileInfo: action.payload, loading: false };
     case FETCH_PROFILE_FAIL:
@@ -113,6 +115,21 @@ export default (state = INITIAL_STATE, action) => {
         return { ...state, error: action.payload.error };
     case FETCH_FOLLOWERS_SUCCESS:
         return { ...state, followerUsers: action.payload };
+    case DELETE_SUCCESS:
+        return {
+            ...state,
+            profileInfo: {
+                ...state.profileInfo,
+                [action.payload.item]: _.filter(
+                    state.profileInfo[action.payload.item],
+                    item => item._id !== action.payload.id
+                )
+            },
+            loading: false,
+            error: action.payload.error
+        };
+    case DELETE_FAIL:
+        return { ...state, error: action.payload.error };
     case CLEAR_ERROR:
         return { ...state, error: {} };
     default:
