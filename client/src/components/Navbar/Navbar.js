@@ -13,7 +13,7 @@ import Button from '@material-ui/core/Button';
 const useStyles = makeStyles(theme => ({
     header: {
         display: 'grid',
-        gridTemplateColumns: '5fr 3fr 6fr 2.5fr 2.5fr 0fr 3fr',
+        gridTemplateColumns: '5fr 3fr 6fr 3fr 3fr 0fr 3fr',
         minHeight: '16vh',
         justifyItems: 'center',
         alignItems: 'center'
@@ -97,14 +97,19 @@ const Navbar = ({ userStore, logout, history, location, searchPosts }) => {
                         </h5>
                     </div>
                     <div>
-                        <Button style={{
-                            border: 'none',
-                            padding: '0',
-                            borderRadius: '7.5px'
-                        }}
-                        >
-                            Following
-                        </Button>
+                        <Link
+                            style={{
+                                textDecoration: 'none'
+                            }}>
+                            <Button style={{
+                                border: 'none',
+                                padding: '0',
+                                borderRadius: '7.5px'
+                            }}
+                            >
+                                Following
+                            </Button>
+                        </Link>
                     </div>
                     <div />
                     <NavMenu

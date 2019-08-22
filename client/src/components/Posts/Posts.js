@@ -38,6 +38,9 @@ const useStyles = makeStyles(theme => ({
     imageContainer: {
         marginBottom: '7.5px',
         marginTop: '7.5px',
+        '&:hover': {
+            opacity: '0.9'
+        },
         '&:hover $title': {
             display: 'block'
         },
@@ -48,7 +51,8 @@ const useStyles = makeStyles(theme => ({
     image: {
         width: '20vw',
         height: 'auto',
-        borderRadius: '1vw'
+        borderRadius: '1vw',
+        boxShadow: '0px 1px 3px grey'
     },
     masonry: {
         margin: '0 auto',

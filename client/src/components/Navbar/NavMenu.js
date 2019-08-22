@@ -4,6 +4,7 @@ import { Link, withRouter } from 'react-router-dom';
 import Avatar from '@material-ui/core/Avatar';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
+import Button from '@material-ui/core/Button';
 
 const useStyles = makeStyles(theme => ({
     cornerIcon: {
@@ -67,9 +68,16 @@ const NavMenu = ({ authenticated, user, handleLogOutClicked, history }) => {
     } else {
         return (
             <>
-                <h5>
-                    <Link to='/login' style={{ textDecoration: 'none', color: 'black' }}>Log In</Link>
-                </h5>
+                <Link to='/login' style={{ textDecoration: 'none', color: 'black' }}>
+                    <Button
+                        style={{
+                            border: 'none',
+                            padding: '0',
+                            borderRadius: '7.5px'
+                        }}>
+                        Log In
+                    </Button>
+                </Link>
             </>
         );
     }
