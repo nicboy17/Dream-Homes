@@ -48,6 +48,7 @@ class Profile extends Component {
     onCreatePress = item => {
         this.props.history.push(`/profile/${this.state.username}/${item}/create`);
     };
+
     onCreateBoardPress = () => {
         this.props.history.push(`/profile/${this.state.username}/board/create`);
     };
@@ -150,11 +151,7 @@ class Profile extends Component {
                                     justifyContent: 'end'
                                 }}
                             >
-                                <DeleteButton
-                                    item = 'boards'
-                                    id = {board._id}
-                                    title = {board.title}
-                                />
+                                <DeleteButton item="boards" id={board._id} title={board.title} />
                             </div>
                         </div>
                     </Card>
@@ -391,7 +388,7 @@ class Profile extends Component {
                                 Boards
                             </Button>
                             <Button
-                                id = 'post'
+                                id="post"
                                 color="primary"
                                 onClick={() => this.toggleTabs('post')}
                                 style={{

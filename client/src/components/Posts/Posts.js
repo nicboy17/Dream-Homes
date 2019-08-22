@@ -2,8 +2,6 @@ import React from 'react';
 import { makeStyles } from '@material-ui/styles';
 import { Link } from 'react-router-dom';
 import Masonry from 'react-masonry-component';
-import IconButton from '@material-ui/core/IconButton';
-import DeleteIcon from '@material-ui/icons/Delete';
 import DeleteButton from '../Buttons/DeleteButton';
 
 const useStyles = makeStyles(theme => ({
