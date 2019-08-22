@@ -28,7 +28,7 @@ const useStyles = makeStyles(theme => ({
         display: 'none',
         float: 'right',
         position: 'absolute',
-        right: 10,
+        right: 0,
         top: 10,
         backgroundColor: 'rgba(0,0,0,0.6)'
     },
