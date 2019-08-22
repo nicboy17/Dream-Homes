@@ -19,7 +19,7 @@ import PostInBoards from './pages/PostsInBoards';
 
 import NavBar from './components/Navbar/Navbar';
 
-import FollowersPage from './pages/FollowersPage'
+import FollowersPage from './pages/FollowersPage';
 
 class App extends Component {
     constructor (props) {

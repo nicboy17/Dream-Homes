@@ -1,18 +1,18 @@
-import React, {Component} from 'react'
+import React, { Component } from 'react';
 
 class FollowersPage extends Component {
-    constructor(props) {
-        super(props)
+    constructor (props) {
+        super(props);
         this.state = {
             placeholder: ''
-        }
+        };
     }
 
-    render() {
+    render () {
         return (
             <h1>This is the followers page</h1>
-        )
+        );
     }
 }
 
-export default FollowersPage
+export default FollowersPage;

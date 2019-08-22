@@ -70,11 +70,11 @@ const NavMenu = ({ authenticated, user, handleLogOutClicked, history }) => {
             <>
                 <Link to='/login' style={{ textDecoration: 'none', color: 'black' }}>
                     <Button
-                    style={{
-                        border: 'none',
-                        padding: '0',
-                        borderRadius: '7.5px'
-                    }}>
+                        style={{
+                            border: 'none',
+                            padding: '0',
+                            borderRadius: '7.5px'
+                        }}>
                         Log In
                     </Button>
                 </Link>

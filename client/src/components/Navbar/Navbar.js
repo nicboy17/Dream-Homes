@@ -97,10 +97,10 @@ const Navbar = ({ userStore, logout, history, location, searchPosts }) => {
                         </h5>
                     </div>
                     <div>
-                        <Link 
-                        style={{
-                            textDecoration: 'none'
-                        }}>
+                        <Link
+                            style={{
+                                textDecoration: 'none'
+                            }}>
                             <Button style={{
                                 border: 'none',
                                 padding: '0',
