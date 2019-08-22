@@ -10,7 +10,7 @@ class FollowersPage extends Component {
 
     render() {
         return (
-            <h1>HELLO WORLD!</h1>
+            <h1>This is the followers page</h1>
         )
     }
 }
