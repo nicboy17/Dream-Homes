@@ -59,7 +59,7 @@ router.put('/:id/post', async (req, res) => {
 });
 
 // @route    PUT boards/:id/remove
-// @desc     Add post to a board
+// @desc     Remove post from a board
 // @access   Private
 router.put('/:id/remove', [BoardValidation.removePost, async (req, res) => {
     try {

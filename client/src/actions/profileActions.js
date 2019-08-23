@@ -187,7 +187,7 @@ export const deleteItem = (item, id) => async dispatch => {
         dispatch({
             type: CLEAR_ERROR
         });
-        await axios.delete(`/${item}/${id}`);
+        // await axios.delete(`/${item}/${id}`);
         dispatch({
             type: DELETE_SUCCESS,
             payload: {

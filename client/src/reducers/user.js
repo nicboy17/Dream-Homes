@@ -12,7 +12,13 @@ import {
     FETCH_FOLLOWINGS_SUCCESS,
     FETCH_FOLLOWINGS_FAIL,
     FETCH_FOLLOWERS_SUCCESS,
-    FETCH_FOLLOWERS_FAIL
+    FETCH_FOLLOWERS_FAIL,
+    DELETE_SUCCESS,
+    DELETE_FAIL,
+    ADD_BOARD_SUCCESS,
+    ADD_BOARD_ERROR,
+    ADD_POST_SUCCESS,
+    ADD_POST_ERROR, CLEAR_ERROR
 } from '../actions/types';
 import _ from 'lodash';
 
@@ -69,6 +75,46 @@ export default (state = initialState, action) => {
         return { ...state, error: action.payload.error };
     case FETCH_FOLLOWERS_SUCCESS:
         return { ...state, followers: action.payload };
+        case ADD_BOARD_SUCCESS:
+            state.user.boards.push(response.board);
+            localStorage.setItem('user', JSON.stringify(state.user));
+            return { ...state };
+        case ADD_BOARD_ERROR:
+            return { ...state, error: action.err };
+        case ADD_POST_SUCCESS:
+            state.user.posts.push(response.post);
+            localStorage.setItem('user', JSON.stringify(state.user));
+            return {
+                ...state,
+                loading: false,
+                error: response.error
+            };
+        case ADD_POST_ERROR:
+            return { ...state, error: action.err, loading: false };
+        case DELETE_SUCCESS:
+            let boards = state.user.boards;
+            if (action.payload.item === 'posts') {
+                boards = state.user.boards.map(board => {
+                    board.posts = board.posts.filter(post => post._id !== action.payload.id);
+                    return board;
+                });
+            }
+            const user = {
+                ...state.user,
+                boards,
+                [action.payload.item]: state.user[action.payload.item].filter(item => item._id !== action.payload.id)
+            };
+            localStorage.setItem('user', JSON.stringify(user));
+            return {
+                ...state,
+                user,
+                loading: false,
+                error: action.payload.error
+            };
+        case DELETE_FAIL:
+            return { ...state, error: action.payload.error };
+        case CLEAR_ERROR:
+            return { ...state, error: {} };
     default:
         return state;
     }

@@ -68,11 +68,12 @@ class QuizDialog extends React.Component {
         })
             .then(res => console.log(res))
             .catch(err => console.log(err));
-        this.props.history.push(`/profile/${this.state.username}`);
+        this.handleClose();
     }
 
     handleClose = () => {
         this.setState({ open: false });
+        this.props.history.push(`/profile/${this.state.username}`);
     };
 
     render () {

@@ -27,7 +27,7 @@ const BoardPreview = ({ posts, className }) => {
     const len = posts.length;
 
     for (let i = 0; i < 9 - len; i++) {
-        posts.push({ image: placeholder, _id: 'placeholder' });
+        posts.push({ image: placeholder, _id: `placeholder${i}` });
     }
 
     const images = posts.map((post, i) => {

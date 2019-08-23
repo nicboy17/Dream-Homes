@@ -49,12 +49,12 @@ class Profile extends Component {
 
     onFollowPress = () => {
         const {
-            userStore: { authenticated, user },
-            profileStore: { profileInfo },
+            userStore: { authenticated },
+            user,
             history,
             followUser
         } = this.props;
-        const followee = profileInfo._id;
+        const followee = user(this.state.username)._id;
         const currentUserId = user._id;
         if (!authenticated) {
             history.push('/login');
@@ -66,24 +66,22 @@ class Profile extends Component {
 
     onUnfollowPress = () => {
         const {
-            userStore: { user },
-            profileStore: { profileInfo },
+            userStore,
+            user,
             unfollowUser
         } = this.props;
-        const currentUserId = user._id;
-        const followee = profileInfo._id;
+        const currentUserId = userStore.user._id;
+        const followee = user(this.state.username)._id;
         unfollowUser(followee, currentUserId);
         this.setState({ followedOrNot: !this.state.followedOrNot });
     };
 
     checkFollowing = () => {
         const {
-            userStore: { user },
-            profileStore: {
-                profileInfo: { followers }
-            }
+            userStore,
+            user
         } = this.props;
-        const res = _.filter(followers, follower => follower._id === user._id);
+        const res = user(this.state.username).followers.filter(follower => follower._id === userStore.user._id);
         return _.isEmpty(res);
     };
 
@@ -109,7 +107,7 @@ class Profile extends Component {
     };
 
     renderBoards = () => {
-        const { boards } = this.props.profileStore.profileInfo;
+        const { boards } = this.props.user(this.state.username);
         return boards.length === 0 ? (
             <h2>There are no boards</h2>
         ) : (
@@ -132,10 +130,10 @@ class Profile extends Component {
                         >
                             <div>
                                 <Typography variant="h6" className="cardHeader">
-                                    {board['title']}
+                                    {board.title}
                                 </Typography>
                                 <Typography variant="body1" className="cardHeader">
-                                    {board['posts'].length} posts
+                                    {board.posts.length} posts
                                 </Typography>
                             </div>
                             <div
@@ -155,7 +153,7 @@ class Profile extends Component {
     };
 
     renderPosts = () => {
-        const { posts } = this.props.profileStore.profileInfo;
+        const { posts } = this.props.user(this.state.username);
         return posts.length === 0 ? (
             <h2>There are no posts</h2>
         ) : (
@@ -166,21 +164,21 @@ class Profile extends Component {
     };
 
     renderFavorites = () => {
-        const { favourites } = this.props.profileStore.profileInfo;
+        const { favourites } = this.props.user(this.state.username);
         return favourites.length === 0 ? <h2>There are no favorite posts</h2>
             : <div style={{ width: '100vw' }}><Posts posts={favourites}/></div>;
     };
 
     renderCreateButtons = () => {
         const {
-            userStore: { user, authenticated },
-            profileStore: { profileInfo }
+            userStore,
+            user
         } = this.props;
-        if (authenticated) {
-            if (profileInfo._id !== user._id) {
+        if (userStore.authenticated) {
+            if (user(this.state.username)._id !== userStore.user._id) {
                 return <>{this.renderFollowButton()}</>;
             }
-        } else if (!authenticated) {
+        } else if (!userStore.authenticated) {
             return <>{this.renderFollowButton()}</>;
         }
         return (
@@ -230,9 +228,10 @@ class Profile extends Component {
 
     render () {
         const {
-            profileStore: { profileInfo, loading }
+            user,
+            profileStore: { loading }
         } = this.props;
-        if (_.isUndefined(profileInfo) || loading) {
+        if (_.isUndefined(user(this.state.username)) || loading) {
             return <CircularProgress className="spinner" />;
         }
         return (
@@ -250,15 +249,15 @@ class Profile extends Component {
                             <Avatar
                                 className="subHeaderIcon"
                                 component={Link}
-                                src={profileInfo.profile}
-                                to={'/profile/' + profileInfo.username + '/edit'}
+                                src={user(this.state.username).profile}
+                                to={'/profile/' + user(this.state.username).username + '/edit'}
                             />
                         </Tooltip>
                         <div>
-                            <h3 className="profileName">{profileInfo.name}</h3>
+                            <h3 className="profileName">{user(this.state.username).name}</h3>
                             <h5 className="profileFollowers">
-                                {profileInfo.followers} Followers |{' '}
-                                {profileInfo.following} Following
+                                {user(this.state.username).followers} Followers |{' '}
+                                {user(this.state.username).following} Following
                             </h5>
                         </div>
                     </div>
@@ -301,7 +300,7 @@ class Profile extends Component {
                     <div className="activePanel">
                         <div
                             className={
-                                profileInfo.boards.length === 0 ? 'gridContainer1' : 'gridContainer'
+                                user(this.state.username).boards.length === 0 ? 'gridContainer1' : 'gridContainer'
                             }
                         >
                             {this.renderBoards()}
@@ -344,7 +343,7 @@ class Profile extends Component {
                     <div className="Panel">
                         <div
                             className={
-                                profileInfo.posts.length === 0 ? 'postContainer1' : 'postContainer'
+                                user(this.state.username).posts.length === 0 ? 'postContainer1' : 'postContainer'
                             }
                         >
                             <div
@@ -401,7 +400,13 @@ class Profile extends Component {
 
 const mapStateToProps = state => ({
     userStore: state.UserStore,
-    profileStore: state.ProfileStore
+    profileStore: state.ProfileStore,
+    user: (username) => {
+        if (state.UserStore.authenticated && state.UserStore.user.username === username) {
+            return state.UserStore.user;
+        }
+        return state.ProfileStore.profileInfo;
+    }
 });
 
 const mapDispatchToProps = dispatch => {
