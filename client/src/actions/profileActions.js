@@ -48,16 +48,7 @@ export const fetchProfileInfo = username => async dispatch => {
             type: FETCHING_PROFILE
         });
         const res = await axios.get(`/users/${username}`);
-        const promises = [
-            axios.get(`/users/${res.data.user._id}/following`),
-            axios.get(`/users/${res.data.user._id}/followers`)
-        ];
-        const results = await Promise.all(promises);
-        const following = results[0].data.following;
-        const followers = results[1].data.followers;
         const profileInfo = res.data.user;
-        profileInfo['following'] = following;
-        profileInfo['followers'] = followers;
         dispatch({
             type: FETCH_PROFILE_SUCCESS,
             payload: profileInfo

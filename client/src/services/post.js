@@ -4,7 +4,7 @@ export const postService = {
     addPost: ({ post, username }) => {
         const formData = createFormData(post);
         return axios({
-            url: '/users/' + username + '/posts',
+            url: `/users/${username}/posts`,
             method: 'POST',
             data: formData,
             headers: { 'Content-Type': 'multipart/form-data' }

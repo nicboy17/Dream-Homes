@@ -10,9 +10,9 @@ const { auth } = require ('../middleware');
 // @access   Private
 router.get ('/:id/posts', [BoardValidation.getPosts, async (req, res) => {
     try {
-        const board = await Board.findOne ({
-            _id: req.params.id
-        }).populate ('posts', 'title image description tags').lean ();
+        const board = await Board.findOne({ _id: req.params.id })
+            .populate({ path: 'posts', select: 'title image description tags' })
+            .lean();
         if (!board) {
             return res.status (404).json ({ success: false, message: 'no board found' });
         } else if (!board.posts.length) {

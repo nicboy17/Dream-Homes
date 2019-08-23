@@ -2,7 +2,7 @@ import { axios } from './utils';
 
 export const boardService = {
     addBoard: ({ board, username }) => {
-        return axios.post('/users/' + username + '/board', board).then(res => {
+        return axios.post(`/users/${username}/board`, board).then(res => {
             return res.data;
         }).catch(err => {
             throw err;

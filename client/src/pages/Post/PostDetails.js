@@ -32,8 +32,9 @@ const useStyles = makeStyles(theme => ({
     }
 }));
 
-const PostDetails = ({ post, profileImage, history, favouritePost, match }) => {
+const PostDetails = ({ post, history, favouritePost, authenticated, match }) => {
     const classes = useStyles();
+    const placeholder = 'https://team-pineapple.s3.ca-central-1.amazonaws.com/placeholder.jpg';
 
     const onFavouritePress = () => {
         favouritePost(post.user.username, match.params.id);
@@ -52,7 +53,7 @@ const PostDetails = ({ post, profileImage, history, favouritePost, match }) => {
                 style={{ cursor: 'pointer' }}
             >
                 <Avatar
-                    src={profileImage}
+                    src={post.user.profile || placeholder}
                     alt={face}
                     component={'div'}
                     className={classes.avatar}
@@ -68,22 +69,20 @@ const PostDetails = ({ post, profileImage, history, favouritePost, match }) => {
                 </Typography>
                 <Typography className={classes.text}>{post.description}</Typography>
                 <p className={classes.date}>{moment(post.date).format('MMMM Do YYYY, h:mm a')}</p>
-                <Button className={classes.favorite} onClick={() => onFavouritePress()}>
-                    Favorite This Post!
-                </Button>
+                {
+                    authenticated
+                        ? <Button className={classes.favorite} onClick={() => onFavouritePress()}>Favorite This Post!</Button>
+                        : null
+                }
             </Grid>
         </div>
     );
 };
 
-const mapStateToProps = state => ({
-    userStore: state.UserStore
-});
-
 export default compose(
     withRouter,
     connect(
-        mapStateToProps,
+        null,
         { favouritePost }
     )
 )(PostDetails);

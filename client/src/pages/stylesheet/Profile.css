@@ -51,7 +51,7 @@
 }
 
 .tabSection {
-    min-height: 25vh;
+    min-height: 18vh;
     display: grid;
     grid-template-columns: 1fr 1fr;
     align-items: center;

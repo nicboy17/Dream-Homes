@@ -8,6 +8,7 @@ import Divider from '@material-ui/core/Divider';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import { getBoardsandPosts } from '../../actions/profileActions';
 import { boardService } from '../../services/board';
+import { fetchPosts } from '../../actions/post';
 
 const styles = theme => ({
     post: {
@@ -27,6 +28,9 @@ class PostPage extends React.Component {
     componentDidMount () {
         const id = this.props.match.params.id;
         this.setState({ id });
+        if (!this.props.post(id)) {
+            this.props.fetchPosts('', '', '');
+        }
     }
 
     handleChange = e => {
@@ -52,16 +56,13 @@ class PostPage extends React.Component {
     render () {
         const {
             classes,
-            profileStore,
-            userStore: { user },
+            userStore: { authenticated, user },
             post,
             morePosts,
-            match,
-            getBoardsandPosts
+            match
         } = this.props;
 
-        if (!profileStore.boards) {
-            getBoardsandPosts(user.username);
+        if (!post(match.params.id)) {
             return (
                 <div>
                     <CircularProgress
@@ -93,8 +94,8 @@ class PostPage extends React.Component {
                         handleSelectBoard={this.handleChange}
                         value={this.state.board}
                         post={post(match.params.id)}
-                        boards={profileStore.boards}
-                        profileImage = {profileStore.profile}
+                        boards={authenticated ? user.boards : []}
+                        authenticated={authenticated}
                     />
                 </div>
                 <Divider component={'hr'} />
@@ -109,26 +110,21 @@ class PostPage extends React.Component {
 const mapStateToProps = state => ({
     userStore: state.UserStore,
     post: id => {
-        return (
-            {
-                ...state.ProfileStore.posts.find(post => {
-                    return id === post._id;
-                }),
-                user: { ...state.UserStore.user }
-            } ||
-            state.ProfileStore.posts.find(post => {
-                return id === post._id;
-            })
-        );
+        if (state.posts.posts.length || state.UserStore.authenticated) {
+            return (
+                state.posts.posts.find(post => id === post._id) ||
+                state.UserStore.user.posts.find(post => id === post._id)
+            );
+        }
     },
-    morePosts: state.PostStore.morePosts,
-    profileStore: state.ProfileStore
+    morePosts: state.PostStore.morePosts
 });
 
 function mapDispatchToProps (dispatch) {
     return bindActionCreators(
         {
-            getBoardsandPosts
+            getBoardsandPosts,
+            fetchPosts
         },
         dispatch
     );

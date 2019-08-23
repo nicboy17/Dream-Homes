@@ -35,7 +35,21 @@ export const userService = {
         return null;
     },
     getBoardsandPosts: ({ username }) => {
-        return axios.get('/users/' + username).then(res => {
+        return axios.get(`/users/${username}`).then(res => {
+            return res.data;
+        }).catch(err => {
+            throw err;
+        });
+    },
+    getFollowers: ({ user }) => {
+        axios.get(`/users/${user}/following`).then(res => {
+            return res.data;
+        }).catch(err => {
+            throw err;
+        });
+    },
+    getFollowing: ({ user }) => {
+        axios.get(`/users/${user}/followers`).then(res => {
             return res.data;
         }).catch(err => {
             throw err;

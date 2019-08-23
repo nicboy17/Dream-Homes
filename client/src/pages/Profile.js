@@ -23,7 +23,6 @@ import {
 import Posts from '../components/Posts/Posts';
 import _ from 'lodash';
 import './stylesheet/Profile.css';
-import Masonry from 'react-masonry-component';
 import BoardPreview from '../components/Posts/BoardPreview';
 import Tooltip from '@material-ui/core/Tooltip';
 
@@ -37,7 +36,7 @@ class Profile extends Component {
     componentDidMount () {
         const username = this.props.match.params.username;
         this.setState({ username: username });
-        this.props.fetchProfileInfo(username);
+        this.props.getBoardsandPosts(username);
     }
 
     toggleTabs = item => {
@@ -46,14 +45,6 @@ class Profile extends Component {
 
     onCreatePress = item => {
         this.props.history.push(`/profile/${this.state.username}/${item}/create`);
-    };
-
-    onCreateBoardPress = () => {
-        this.props.history.push(`/profile/${this.state.username}/board/create`);
-    };
-
-    onCreatePostPress = () => {
-        this.props.history.push(`/profile/${this.state.username}/post/create`);
     };
 
     onFollowPress = () => {
@@ -97,6 +88,10 @@ class Profile extends Component {
     };
 
     renderFollowButton = () => {
+        if (!this.props.userStore.authenticated) {
+            return null;
+        }
+
         return this.checkFollowing() ? (
             <Button className="followButton" color="primary" onClick={() => this.onFollowPress()}>
                 Follow!
@@ -171,21 +166,9 @@ class Profile extends Component {
     };
 
     renderFavorites = () => {
-        const favoritePosts = [];
-        const favorites = favoritePosts.map(function (el) {
-            return <img className="favoritePost" alt="" src={el} key={el} />;
-        });
-        return favoritePosts.length === 0 ? (
-            <h2>You have no favorite posts</h2>
-        ) : (
-            <Masonry
-                className="masonry"
-                elementType={'div'}
-                options={{ fitWidth: true, gutter: 15 }}
-            >
-                {favorites}
-            </Masonry>
-        );
+        const { favourites } = this.props.profileStore.profileInfo;
+        return favourites.length === 0 ? <h2>There are no favorite posts</h2>
+            : <div style={{ width: '100vw' }}><Posts posts={favourites}/></div>;
     };
 
     renderCreateButtons = () => {
@@ -274,8 +257,8 @@ class Profile extends Component {
                         <div>
                             <h3 className="profileName">{profileInfo.name}</h3>
                             <h5 className="profileFollowers">
-                                {profileInfo.followers.length} Followers |{' '}
-                                {profileInfo.following.length} Following
+                                {profileInfo.followers} Followers |{' '}
+                                {profileInfo.following} Following
                             </h5>
                         </div>
                     </div>
@@ -411,7 +394,6 @@ class Profile extends Component {
                     <div className="activePanel">{this.renderFavorites()}</div>
                 </div>
                 {this.renderSnackBarError()}
-                {/* <SnackBar variant = 'success' message = 'hello' open ={this.state.SnackBar}/> */}
             </div>
         );
     }

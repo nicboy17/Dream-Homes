@@ -32,8 +32,12 @@ const useStyles = makeStyles(theme => ({
 }));
 
 // eslint-disable-next-line react/prop-types
-const BoardList = ({ boards, handleSelect, value, handleSave }) => {
+const BoardList = ({ boards, handleSelect, value, handleSave, visible }) => {
     const classes = useStyles();
+
+    if (!visible) {
+        return null;
+    }
 
     return (
         <form autoComplete='off'>

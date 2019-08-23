@@ -36,7 +36,7 @@ router.get ('/', [pub, async (req, res) => {
         } else {
             query = {};
         }
-        const posts = await Post.find(query);
+        const posts = await Post.find(query).populate({ path: 'user', select: 'username name profile' }).lean();
         res.send(posts);
     } catch (err) {
         res.status(500).send('Something went wrong with the server');

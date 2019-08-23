@@ -67,6 +67,7 @@ user.pre('save', function (next) {
     });
 });
 
+user.set('toObject', { virtuals: true });
 user.plugin(uniqueValidator, { type: 'mongoose-unique-validator' });
 user.loadClass(UserClass);
 module.exports = mongoose.model('users', user, 'users');

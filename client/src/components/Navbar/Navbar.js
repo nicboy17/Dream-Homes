@@ -98,6 +98,7 @@ const Navbar = ({ userStore, logout, history, location, searchPosts }) => {
                     </div>
                     <div>
                         <Link
+                            to={''}
                             style={{
                                 textDecoration: 'none'
                             }}>

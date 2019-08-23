@@ -13,13 +13,13 @@ const { auth, pub } = require ('../middleware');
 router.post('/register', [UserValidation.register, async (req, res) => {
     try{
         const user = await User.create(req.body);
-        res.status (201).json ({
+        return res.status(201).json({
             success: true,
             user: { ...user.toObject (), 'followers': 0, 'following': 0 },
             token: user.loginToken ()
         });
     } catch (err) {
-        res.status(400).json({ success: false, message: err.errors });
+        return res.status(400).json({ success: false, message: err.errors });
     }
 }]);
 
@@ -28,17 +28,21 @@ router.post('/register', [UserValidation.register, async (req, res) => {
 // @desc     login
 // @access   Public
 router.post('/login', [UserValidation.login, async (req, res) => {
-    const user = await User.findOne({ email: req.body.email }).exec();
+    const user = await User.findOne({ email: req.body.email })
+        .populate({ path: 'posts', populate: { path: 'user', select: 'username name profile' } })
+        .populate({ path: 'favourites', populate: { path: 'user', select: 'username name profile' } })
+        .populate({ path: 'boards', populate: { path: 'posts', select: '_id image', options: { limit: 9 } } })
+        .exec();
     if (!user) {
-        res.status(400).json({ success: false, message: 'Could not authenticate' });
+        return res.status(400).json({ success: false, message: 'Could not authenticate' });
     } else {
         const validPassword = await user.comparePassword(req.body.password);
         if (!validPassword) {
             res.status(400).json({ success: false, message: 'Could not authenticate' });
         } else {
-            res.status (200).json ({
+            return res.status(200).json({
                 success: true,
-                user: { ...user.toObject (), ...await user.follow () },
+                user: { ...user.toObject(), password: '', ...await user.follow() },
                 token: user.loginToken ()
             });
         }
@@ -52,14 +56,14 @@ router.get ('/:username', [pub, async (req, res) => {
     try {
         const user = await User.findOne({ username: req.params.username })
             .select('-password')
-            .populate('posts')
-            .populate('favourites')
+            .populate({ path: 'posts', populate: { path: 'user', select: 'username name profile' } })
+            .populate({ path: 'favourites', populate: { path: 'user', select: 'username name profile' } })
             .populate({ path: 'boards', populate: { path: 'posts', select: '_id image', options: { limit: 9 } } })
-            .lean();
+            .exec();
         if (!user) {
             return res.status(404).json({ success: false, message: 'User not found' });
         }
-        return res.status(200).json({ success: true, user });
+        return res.status(200).json({ success: true, user: { ...user.toObject(), ...await user.follow() } });
     } catch (err) {
         return res.status(400).json({ success: false, message: err });
     }

@@ -1,4 +1,4 @@
-import { put, takeLatest, call } from 'redux-saga/effects';
+import { put, takeLatest, call, select } from 'redux-saga/effects';
 import {
     LOGIN, LOGIN_SUCCESS, LOGIN_ERROR,
     GET_TOKEN, GET_TOKEN_SUCCESS,
@@ -6,6 +6,7 @@ import {
     LOGOUT, LOGOUT_SUCCESS
 } from '../actions/types';
 import { userService } from '../services/user';
+const getUserStore = (state) => state.UserStore;
 
 /*
 call user service login
@@ -50,11 +51,17 @@ export function * getTokenSaga () {
 }
 
 function * getBoardsandPosts (request) {
-    try {
-        const response = yield call(userService.getBoardsandPosts, { ...request });
-        yield put({ type: GET_USER_BOARDS_POSTS_SUCCESS, response });
-    } catch (err) {
-        yield put({ type: GET_USER_BOARDS_POSTS_ERROR });
+    const UserStore = yield select(getUserStore);
+
+    if (UserStore.authenticated && UserStore.user.username === request.username) {
+        yield put({ type: GET_USER_BOARDS_POSTS_SUCCESS, response: UserStore });
+    } else {
+        try {
+            const response = yield call(userService.getBoardsandPosts, { ...request });
+            yield put({ type: GET_USER_BOARDS_POSTS_SUCCESS, response });
+        } catch (err) {
+            yield put({ type: GET_USER_BOARDS_POSTS_ERROR });
+        }
     }
 }
 
