@@ -110,6 +110,15 @@ class UserClass {
             throw(e);
         }
     }
+
+    async isFollowing (id) {
+        try {
+            const follow = await Follow.findOne({ follower: this._id, followee: id }).lean();
+            return !!follow;
+        } catch (e) {
+            return false;
+        }
+    }
 }
 
 module.exports = UserClass;

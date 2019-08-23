@@ -77,12 +77,7 @@ class Profile extends Component {
     };
 
     checkFollowing = () => {
-        const {
-            userStore,
-            user
-        } = this.props;
-        const res = user(this.state.username).followers.filter(follower => follower._id === userStore.user._id);
-        return _.isEmpty(res);
+        return _.isEmpty(this.props.user(this.state.username).isFollowing);
     };
 
     renderFollowButton = () => {
@@ -157,9 +152,7 @@ class Profile extends Component {
         return posts.length === 0 ? (
             <h2>There are no posts</h2>
         ) : (
-            <div style={{ width: '100vw' }}>
-                <Posts posts={posts} />
-            </div>
+            <Posts posts={posts}/>
         );
     };
 
@@ -346,13 +339,7 @@ class Profile extends Component {
                                 user(this.state.username).posts.length === 0 ? 'postContainer1' : 'postContainer'
                             }
                         >
-                            <div
-                                style={{
-                                    width: '90vw'
-                                }}
-                            >
-                                {this.renderPosts()}
-                            </div>
+                            {this.renderPosts()}
                         </div>
                     </div>
                 </div>

@@ -63,7 +63,11 @@ router.get ('/:username', [pub, async (req, res) => {
         if (!user) {
             return res.status(404).json({ success: false, message: 'User not found' });
         }
-        return res.status(200).json({ success: true, user: { ...user.toObject(), ...await user.follow() } });
+        const isFollowing = req.decoded ? await user.isFollowing(req.decoded._id) : false;
+        return res.status(200).json({
+            success: true,
+            user: { ...user.toObject(), ...await user.follow(), isFollowing }
+        });
     } catch (err) {
         return res.status(400).json({ success: false, message: err });
     }
@@ -106,9 +110,9 @@ router.post ('/follow', [UserValidation.followUser, async (req, res) => {
             new: true,
             setDefaultsOnInsert: true
         }).lean ();
-        return res.status (200).json ({ success: true });
+        return res.status(200).json({ success: true });
     } catch (err) {
-        return res.status (400).json ({ success: false });
+        return res.status(400).json({ success: false });
     }
 }]);
 
