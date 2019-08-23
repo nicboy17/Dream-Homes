@@ -4,9 +4,7 @@ import { connect } from 'react-redux';
 import SnackBar from '../components/SnackBar/SnackBar';
 import Avatar from '@material-ui/core/Avatar';
 import { Card, Typography } from '@material-ui/core';
-import CardMedia from '@material-ui/core/CardMedia';
 import CardActionArea from '@material-ui/core/CardActionArea';
-import house from '../assets/house.png';
 import { Route, Link, withRouter } from 'react-router-dom';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import InterestQuizDialog from '../components/Dialog/InterestQuizDialog/QuizDialog';
@@ -26,6 +24,7 @@ import Posts from '../components/Posts/Posts';
 import _ from 'lodash';
 import './stylesheet/Profile.css';
 import Masonry from 'react-masonry-component';
+import BoardPreview from '../components/Posts/BoardPreview';
 import Tooltip from '@material-ui/core/Tooltip';
 
 class Profile extends Component {
@@ -127,7 +126,7 @@ class Profile extends Component {
                             className="boardLink"
                         >
                             <CardActionArea>
-                                <CardMedia className="cardImg" image={house} />
+                                <BoardPreview posts={board.posts} className='boardPreview'/>
                             </CardActionArea>
                         </Link>
                         <div

@@ -10,7 +10,17 @@ import plant4 from '../assets/posts/plant4.jpg';
 
 const initialState = {
     posts: [{ _id: 'test', image: postPic, author: 'Delores Jones', title: 'Small background garden', description: 'A small garden doesn\'t mean you can\'t create a chic outdoor space', date: 'Published 20 July 2019' }],
-    morePosts: [{ image: banna, title: 'Dreamy minimal interior' }, { image: interior, title: 'Banana Tree' }, { image: live, title: 'Ideas to fill your living room' }, { image: livingroom, title: 'amazing live plant decorations' }, { image: plant1, title: 'test' }, { image: plant2, title: 'test' }, { image: plant3, title: 'test' }, { image: plant4, title: 'test' }]
+    morePosts: [{ image: banna, title: 'Dreamy minimal interior' }, {
+        image: interior,
+        title: 'Banana Tree'
+    }, { image: live, title: 'Ideas to fill your living room' }, {
+        image: livingroom,
+        title: 'amazing live plant decorations'
+    }, { image: plant1, title: 'test' }, { image: plant2, title: 'test' }, {
+        image: plant3,
+        title: 'test'
+    }, { image: plant4, title: 'test' }],
+    temporary: [postPic, banna, interior, live, livingroom, plant1]
 };
 
 export default (state = initialState, action) => {

@@ -74,7 +74,6 @@ describe('User Authenticated Routes', () => {
                 .set({ 'access-token': global['token'] })
                 .expect(200)
                 .then((res) => {
-                    console.log (res.body.user);
                     expect(res.body.user.boards[0].title).to.be.equal('test board');
                     expect(res.body.user.posts[0].title).to.be.equal('test');
                     expect (res.body.user.favourites[0].title).to.be.equal ('test');

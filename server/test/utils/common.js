@@ -33,7 +33,7 @@ module.exports = {
             image: 'test image'
         });
 
-        console.log (await User.findByIdAndUpdate (id, { '$addToSet': { favourites: post._id } }, { new: true }).lean ());
+        await User.findByIdAndUpdate(id, { '$addToSet': { favourites: post._id } }).lean();
 
         return { board, post };
     },

@@ -50,11 +50,12 @@ router.post('/login', [UserValidation.login, async (req, res) => {
 // @access   Public
 router.get ('/:username', [pub, async (req, res) => {
     try {
-        const user = await User.findOne ({ username: req.params.username }).select ('-password')
-            .populate ('boards')
-            .populate ('posts')
-            .populate ('favourites')
-            .lean ();
+        const user = await User.findOne({ username: req.params.username })
+            .select('-password')
+            .populate('posts')
+            .populate('favourites')
+            .populate({ path: 'boards', populate: { path: 'posts', select: '_id image', options: { limit: 9 } } })
+            .lean();
         if (!user) {
             return res.status(404).json({ success: false, message: 'User not found' });
         }
