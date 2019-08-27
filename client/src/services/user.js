@@ -1,8 +1,4 @@
-import axios from 'axios';
-
-export const addTokenHeaders = (token) => {
-    axios.defaults.headers.common['access-token'] = token;
-};
+import { axios, addTokenHeaders, Put, Get, Post } from './utils';
 
 export const userService = {
     login: (user) => {
@@ -38,11 +34,19 @@ export const userService = {
 
         return null;
     },
-    getBoardsandPosts: ({ username }) => {
-        return axios.get('/users/' + username).then(res => {
-            return res.data;
-        }).catch(err => {
-            throw err;
-        });
+    saveInterests: ({ username, interests }) => {
+        return Put(`/users/${username}/interests`, { interests });
+    },
+    favouritePost: ({ username, post }) => {
+        return Post(`/users/${username}/favourite`, { post });
+    },
+    unFavouritePost: ({ username, post }) => {
+        return Post(`/users/${username}/unfavourite`, { post });
+    },
+    getFollowers: ({ user }) => {
+        return Get(`/users/${user}/followers`);
+    },
+    getFollowing: ({ user }) => {
+        return Get(`/users/${user}/following`);
     }
 };

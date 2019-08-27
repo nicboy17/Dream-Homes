@@ -2,18 +2,22 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { MuiThemeProvider } from '@material-ui/core';
-import { BrowserRouter, Route, Switch } from 'react-router-dom';
+import { BrowserRouter, Route, Switch, withRouter } from 'react-router-dom';
 
 import { theme } from './themes/theme';
 import './App.css';
 
-import Home from './pages/Home';
+import Main from './pages/Main';
 import SignUp from './pages/SignUp.js';
-import Profile from './pages/Profile.js';
+import Login from './components/Dialog/Login/Login';
+import ProfilePage from './pages/Profile/ProfilePage.js';
 
 import PostPage from './pages/Post/PostPage';
 import { getToken } from './actions/userActions';
-import Login from './components/Dialog/Login/Login';
+
+import PostInBoards from './pages/Profile/PostsInBoards';
+import NavBar from './components/Navbar/Navbar';
+import FollowingPage from './pages/Following/FollowingPage';
 
 class App extends Component {
     constructor (props) {
@@ -25,13 +29,23 @@ class App extends Component {
         return (
             <MuiThemeProvider theme={theme}>
                 <BrowserRouter>
-                    <Switch>
-                        <Route exact path='/' component={Home}/>
-                        <Route exact path='/login' component={Login}/>
-                        <Route path='/posts/:id' component={PostPage}/>
-                        <Route path='/profile/:username' component={Profile} />
-                        <Route exact path='/signup' component={SignUp} />
-                    </Switch>
+                    <NavBar />
+                    <div>
+                        <Switch>
+                            <Route exact path='/' component={withRouter(Main)} />
+                            <Route exact path='/login' component={Login} />
+                            <Route path='/posts/:id' component={PostPage} />
+                            <Route path='/profile/:username/following' component={FollowingPage}/>
+                            <Route
+                                path='/profile/:username'
+                                render={props => (
+                                    <ProfilePage key={props.match.params.username} {...props} />
+                                )}
+                            />
+                            <Route exact path='/signup' component={SignUp} />
+                            <Route path='/board/:id' component={PostInBoards}/>
+                        </Switch>
+                    </div>
                 </BrowserRouter>
             </MuiThemeProvider>
         );
@@ -47,4 +61,7 @@ function mapDispatchToProps (dispatch) {
     );
 }
 
-export default connect(null, mapDispatchToProps)(App);
+export default connect(
+    null,
+    mapDispatchToProps
+)(App);

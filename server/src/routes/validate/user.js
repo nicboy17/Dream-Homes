@@ -37,6 +37,30 @@ module.exports = {
     addBoard: (req, res, next) => {
         req.checkBody('title', 'No title provided').exists().notEmpty();
 
+        validationHandler (req, res, next);
+    },
+
+    followUser: (req, res, next) => {
+        req.checkBody ('followee', 'No followee provided').exists ().isMongoId ();
+
+        validationHandler (req, res, next);
+    },
+
+    unfollowUser: (req, res, next) => {
+        req.checkBody ('followee', 'No followee provided').exists ().isMongoId ();
+
+        validationHandler (req, res, next);
+    },
+
+    addPostToFavourites: (req, res, next) => {
+        req.checkBody ('post', 'No Post provided').exists ().isMongoId ();
+
+        validationHandler (req, res, next);
+    },
+
+    removePostFromFavourites: (req, res, next) => {
+        req.checkBody ('post', 'No Post provided').exists ().isMongoId ();
+
         validationHandler(req, res, next);
-    }
+    },
 };

@@ -21,22 +21,23 @@ const useStyles = makeStyles(theme => ({
     }
 }));
 
-const Post = ({ post, boards, handleSelectBoard, handleSave, value }) => {
+const Post = ({ post, boards, handleSelectBoard, handleSave, value, profileImage, authenticated }) => {
     const classes = useStyles();
 
     return (
         <Grid container direction="row" justify="center">
             <Grid item xs={6}>
-                <img src={post.image} alt={post.title} className={classes.image}/>
+                <img src={post.image} alt={post.title} className={classes.image} />
             </Grid>
             <Grid item xs={6}>
                 <div className={classes.info}>
-                    <PostDetails post={post} />
+                    <PostDetails post={post} profileImage={profileImage} authenticated={authenticated}/>
                     <BoardList
                         boards={boards}
                         value={value}
                         handleSelect={handleSelectBoard}
                         handleSave={handleSave}
+                        visible={authenticated}
                     />
                 </div>
             </Grid>

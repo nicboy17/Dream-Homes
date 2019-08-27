@@ -6,6 +6,8 @@ const FormContent = ({
     onSubmitPress,
     titleError,
     tagError,
+    linkError,
+    descriptionError,
     title,
     tag,
     link,
@@ -17,40 +19,47 @@ const FormContent = ({
                 autoFocus
                 margin='dense'
                 id='title'
-                placeholder='Add your title'
+                label='Add your title'
                 type='title'
                 fullWidth
                 onChange={e => onChangeText(e)}
                 value={title}
                 helperText={titleError}
                 error={Boolean(titleError)}
+                FormHelperTextProps={{ style: { float: 'left', position: 'absolute', bottom: -15 } }}
             />
 
             <TextField
                 margin='dense'
                 id='description'
-                placeholder='Tell everyone what your post is about'
+                label='A description of your post'
                 type='text'
                 multiline
                 fullWidth
                 onChange={e => onChangeText(e)}
                 value={description}
+                helperText={descriptionError}
+                error={Boolean(descriptionError)}
+                FormHelperTextProps={{ style: { float: 'left', position: 'absolute', bottom: -15 } }}
             />
 
             <TextField
                 margin='dense'
                 id='link'
-                placeholder='Add a destination link'
+                label='Add a destination link'
                 type='text'
                 fullWidth
                 onChange={e => onChangeText(e)}
                 value={link}
+                helperText={linkError}
+                error={Boolean(linkError)}
+                FormHelperTextProps={{ style: { float: 'left', position: 'absolute', bottom: -15 } }}
             />
 
             <TextField
                 margin='dense'
                 id='tag'
-                label='Tags'
+                label='Press "Enter" to create tags'
                 type='text'
                 fullWidth
                 value={tag}
@@ -58,6 +67,9 @@ const FormContent = ({
                 onKeyPress={e => onSubmitPress(e)}
                 error={Boolean(tagError)}
                 helperText={tagError}
+                autoComplete='off'
+                style = {{ marginBottom: '15px' }}
+                FormHelperTextProps={{ style: { float: 'left', position: 'absolute', bottom: -15 } }}
             />
         </Fragment>
     );
