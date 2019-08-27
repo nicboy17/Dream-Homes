@@ -4,24 +4,22 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import Tooltip from '@material-ui/core/Tooltip';
 
 import { connect } from 'react-redux';
-import { compose } from 'redux';
-import { fetchBoardPosts } from '../actions/boardActions';
+import { bindActionCreators, compose } from 'redux';
+import { getBoardPosts } from '../../actions/boardActions';
 import { withRouter } from 'react-router-dom';
 import _ from 'lodash';
 
-import './stylesheet/Board.css';
+import '../stylesheet/Board.css';
 
 class PostInBoards extends Component {
     componentDidMount = () => {
-        const { fetchBoardPosts, match } = this.props;
-        fetchBoardPosts(match.params.id);
+        const { getBoardPosts, match } = this.props;
+        getBoardPosts(match.params.id);
     };
 
     renderPosts = () => {
-        const {
-            boardStore: { board },
-            history
-        } = this.props;
+        const { history, match } = this.props;
+        const board = this.props.board(match.params.id);
         const posts = _.isEmpty(board.posts)
             ? []
             : board.posts.map(post => {
@@ -60,10 +58,9 @@ class PostInBoards extends Component {
     };
 
     render () {
-        const {
-            boardStore: { loading, board }
-        } = this.props;
-        if (loading) {
+        const { match } = this.props;
+        const board = this.props.board(match.params.id);
+        if (!board) {
             return <CircularProgress className="spinner" />;
         }
         return (
@@ -76,13 +73,27 @@ class PostInBoards extends Component {
 }
 
 const mapStateToProps = state => ({
-    boardStore: state.BoardStore
+    board: (id) => {
+        if (state.ProfileStore.boards.length) {
+            return state.ProfileStore.boards.find(board => board._id === id);
+        }
+        return false;
+    }
 });
+
+const mapDispatchToProps = dispatch => {
+    return bindActionCreators(
+        {
+            getBoardPosts
+        },
+        dispatch
+    );
+};
 
 export default compose(
     withRouter,
     connect(
         mapStateToProps,
-        { fetchBoardPosts }
+        mapDispatchToProps
     )
 )(PostInBoards);

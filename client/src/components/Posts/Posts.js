@@ -62,7 +62,7 @@ const useStyles = makeStyles(theme => ({
     }
 }));
 
-const Posts = ({ posts }) => {
+const Posts = ({ posts, notFoundMessage = 'Sorry, no posts found' }) => {
     const classes = useStyles();
 
     const images = posts.map((post, i) => {
@@ -81,6 +81,12 @@ const Posts = ({ posts }) => {
             </div>
         );
     });
+
+    if (!posts.length) {
+        return (
+            <h2>{ notFoundMessage }</h2>
+        );
+    }
 
     return (
         <div className={classes.root}>

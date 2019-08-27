@@ -7,6 +7,9 @@ import MenuItem from '@material-ui/core/MenuItem';
 import Button from '@material-ui/core/Button';
 
 const useStyles = makeStyles(theme => ({
+    root: {
+        margin: '0 1rem'
+    },
     cornerIcon: {
         width: '50px',
         height: '50px',
@@ -35,7 +38,7 @@ const NavMenu = ({ authenticated, user, handleLogOutClicked, history }) => {
 
     if (authenticated) {
         return (
-            <>
+            <div className={classes.root}>
                 <Avatar
                     className={classes.cornerIcon}
                     src={user.profile}
@@ -63,11 +66,11 @@ const NavMenu = ({ authenticated, user, handleLogOutClicked, history }) => {
                         Logout
                     </MenuItem>
                 </Menu>
-            </>
+            </div>
         );
     } else {
         return (
-            <>
+            <div>
                 <Link to='/login' style={{ textDecoration: 'none', color: 'black' }}>
                     <Button
                         style={{
@@ -78,7 +81,7 @@ const NavMenu = ({ authenticated, user, handleLogOutClicked, history }) => {
                         Log In
                     </Button>
                 </Link>
-            </>
+            </div>
         );
     }
 };

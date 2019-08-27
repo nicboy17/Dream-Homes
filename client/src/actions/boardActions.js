@@ -1,21 +1,15 @@
-import { FETCH_BOARD_POSTS_SUCCESS, FETCHING_BOARD_POSTS, FETCH_BOARD_POSTS_FAIL } from './types';
-import axios from 'axios';
+import {
+    GET_BOARD_POSTS,
+    ADD_BOARD_POST
+} from './types';
 
-// Fetch the board's post
-export const fetchBoardPosts = id => async dispatch => {
-    try {
-        dispatch({
-            type: FETCHING_BOARD_POSTS
-        });
-        const res = await axios.get(`/boards/${id}/posts`);
-        dispatch({
-            type: FETCH_BOARD_POSTS_SUCCESS,
-            payload: res.data
-        });
-    } catch (err) {
-        dispatch({
-            type: FETCH_BOARD_POSTS_FAIL,
-            error: { message: 'Unable to fetch posts', status: 'error' }
-        });
-    }
-};
+export const addBoardPost = (board, post) => ({
+    type: ADD_BOARD_POST,
+    board,
+    post
+});
+
+export const getBoardPosts = id => ({
+    type: GET_BOARD_POSTS,
+    id
+});

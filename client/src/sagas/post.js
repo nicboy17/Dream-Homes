@@ -12,7 +12,7 @@ import { postService } from '../services/post';
 
 function * addPost (request) {
     try {
-        const response = yield call(postService.addPost, { ...request });
+        const response = yield call(postService.addPost, request);
         yield put({ type: ADD_POST_SUCCESS, response });
     } catch (err) {
         yield put({ type: ADD_POST_ERROR, err });
@@ -26,7 +26,7 @@ export function * addPostSaga () {
 function * searchPosts (request) {
     try {
         yield put({ type: FETCHING_POSTS });
-        const response = yield call(postService.searchPosts, { ...request });
+        const response = yield call(postService.searchPosts, request);
         yield put({ type: FETCH_POSTS_SUCCESS, payload: response });
     } catch (err) {
         yield put({ type: FETCH_POSTS_FAIL });

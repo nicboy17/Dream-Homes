@@ -7,8 +7,8 @@ import MorePosts from './MorePosts';
 import Divider from '@material-ui/core/Divider';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import { getBoardsandPosts } from '../../actions/profileActions';
-import { boardService } from '../../services/board';
 import { fetchPosts } from '../../actions/post';
+import { addBoardPost } from '../../actions/boardActions';
 
 const styles = theme => ({
     post: {
@@ -16,6 +16,14 @@ const styles = theme => ({
     },
     more: {
         marginTop: theme.spacing(4)
+    },
+    loading: {
+        position: 'absolute',
+        top: '0',
+        bottom: '0',
+        right: '0',
+        left: '0',
+        margin: 'auto'
     }
 });
 
@@ -42,15 +50,7 @@ class PostPage extends React.Component {
 
     save = async e => {
         e.preventDefault();
-        try {
-            const response = await boardService.addPost({
-                post: this.state.id,
-                board: this.state.board
-            });
-            console.log(response);
-        } catch (err) {
-            console.log(err.response);
-        }
+        this.props.addBoardPost(this.state.board, this.state.id);
     };
 
     render () {
@@ -65,15 +65,7 @@ class PostPage extends React.Component {
         if (!post(match.params.id)) {
             return (
                 <div>
-                    <CircularProgress
-                        style={{
-                            position: 'absolute',
-                            top: '0',
-                            bottom: '0',
-                            right: '0',
-                            left: '0',
-                            margin: 'auto'
-                        }}/>
+                    <CircularProgress className={classes.loading}/>
                 </div>
             );
         }
@@ -110,11 +102,8 @@ class PostPage extends React.Component {
 const mapStateToProps = state => ({
     userStore: state.UserStore,
     post: id => {
-        if (state.posts.posts.length || state.UserStore.authenticated) {
-            return (
-                state.posts.posts.find(post => id === post._id) ||
-                state.UserStore.user.posts.find(post => id === post._id)
-            );
+        if (state.PostStore.posts.length || state.UserStore.authenticated) {
+            return state.PostStore.posts.find(post => id === post._id);
         }
     },
     morePosts: state.PostStore.morePosts
@@ -124,7 +113,8 @@ function mapDispatchToProps (dispatch) {
     return bindActionCreators(
         {
             getBoardsandPosts,
-            fetchPosts
+            fetchPosts,
+            addBoardPost
         },
         dispatch
     );

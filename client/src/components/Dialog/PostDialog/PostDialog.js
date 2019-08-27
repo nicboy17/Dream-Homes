@@ -2,8 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Redirect } from 'react-router-dom';
 import { bindActionCreators } from 'redux';
-import { getBoardsandPosts, addPost, createPost } from '../../../actions/profileActions';
-import { createFormData } from '../../../services/utils';
+import { getBoardsandPosts, addPost } from '../../../actions/profileActions';
 import _ from 'lodash';
 
 import Button from '@material-ui/core/Button';
@@ -144,10 +143,7 @@ class PostDialog extends React.Component {
         if (description.length < 3 || description.length > 200) {
             this.setState({ descriptionError: 'Must be atleast 3 to 200 characters' });
         } else if (image.length > 0 && !titleError && !linkError && !descriptionError) {
-            console.log(image);
-            const formData = createFormData({ title, link, description, image: image[0], tags });
-            // image.forEach(file => formData.append('image', file));
-            this.props.createPost(formData, username, board);
+            this.props.addPost({ title, link, description, image: image[0], tags, board }, username);
             this.onCloseClick();
         }
     };
@@ -183,7 +179,7 @@ class PostDialog extends React.Component {
                 return <Redirect to={redirect} />;
             }
         }
-        console.log(this.state.image);
+
         return (
             <Dialog
                 open={true}
@@ -205,7 +201,7 @@ class PostDialog extends React.Component {
                             <DialogContent>
                                 <BoardList
                                     className="boardList"
-                                    boards={this.props.profileStore.profileInfo.boards}
+                                    boards={this.props.userStore.user.boards}
                                     handleSelect={this.handleSelectChange}
                                     value={board}
                                 />
@@ -266,8 +262,7 @@ function mapDispatchToProps (dispatch) {
     return bindActionCreators(
         {
             getBoardsandPosts,
-            addPost,
-            createPost
+            addPost
         },
         dispatch
     );

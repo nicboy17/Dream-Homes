@@ -82,7 +82,7 @@ const NavSearch = ({ search, handleSearch, handleChange, clear, posts: { loading
 };
 
 const mapStateToProps = state => ({
-    posts: state.posts
+    posts: state.PostStore
 });
 
 export default compose(withRouter, connect(mapStateToProps))(NavSearch);

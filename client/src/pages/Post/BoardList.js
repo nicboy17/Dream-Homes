@@ -11,7 +11,12 @@ const useStyles = makeStyles(theme => ({
         border: '1px #ddd solid',
         display: 'block',
         padding: '0.4rem',
-        marginTop: '2rem'
+        marginTop: '2rem',
+        outline: 'none',
+        '&:focus': {
+            outline: 'none',
+            border: 'none'
+        }
     },
     board: {
         display: 'inline-block',
@@ -49,10 +54,10 @@ const BoardList = ({ boards, handleSelect, value, handleSave, visible }) => {
                         id: 'board'
                     }}
                 >
-                    <MenuItem value="" button={false} component={'li'}>Select board</MenuItem>
+                    <MenuItem value="">Select board</MenuItem>
                     {boards.map((board, i) => {
                         return (
-                            <MenuItem key={i} value={board._id} button={false} component={'li'}>
+                            <MenuItem key={i} value={board._id}>
                                 {board.title}
                             </MenuItem>
                         );

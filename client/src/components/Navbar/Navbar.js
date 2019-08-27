@@ -9,11 +9,12 @@ import NavMenu from './NavMenu';
 import NavSearch from './NavSearch';
 import { searchPosts } from '../../actions/post';
 import Button from '@material-ui/core/Button';
+import Grid from '@material-ui/core/Grid';
 
 const useStyles = makeStyles(theme => ({
     header: {
         display: 'grid',
-        gridTemplateColumns: '5fr 3fr 6fr 3fr 3fr 0fr 3fr',
+        gridTemplateColumns: '4fr 2fr 6fr 6fr',
         minHeight: '16vh',
         justifyItems: 'center',
         alignItems: 'center'
@@ -65,6 +66,29 @@ const Navbar = ({ userStore, logout, history, location, searchPosts }) => {
         setSearch('');
     }
 
+    function Following () {
+        if (!userStore.authenticated) {
+            return null;
+        }
+
+        return (
+            <Link
+                to={`/profile/${userStore.user.username}/following`}
+                style={{
+                    textDecoration: 'none'
+                }}>
+                <Button style={{
+                    border: 'none',
+                    padding: '0',
+                    borderRadius: '7.5px'
+                }}
+                >
+                    Following
+                </Button>
+            </Link>
+        );
+    }
+
     return (
         <div>
             <div className={classes.headerContainer}>
@@ -79,45 +103,32 @@ const Navbar = ({ userStore, logout, history, location, searchPosts }) => {
                         handleChange={handleSearchChange}
                         clear={clearSearch}
                     />
-                    <div>
-                        <h5>
-                            <Link to='/' style={{
-                                textDecoration: 'none'
-                            }}
-                            >
-                                <Button style={{
-                                    border: 'none',
-                                    padding: '0',
-                                    borderRadius: '7.5px'
-                                }}
-                                >
-                                    Home
-                                </Button>
-                            </Link>
-                        </h5>
-                    </div>
-                    <div>
-                        <Link
-                            to={''}
-                            style={{
-                                textDecoration: 'none'
-                            }}>
+                    <Grid
+                        container
+                        direction="row"
+                        justify="space-evenly"
+                        alignItems="center"
+                    >
+                        <Link to='/' style={{
+                            textDecoration: 'none'
+                        }}
+                        >
                             <Button style={{
                                 border: 'none',
                                 padding: '0',
                                 borderRadius: '7.5px'
                             }}
                             >
-                                Following
+                                Home
                             </Button>
                         </Link>
-                    </div>
-                    <div />
-                    <NavMenu
-                        user={userStore.user}
-                        handleLogOutClicked={handleLogOutClicked}
-                        authenticated={userStore.authenticated}
-                    />
+                        {Following()}
+                        <NavMenu
+                            user={userStore.user}
+                            handleLogOutClicked={handleLogOutClicked}
+                            authenticated={userStore.authenticated}
+                        />
+                    </Grid>
                 </div>
                 <div className={classes.headerBottomBorder} />
             </div>

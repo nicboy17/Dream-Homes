@@ -10,16 +10,14 @@ import './App.css';
 import Main from './pages/Main';
 import SignUp from './pages/SignUp.js';
 import Login from './components/Dialog/Login/Login';
-import Profile from './pages/Profile.js';
+import ProfilePage from './pages/Profile/ProfilePage.js';
 
 import PostPage from './pages/Post/PostPage';
 import { getToken } from './actions/userActions';
 
-import PostInBoards from './pages/PostsInBoards';
-
+import PostInBoards from './pages/Profile/PostsInBoards';
 import NavBar from './components/Navbar/Navbar';
-
-import FollowersPage from './pages/FollowersPage';
+import FollowingPage from './pages/Following/FollowingPage';
 
 class App extends Component {
     constructor (props) {
@@ -37,15 +35,15 @@ class App extends Component {
                             <Route exact path='/' component={withRouter(Main)} />
                             <Route exact path='/login' component={Login} />
                             <Route path='/posts/:id' component={PostPage} />
+                            <Route path='/profile/:username/following' component={FollowingPage}/>
                             <Route
                                 path='/profile/:username'
                                 render={props => (
-                                    <Profile key={props.match.params.username} {...props} />
+                                    <ProfilePage key={props.match.params.username} {...props} />
                                 )}
                             />
                             <Route exact path='/signup' component={SignUp} />
                             <Route path='/board/:id' component={PostInBoards}/>
-                            <Route path='/profile/:username/following' component={FollowersPage}/>
                         </Switch>
                     </div>
                 </BrowserRouter>

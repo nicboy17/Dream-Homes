@@ -1,20 +1,13 @@
-import { axios } from './utils';
+import { Get, Post, Put } from './utils';
 
 export const boardService = {
     addBoard: ({ board, username }) => {
-        return axios.post(`/users/${username}/board`, board).then(res => {
-            return res.data;
-        }).catch(err => {
-            throw err;
-        });
+        return Post(`/users/${username}/board`, board);
     },
     addPost: ({ board, post }) => {
-        return axios.put(`/boards/${board}/post`, {
-            _id: `${post}`
-        })
-            .then(res => res.data)
-            .catch(err => {
-                throw err;
-            });
+        return Put(`/boards/${board}/post`, { _id: post });
+    },
+    getPosts: ({ id }) => {
+        return Get(`/boards/${id}/posts`);
     }
 };

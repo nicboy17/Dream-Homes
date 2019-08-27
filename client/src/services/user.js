@@ -1,4 +1,4 @@
-import { axios, addTokenHeaders } from './utils';
+import { axios, addTokenHeaders, Put, Get, Post } from './utils';
 
 export const userService = {
     login: (user) => {
@@ -34,25 +34,19 @@ export const userService = {
 
         return null;
     },
-    getBoardsandPosts: ({ username }) => {
-        return axios.get(`/users/${username}`).then(res => {
-            return res.data;
-        }).catch(err => {
-            throw err;
-        });
+    saveInterests: ({ username, interests }) => {
+        return Put(`/users/${username}/interests`, { interests });
+    },
+    favouritePost: ({ username, post }) => {
+        return Post(`/users/${username}/favourite`, { post });
+    },
+    unFavouritePost: ({ username, post }) => {
+        return Post(`/users/${username}/unfavourite`, { post });
     },
     getFollowers: ({ user }) => {
-        axios.get(`/users/${user}/following`).then(res => {
-            return res.data;
-        }).catch(err => {
-            throw err;
-        });
+        return Get(`/users/${user}/followers`);
     },
     getFollowing: ({ user }) => {
-        axios.get(`/users/${user}/followers`).then(res => {
-            return res.data;
-        }).catch(err => {
-            throw err;
-        });
+        return Get(`/users/${user}/following`);
     }
 };

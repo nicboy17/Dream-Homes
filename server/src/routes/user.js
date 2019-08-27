@@ -29,9 +29,8 @@ router.post('/register', [UserValidation.register, async (req, res) => {
 // @access   Public
 router.post('/login', [UserValidation.login, async (req, res) => {
     const user = await User.findOne({ email: req.body.email })
-        .populate({ path: 'posts', populate: { path: 'user', select: 'username name profile' } })
-        .populate({ path: 'favourites', populate: { path: 'user', select: 'username name profile' } })
-        .populate({ path: 'boards', populate: { path: 'posts', select: '_id image', options: { limit: 9 } } })
+        .select('-posts')
+        .populate({ path: 'boards', select: 'title' })
         .exec();
     if (!user) {
         return res.status(400).json({ success: false, message: 'Could not authenticate' });
@@ -42,7 +41,7 @@ router.post('/login', [UserValidation.login, async (req, res) => {
         } else {
             return res.status(200).json({
                 success: true,
-                user: { ...user.toObject(), password: '', ...await user.follow() },
+                user: { ...user.toObject(), boards: user.boards, password: '', ...await user.follow() },
                 token: user.loginToken ()
             });
         }
@@ -66,7 +65,8 @@ router.get ('/:username', [pub, async (req, res) => {
         const isFollowing = req.decoded ? await user.isFollowing(req.decoded._id) : false;
         return res.status(200).json({
             success: true,
-            user: { ...user.toObject(), ...await user.follow(), isFollowing }
+            user: { ...user.toObject(), ...await user.follow(), isFollowing },
+            posts: user.posts, favourites: user.favourites, boards: user.boards
         });
     } catch (err) {
         return res.status(400).json({ success: false, message: err });
@@ -84,7 +84,7 @@ router.put('/:username', [upload.single('image'), UserValidation.updateUser, asy
     if(req.file) { update.profile = req.file.location; }
     if (req.body.name) { update.name = req.body.name; }
     try {
-        const user = await User.findOneAndUpdate({ username: req.params.username }, update, {new:true}).select('-password').lean();
+        const user = await User.findOneAndUpdate({ username: req.params.username }, update, { new:true }).select('-password').lean();
         if(!user) {
             return res.status(404).json({ success: false, message: 'User not found' });
         }
@@ -106,9 +106,7 @@ router.post ('/follow', [UserValidation.followUser, async (req, res) => {
     try {
         const follow = { ...req.body, follower: req.decoded._id };
         await Follow.findOneAndUpdate (follow, follow, {
-            upsert: true,
-            new: true,
-            setDefaultsOnInsert: true
+            upsert: true, setDefaultsOnInsert: true
         }).lean ();
         return res.status(200).json({ success: true });
     } catch (err) {
@@ -194,7 +192,15 @@ router.post('/:username/posts', [upload.single('image'), UserValidation.addPost,
     if (req.file) {
         try {
             const post = await Post.create({ ...req.body, user: user._id, image: req.file.location });
-            return res.status(201).json({ success: true, post });
+
+            if(req.body.board) {
+                const board = await Board.findOneAndUpdate({_id: req.body.board, user: req.decoded._id}, { $addToSet: { posts: post._id } }).lean();
+                if (!board) {
+                    return res.status(404).json({ success: false, message: 'no board found' });
+                }
+            }
+
+            return res.status(201).json({ success: true, post, board: req.body.board });
         } catch(err) {
             return res.status(400).json({err});
         }
@@ -213,8 +219,7 @@ router.post ('/:username/favourite', [UserValidation.addPostToFavourites, async 
         if (!user) {
             return res.status (404).json ({ success: false, message: 'User not found' });
         }
-
-        res.status (201).json ({ success: true });
+        return res.status(201).json({ success: true });
     } catch (err) {
         return res.status (400).json ({ success: false, err });
     }
@@ -225,12 +230,11 @@ router.post ('/:username/favourite', [UserValidation.addPostToFavourites, async 
 // @access   Private
 router.post ('/:username/unfavourite', [UserValidation.removePostFromFavourites, async (req, res) => {
     try {
-        const user = await User.findByIdAndUpdate (req.decoded._id, { 'pull': { favourites: req.body.post } }).lean ();
+        const user = await User.findByIdAndUpdate(req.decoded._id, { '$pull': { favourites: req.body.post } }).lean();
         if (!user) {
             return res.status (404).json ({ success: false, message: 'User not found' });
         }
-
-        res.status (200).json ({ success: true });
+        return res.status(200).json({ success: true });
     } catch (err) {
         return res.status (400).json ({ success: false, err });
     }

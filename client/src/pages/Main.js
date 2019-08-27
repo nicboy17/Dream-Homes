@@ -17,7 +17,7 @@ import './stylesheet/Content.css';
 class Search extends Component {
     state = {
         SnackBar: _.isEmpty(this.props.posts.posts)
-    }
+    };
 
     componentDidMount = () => {
         const { location, fetchPosts, user: { authenticated, user } } = this.props;
@@ -76,7 +76,7 @@ class Search extends Component {
 }
 
 const mapStateToProps = state => ({
-    posts: state.posts,
+    posts: state.PostStore,
     user: state.UserStore
 });
 

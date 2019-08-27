@@ -1,12 +1,28 @@
-import { put, takeLatest, call, select } from 'redux-saga/effects';
+import { put, takeLatest, call } from 'redux-saga/effects';
 import {
-    LOGIN, LOGIN_SUCCESS, LOGIN_ERROR,
-    GET_TOKEN, GET_TOKEN_SUCCESS,
-    GET_USER_BOARDS_POSTS, GET_USER_BOARDS_POSTS_SUCCESS, GET_USER_BOARDS_POSTS_ERROR,
-    LOGOUT, LOGOUT_SUCCESS
+    LOGIN,
+    LOGIN_SUCCESS,
+    LOGIN_ERROR,
+    GET_TOKEN,
+    GET_TOKEN_SUCCESS,
+    LOGOUT,
+    LOGOUT_SUCCESS,
+    FETCH_FOLLOWERS,
+    FETCH_FOLLOWING,
+    FETCH_FOLLOWING_SUCCESS,
+    FETCH_FOLLOWING_ERROR,
+    FETCH_FOLLOWERS_SUCCESS,
+    FETCH_FOLLOWERS_ERROR,
+    SAVE_INTERESTS,
+    SAVE_INTERESTS_SUCCESS,
+    SAVE_INTERESTS_ERROR,
+    ADD_FAVOURITE,
+    ADD_FAVOURITE_SUCCESS,
+    ADD_FAVOURITE_ERROR,
+    REMOVE_FAVOURITE,
+    REMOVE_FAVOURITE_SUCCESS, REMOVE_FAVOURITE_ERROR
 } from '../actions/types';
 import { userService } from '../services/user';
-const getUserStore = (state) => state.UserStore;
 
 /*
 call user service login
@@ -50,21 +66,67 @@ export function * getTokenSaga () {
     yield takeLatest(GET_TOKEN, getToken);
 }
 
-function * getBoardsandPosts (request) {
-    const UserStore = yield select(getUserStore);
-
-    if (UserStore.authenticated && UserStore.user.username === request.username) {
-        yield put({ type: GET_USER_BOARDS_POSTS_SUCCESS, response: UserStore });
-    } else {
-        try {
-            const response = yield call(userService.getBoardsandPosts, { ...request });
-            yield put({ type: GET_USER_BOARDS_POSTS_SUCCESS, response });
-        } catch (err) {
-            yield put({ type: GET_USER_BOARDS_POSTS_ERROR });
-        }
+function * saveInterests (request) {
+    try {
+        const response = yield call(userService.saveInterests, request);
+        yield put({ type: SAVE_INTERESTS_SUCCESS, user: response });
+    } catch (err) {
+        yield put({ type: SAVE_INTERESTS_ERROR, err });
     }
 }
 
-export function * getBoardsPostsSaga () {
-    yield takeLatest(GET_USER_BOARDS_POSTS, getBoardsandPosts);
+export function * saveInterestsSaga () {
+    yield takeLatest(SAVE_INTERESTS, saveInterests);
+}
+
+function * favouritePost (request) {
+    try {
+        yield call(userService.favouritePost, request);
+        yield put({ type: ADD_FAVOURITE_SUCCESS, post: request.post });
+    } catch (err) {
+        yield put({ type: ADD_FAVOURITE_ERROR, err });
+    }
+}
+
+export function * favouritePostSaga () {
+    yield takeLatest(ADD_FAVOURITE, favouritePost);
+}
+
+function * unFavouritePost (request) {
+    try {
+        yield call(userService.unFavouritePost, request);
+        yield put({ type: REMOVE_FAVOURITE_SUCCESS, post: request.post });
+    } catch (err) {
+        yield put({ type: REMOVE_FAVOURITE_ERROR, err });
+    }
+}
+
+export function * unFavouritePostSaga () {
+    yield takeLatest(REMOVE_FAVOURITE, unFavouritePost);
+}
+
+function * getFollowing (request) {
+    try {
+        const response = yield call(userService.getFollowing, request);
+        yield put({ type: FETCH_FOLLOWING_SUCCESS, following: response.following });
+    } catch (err) {
+        yield put({ type: FETCH_FOLLOWING_ERROR, err });
+    }
+}
+
+export function * getFollowingSaga () {
+    yield takeLatest(FETCH_FOLLOWING, getFollowing);
+}
+
+function * getFollowers (request) {
+    try {
+        const response = yield call(userService.getFollowers, request);
+        yield put({ type: FETCH_FOLLOWERS_SUCCESS, followers: response.followers });
+    } catch (err) {
+        yield put({ type: FETCH_FOLLOWERS_ERROR, err });
+    }
+}
+
+export function * getFollowersSaga () {
+    yield takeLatest(FETCH_FOLLOWERS, getFollowers);
 }
