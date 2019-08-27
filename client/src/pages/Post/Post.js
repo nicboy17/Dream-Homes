@@ -14,30 +14,30 @@ const useStyles = makeStyles(theme => ({
         fontWeight: 'bold'
     },
     image: {
-        maxWidth: '80%',
-        maxHeight: '60vh',
+        height: '60vh',
+        width: 'auto',
         float: 'right',
         paddingRight: '3rem'
     }
 }));
 
-const Post = ({ post, boards, handleSelectBoard, handleSave, value, disabled }) => {
+const Post = ({ post, boards, handleSelectBoard, handleSave, value, profileImage, authenticated }) => {
     const classes = useStyles();
 
     return (
         <Grid container direction="row" justify="center">
             <Grid item xs={6}>
-                <img src={post.image} alt={post.title} className={classes.image}/>
+                <img src={post.image} alt={post.title} className={classes.image} />
             </Grid>
             <Grid item xs={6}>
                 <div className={classes.info}>
-                    <PostDetails post={post} />
+                    <PostDetails post={post} profileImage={profileImage} authenticated={authenticated}/>
                     <BoardList
                         boards={boards}
                         value={value}
-                        disabled={disabled}
                         handleSelect={handleSelectBoard}
                         handleSave={handleSave}
+                        visible={authenticated}
                     />
                 </div>
             </Grid>

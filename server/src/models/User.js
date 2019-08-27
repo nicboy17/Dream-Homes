@@ -32,7 +32,14 @@ const user = new mongoose.Schema({
     image: {
         type: String,
         required: false
-    }
+    },
+    interests: {
+        type: [String]
+    },
+    favourites: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'posts'
+    }]
 });
 
 user.virtual('boards', {
@@ -50,9 +57,13 @@ user.virtual('posts', {
 user.pre('save', function (next) {
     let user = this;
 
-    bcrypt.hash(user.password, 10, function(err, hash) {
+    if (!this.isModified ('password')) {
+        next ();
+    }
+
+    bcrypt.hash (user.password, 10, function (err, hash) {
         user.password = hash;
-        next();
+        next ();
     });
 });
 

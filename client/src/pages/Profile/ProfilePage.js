@@ -13,6 +13,8 @@ import { Route } from 'react-router-dom';
 import { bindActionCreators, compose } from 'redux';
 import { getBoardsandPosts } from '../../actions/userActions';
 import { connect } from 'react-redux';
+import { getBoardsandPosts, clearError } from '../../actions/profileActions';
+import { follow, unfollow } from '../../actions/userActions';
 
 const styles = theme => ({
     root: {
@@ -46,13 +48,57 @@ class Profile extends Component {
         this.setState({ tab: value });
     }
 
+    onCreate = item => {
+        this.props.history.push(`/profile/${this.state.username}/${item}/create`);
+    };
+
+    onFollow = () => {
+        const { follow, profileStore: { user } } = this.props;
+        follow(user._id);
+        this.setState({ followedOrNot: !this.state.followedOrNot });
+    };
+
+    onUnFollow = () => {
+        const { unfollow, profileStore: { user } } = this.props;
+        unfollow(user._id);
+        this.setState({ followedOrNot: !this.state.followedOrNot });
+    };
+
+    renderSnackBarError = () => {
+        const {
+            profileStore: { error },
+            clearError
+        } = this.props;
+        if (!_.isEmpty(error)) {
+            return (
+                <SnackBar
+                    message={error.message}
+                    variant={error.status}
+                    open={!_.isEmpty(error)}
+                    onClose={() => {
+                        this.setState({ SnackBar: false });
+                        clearError();
+                    }}
+                />
+            );
+        }
+    };
+
     render () {
         const { classes } = this.props;
-        const { user, boards, posts } = this.props.userStore;
 
+        const { profileStore: { user, boards, posts, favourites, loading } } = this.props;
+        if (_.isUndefined(user) || loading) {
+            return <CircularProgress className="spinner" />;
+        }
         return (
             <div>
-                <Navbar/>
+                <Route path="/profile/:username/edit" component={EditPicUserDialog} />
+                <Route path="/profile/:username/interest-quiz" component={InterestQuizDialog} />
+                <Route path="/profile/:username/post/create"
+                       render={props => <PostDialog key={props.match.params.username} {...props} />}
+                />
+                <Route path="/profile/:username/board/create" component={BoardDialog} />
                 <div className={classes.root}>
                     <ProfileHeader user={user} history={this.props.history}/>
                     <Divider variant={'middle'}/>
@@ -70,16 +116,26 @@ class Profile extends Component {
 }
 
 const mapStateToProps = state => ({
-    userStore: state.UserStore
+    userStore: state.UserStore,
+    profileStore: state.ProfileStore
 });
 
-function mapDispatchToProps (dispatch) {
+const mapDispatchToProps = dispatch => {
     return bindActionCreators(
         {
-            getBoardsandPosts
+            getBoardsandPosts,
+            follow,
+            unfollow,
+            clearError
         },
         dispatch
     );
-}
+};
 
-export default compose(withStyles(styles), connect(mapStateToProps, mapDispatchToProps))(Profile);
+export default compose(
+    withRouter,
+    connect(
+        mapStateToProps,
+        mapDispatchToProps
+    )
+)(ProfilePage);

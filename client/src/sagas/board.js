@@ -3,14 +3,18 @@ import {
     ADD_BOARD,
     ADD_BOARD_ERROR,
     ADD_BOARD_SUCCESS,
-    ADD_POST_TO_BOARD, ADD_POST_TO_BOARD_ERROR,
-    ADD_POST_TO_BOARD_SUCCESS
+    ADD_BOARD_POST,
+    ADD_BOARD_POST_SUCCESS,
+    ADD_BOARD_POST_ERROR,
+    GET_BOARD_POSTS,
+    GET_BOARD_POSTS_SUCCESS,
+    GET_BOARD_POSTS_ERROR
 } from '../actions/types';
 import { boardService } from '../services/board';
 
 function * addBoard (request) {
     try {
-        const response = yield call(boardService.addBoard, { ...request });
+        const response = yield call(boardService.addBoard, request);
         yield put({ type: ADD_BOARD_SUCCESS, response });
     } catch (err) {
         yield put({ type: ADD_BOARD_ERROR, err });
@@ -21,15 +25,28 @@ export function * addBoardSaga () {
     yield takeEvery(ADD_BOARD, addBoard);
 }
 
-function * addPostToBoard (request) {
+function * addPost (request) {
     try {
-        const response = yield call(boardService.addPost, { ...request });
-        yield put({ type: ADD_POST_TO_BOARD_SUCCESS, response });
+        const response = yield call(boardService.addPost, request);
+        yield put({ type: ADD_BOARD_POST_SUCCESS, response });
     } catch (err) {
-        yield put({ type: ADD_POST_TO_BOARD_ERROR, err });
+        yield put({ type: ADD_BOARD_POST_ERROR, err });
     }
 }
 
-export function * addPostToBoardSaga () {
-    yield takeEvery(ADD_POST_TO_BOARD, addPostToBoard);
+export function * addPostSaga () {
+    yield takeEvery(ADD_BOARD_POST, addPost);
+}
+
+function * getBoardPosts (request) {
+    try {
+        const response = yield call(boardService.getPosts, request);
+        yield put({ type: GET_BOARD_POSTS_SUCCESS, response });
+    } catch (err) {
+        yield put({ type: GET_BOARD_POSTS_ERROR, err });
+    }
+}
+
+export function * getBoardPostsSaga () {
+    yield takeEvery(GET_BOARD_POSTS, getBoardPosts);
 }

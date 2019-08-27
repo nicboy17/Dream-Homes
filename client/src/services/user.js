@@ -1,13 +1,8 @@
-import axios from 'axios';
-import { createFormData } from './utils';
-
-const addTokenHeaders = (token) => {
-    axios.defaults.headers.common['access-token'] = token;
-};
+import { axios, addTokenHeaders, Put, Get, Post } from './utils';
 
 const signin = (data) => {
     if (!data.user.image) {
-        data.user.image = 'https://team-pineapple.s3.ca-central-1.amazonaws.com/placeholder.jpg';
+        data.user.profile = 'https://team-pineapple.s3.ca-central-1.amazonaws.com/placeholder.jpg';
     }
     localStorage.setItem('token', data.token);
     localStorage.setItem('user', JSON.stringify(data.user));
@@ -27,6 +22,7 @@ export const userService = {
     login: (user) => {
         return axios.post('/users/login', user).then(res => {
             return signin(res.data);
+            return res.data;
         }).catch(err => {
             throw err.response.data;
         });
@@ -46,7 +42,7 @@ export const userService = {
         }).catch(err => {
             throw err.response.data;
         });
-    },
+    }
     getUser: () => {
         return JSON.parse(localStorage.getItem('user'));
     },
@@ -70,11 +66,19 @@ export const userService = {
 
         return null;
     },
-    getBoardsandPosts: ({ username }) => {
-        return axios.get('/users/' + username).then(res => {
-            return res.data;
-        }).catch(err => {
-            throw err.response.data;
-        });
+    saveInterests: ({ username, interests }) => {
+        return Put(`/users/${username}/interests`, { interests });
+    },
+    favouritePost: ({ username, post }) => {
+        return Post(`/users/${username}/favourite`, { post });
+    },
+    unFavouritePost: ({ username, post }) => {
+        return Post(`/users/${username}/unfavourite`, { post });
+    },
+    getFollowers: ({ user }) => {
+        return Get(`/users/${user}/followers`);
+    },
+    getFollowing: ({ user }) => {
+        return Get(`/users/${user}/following`);
     }
 };

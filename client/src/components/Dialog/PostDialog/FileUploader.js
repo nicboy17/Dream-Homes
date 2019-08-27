@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import { FilePond, registerPlugin } from 'react-filepond';
-import './FilePond.css';
+
 // Plugins
 import FilePondPluginImagePreview from 'filepond-plugin-image-preview';
 import FilePondPluginFileValidateType from 'filepond-plugin-file-validate-type';
@@ -16,18 +16,17 @@ registerPlugin(
 
 const FileUploader = ({ onUploadImages, files }) => {
     return (
-        <FilePond
-            files={files}
-            allowMultiple
-            maxFiles={5}
-            acceptedFileTypes={['image/png', 'image/jpeg']}
-            labelIdle='Drag and drop or Click to upload'
-            maxFileSize='32MB'
-            onupdatefiles={fileItems => onUploadImages(fileItems)}
-            dropValidation
-            imagePreviewMinHeight={50}
-            imagePreviewMaxHeight={150}
-        />
+        <Fragment>
+            <FilePond
+                files={files}
+                // allowMultiple
+                // maxFiles={5}
+                acceptedFileTypes={['image/jpeg']}
+                labelIdle='</br><h1>Drag and drop or </br> click to upload</h1></br>'
+                maxFileSize='32MB'
+                onupdatefiles={fileItems => onUploadImages(fileItems)}
+            />
+        </Fragment>
     );
 };
 

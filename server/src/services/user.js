@@ -1,5 +1,7 @@
+const mongoose = require ('mongoose');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+const Follow = require ('../models/Follow');
 
 class UserClass {
     async comparePassword(password) {
@@ -30,6 +32,111 @@ class UserClass {
             message = 'server error, please try again later';
         }
         return message;
+    }
+
+    async follow () {
+        try {
+            const count = await Follow.aggregate ([
+                {
+                    $facet: {
+                        'following': [
+                            { $match: { follower: this._id } },
+                            {
+                                $group: {
+                                    _id: '$follower',
+                                    count: { $sum: 1 }
+                                }
+                            }
+                        ],
+                        'followers': [
+                            { $match: { followee: this._id } },
+                            {
+                                $group: {
+                                    _id: 'followee',
+                                    count: { $sum: 1 }
+                                }
+                            }
+                        ]
+                    }
+                },
+                {
+                    $project: {
+                        following: { $ifNull: [{ $arrayElemAt: ['$following.count', 0] }, 0] },
+                        followers: { $ifNull: [{ $arrayElemAt: ['$followers.count', 0] }, 0] }
+                    }
+                }
+            ]);
+            return count[0];
+        } catch (e) {
+            throw(e);
+        }
+    }
+
+    static async following (id) {
+        try {
+            return await Follow.aggregate ([
+                { $match: { follower: mongoose.Types.ObjectId (id) } },
+                {
+                    $lookup: {
+                        from: 'users',
+                        localField: 'followee',
+                        foreignField: '_id',
+                        as: 'following'
+                    }
+                },
+                { $unwind: '$following' },
+                {
+                    $project: {
+                        _id: '$following._id',
+                        username: '$following.username',
+                        name: '$following.name',
+                        profile: '$following.profile'
+                    }
+                }
+            ]);
+        } catch (e) {
+            throw(e);
+        }
+    }
+
+    static async followers (id) {
+        try {
+            return await Follow.aggregate ([
+                { $match: { followee: mongoose.Types.ObjectId (id) } },
+                {
+                    $lookup: {
+                        from: 'users',
+                        localField: 'follower',
+                        foreignField: '_id',
+                        as: 'followers'
+                    }
+                },
+                { $unwind: '$followers' },
+                {
+                    $project: {
+                        _id: '$followers._id',
+                        username: '$followers.username',
+                        name: '$followers.name',
+                        profile: '$followers.profile'
+                    }
+                }
+            ]);
+        } catch (e) {
+            throw(e);
+        }
+    }
+
+    async isFollowing (id) {
+        if (id === this._id) {
+            return false;
+        }
+
+        try {
+            const follow = await Follow.findOne({ follower: id, followee: this._id }).lean();
+            return !!follow;
+        } catch (e) {
+            return false;
+        }
     }
 }
 

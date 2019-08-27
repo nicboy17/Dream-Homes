@@ -6,16 +6,15 @@ import DialogContent from '@material-ui/core/DialogContent';
 import { DialogActions, DialogTitle } from '../components';
 import { Chip } from '@material-ui/core';
 import Grid from '@material-ui/core/Grid';
-// import CircularProgress from '@material-ui/core/CircularProgress';
-
 import _ from 'lodash';
-
 import FormContent from './FormContent';
 import FileUploader from './FileUploader';
+import { Redirect } from 'react-router-dom';
 import { bindActionCreators } from 'redux';
 import { getBoardsandPosts, addPost, respond } from '../../../actions/userActions';
 import SnackBar from '../../SnackBar/SnackBar';
-// import BoardList from './BoardList';
+import BoardList from './BoardList';
+import '../../../pages/stylesheet/Dialog.css';
 
 class PostDialog extends React.Component {
     constructor (props) {
@@ -23,15 +22,17 @@ class PostDialog extends React.Component {
         this.state = {
             title: '',
             description: '',
+            descriptionError: '',
             link: '',
+            linkError: '',
             tag: '',
             tags: [],
             tagError: '',
             titleError: '',
             board: '',
-            image: '',
-            files: [],
-            snackBar: false
+            image: [],
+            imageError: '',
+            SnackBar: false
         };
 
         this.snackBarClose = this.snackBarClose.bind(this);
@@ -46,23 +47,25 @@ class PostDialog extends React.Component {
     };
 
     onChangeText = e => {
-        this.setState({ [e.target.id]: e.target.value });
+        this.setState({ [e.target.id]: e.target.value, [`${e.target.id}Error`]: '' });
     };
 
     // Board
     handleSelectChange = e => {
-        this.setState({ selectedBoard: e.target.value });
-        console.log(this.state.selectedBoard);
+        this.setState({ board: e.target.value });
     };
 
     // Create a tag
     onSubmitPress = e => {
+        const { tags, tag } = this.state;
         if (e.which === 13) {
-            if (_.includes(_.lowerCase(this.state.tags), _.lowerCase(this.state.tag))) {
+            if (_.includes(_.lowerCase(tags), _.lowerCase(tag))) {
                 this.setState({ tagError: 'Can not have duplicate tags' });
+            } else if (tag.length > 15) {
+                this.setState({ tagError: 'Tags cannot be more than 15 characters' });
             } else {
                 this.setState({
-                    tags: [...this.state.tags, this.state.tag.trim()],
+                    tags: [...tags, tag.trim()],
                     tag: '',
                     tagError: ''
                 });
@@ -74,7 +77,17 @@ class PostDialog extends React.Component {
         return (
             <>
                 {this.state.tags.map((tag, i) => {
-                    return <Chip key={i} label={tag} onDelete={() => this.onDeleteTag(tag)} />;
+                    return (
+                        <Chip
+                            key={i}
+                            label={tag}
+                            onDelete={() => this.onDeleteTag(tag)}
+                            style={{ margin: 2 }}
+                            size="small"
+                            variant="outlined"
+                            className="chip"
+                        />
+                    );
                 })}
             </>
         );
@@ -89,14 +102,37 @@ class PostDialog extends React.Component {
         const filterFiles = fileItems.filter(
             fileItem => fileItem.file.type.toString() === 'image/jpeg'
         );
-        this.setState({ image: filterFiles.map(filterFile => filterFile.file)[0] });
+        this.setState({ image: filterFiles.map(filterFile => filterFile.file) });
+    };
+
+    renderSmallText = () => {
+        if (_.isEmpty(this.state.image)) {
+            return (
+                <div className="smallText">
+                    <div style={{ textAlign: 'center', fontSize: 14 }}>
+                        {/* <h1 style={{ fontSize: 14 }}>Maximum 5 files</h1> */}
+                        Use high-quality jpg files <br /> less than 32mb
+                    </div>
+                </div>
+            );
+        }
     };
 
     // Create post
     onCreatePress = async () => {
-        if (this.state.title.length < 3) {
-            this.setState({ titleError: 'Title must be greater than 3 characters' });
-        } else {
+        e.preventDefault();
+        if (image.length < 1) {
+            this.setState({ imageError: 'Please include atleast one image', SnackBar: true });
+        }
+        if (title.length < 3 || title.length > 15) {
+            this.setState({ titleError: 'Must be atleast 3 or less than 15 characters' });
+        }
+        if (link.length < 3 || link.length > 15) {
+            this.setState({ linkError: 'Must be atleast 3 or less than 15 characters' });
+        }
+        if (description.length < 3 || description.length > 200) {
+            this.setState({ descriptionError: 'Must be atleast 3 to 200 characters' });
+        } else if (image.length > 0 && !titleError && !linkError && !descriptionError) {
             this.props.addPost(this.state, this.state.username);
             this.setState({ snackBar: true });
         }
@@ -135,6 +171,33 @@ class PostDialog extends React.Component {
     };
 
     render () {
+        const {
+            userStore,
+            match: { params }
+        } = this.props;
+
+        const {
+            title,
+            description,
+            descriptionError,
+            link,
+            linkError,
+            tag,
+            tagError,
+            titleError,
+            board,
+            image,
+            imageError
+        } = this.state;
+
+        // Redirect user to profile if not authorized
+        if (userStore.authenticated) {
+            if (userStore.user.username !== params.username) {
+                const redirect = `/profile/${params.username}`;
+                return <Redirect to={redirect} />;
+            }
+        }
+
         return (
             <div>
                 <Dialog
@@ -150,15 +213,23 @@ class PostDialog extends React.Component {
                         <DialogContent>
                             <Grid container direction="row" justify="space-between" alignItems="center">
                                 <Grid item xs={6}>
+                                    <BoardList
+                                        className="boardList"
+                                        boards={this.props.userStore.user.boards}
+                                        handleSelect={this.handleSelectChange}
+                                        value={board}
+                                    />
                                     <FormContent
                                         onChangeText={this.onChangeText}
-                                        titleError={this.state.titleError}
-                                        tagError={this.state.tagError}
+                                        titleError={titleError}
+                                        tagError={tagError}
+                                        linkError={linkError}
+                                        descriptionError={descriptionError}
                                         onSubmitPress={this.onSubmitPress}
-                                        tag={this.state.tag}
-                                        title={this.state.title}
-                                        description={this.state.description}
-                                        link={this.state.link}
+                                        tag={tag}
+                                        title={title}
+                                        description={description}
+                                        link={link}
                                     />
                                     {this.renderTags()}
                                 </Grid>
@@ -182,7 +253,8 @@ class PostDialog extends React.Component {
 }
 
 const mapStateToProps = state => ({
-    userStore: state.UserStore
+    userStore: state.UserStore,
+    profileStore: state.ProfileStore
 });
 
 function mapDispatchToProps (dispatch) {

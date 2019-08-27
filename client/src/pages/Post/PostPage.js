@@ -2,14 +2,16 @@ import React from 'react';
 import { withStyles } from '@material-ui/styles';
 import { compose, bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import Navbar from '../../components/Navbar/Navbar';
 import Post from './Post';
 import MorePosts from './MorePosts';
 import Divider from '@material-ui/core/Divider';
 import CircularProgress from '@material-ui/core/CircularProgress';
-import { getBoardsandPosts, respond } from '../../actions/userActions';
+import { respond } from '../../actions/userActions';
 import { addPostToBoard } from '../../actions/board';
 import SnackBar from '../../components/SnackBar/SnackBar';
+import { getBoardsandPosts } from '../../actions/profileActions';
+import { fetchPosts } from '../../actions/post';
+import { addBoardPost } from '../../actions/boardActions';
 
 const styles = theme => ({
     post: {
@@ -17,6 +19,14 @@ const styles = theme => ({
     },
     more: {
         marginTop: theme.spacing(4)
+    },
+    loading: {
+        position: 'absolute',
+        top: '0',
+        bottom: '0',
+        right: '0',
+        left: '0',
+        margin: 'auto'
     }
 });
 
@@ -38,6 +48,9 @@ class PostPage extends React.Component {
     componentDidMount () {
         const id = this.props.match.params.id;
         this.setState({ id });
+        if (!this.props.post(id)) {
+            this.props.fetchPosts('', '', '');
+        }
     }
 
     handleChange (e) {
@@ -79,19 +92,23 @@ class PostPage extends React.Component {
     };
 
     render () {
-        const { classes } = this.props;
+        const {
+            classes,
+            userStore: { authenticated, user },
+            post,
+            morePosts,
+            match
+        } = this.props;
 
-        if (!this.props.userStore.boards) {
-            this.props.getBoardsandPosts(this.props.userStore.user.username);
+        if (!post(match.params.id)) {
             return (
                 <div>
-                    <Navbar/>
-                    <CircularProgress/>
+                    <CircularProgress className={classes.loading}/>
                 </div>
             );
         }
 
-        if (!this.props.post(this.props.match.params.id)) {
+        if (!post(match.params.id)) {
             return (
                 <div>
                     <h1>No Post found</h1>
@@ -101,18 +118,18 @@ class PostPage extends React.Component {
 
         return (
             <div>
-                <Navbar/>
                 <div className={classes.post}>
                     <Post handleSave={this.save}
                         handleSelectBoard={this.handleChange}
                         value={this.state.board}
                         disabled={this.state.disabled}
-                        post={this.props.post(this.props.match.params.id)}
-                        boards={this.props.userStore.boards}/>
+                        post={post(this.props.match.params.id)}
+                          boards={authenticated ? user.boards : []}
+                          authenticated={authenticated}/>
                 </div>
-                <Divider component={'hr'}/>
+                <Divider component={'hr'} />
                 <div className={classes.more}>
-                    <MorePosts posts={this.props.morePosts} />
+                    <MorePosts posts={morePosts} />
                 </div>
                 <this.ServerResponse />
             </div>
@@ -122,16 +139,10 @@ class PostPage extends React.Component {
 
 const mapStateToProps = state => ({
     userStore: state.UserStore,
-    post: (id) => {
-        return {
-            ...state.UserStore.posts.find((post) => {
-                return id === post._id;
-            }),
-            user: { ...state.UserStore.user }
-        } ||
-            state.PostStore.posts.find((post) => {
-                return id === post._id;
-            });
+    post: id => {
+        if (state.PostStore.posts.length || state.UserStore.authenticated) {
+            return state.PostStore.posts.find(post => id === post._id);
+        }
     },
     morePosts: state.PostStore.morePosts
 });
@@ -142,6 +153,7 @@ function mapDispatchToProps (dispatch) {
             getBoardsandPosts,
             addPostToBoard,
             dispatch
+            fetchPosts,
         },
         dispatch
     );

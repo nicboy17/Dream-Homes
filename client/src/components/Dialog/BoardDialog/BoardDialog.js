@@ -83,8 +83,18 @@ class BoardDialog extends Component {
     };
 
     render () {
-        const { classes } = this.props;
-
+        // Redirect user to profile if not authorized
+        const {
+            userStore,
+            match: { params },
+            classes
+        } = this.props;
+        if (userStore.authenticated) {
+            if (userStore.user.username !== params.username) {
+                const redirect = `/profile/${params.username}`;
+                return <Redirect to={redirect} />;
+            }
+        }
         return (
             <div>
                 <Dialog open={true} onClick={() => this.onCloseClick()} aria-labelledby='board-dialog' maxWidth='xs'

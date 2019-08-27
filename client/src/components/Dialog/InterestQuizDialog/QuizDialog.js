@@ -6,7 +6,7 @@ import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
 import { DialogTitle, DialogActions, DialogContent } from '../components';
 import Interests from './Interests';
-import axios from 'axios';
+import { saveInterests } from '../../../actions/userActions';
 
 const styles = theme => ({
     root: {
@@ -43,8 +43,10 @@ class QuizDialog extends React.Component {
     }
 
     componentDidMount () {
-        const username = this.props.match.params.username;
-        this.setState({ username: username });
+        this.setState({
+            username: this.props.match.params.username,
+            selected: this.props.user.interests
+        });
     }
 
     handleChange (interest) {
@@ -53,29 +55,16 @@ class QuizDialog extends React.Component {
 
         if (index !== -1) {
             selected.splice(index, 1);
-        } else if (selected.length < 6) {
+        } else if (selected.length <= 6) {
             selected.push(interest);
         }
         this.setState({ selected });
     }
 
     async handleConfirm () {
-        try {
-            const body = {
-                interests: this.state.selected
-            };
-            const config = {
-                'Content-Type': 'application/json',
-                'access-token': this.props.userStore.token
-            };
-            const res = await axios.put(`users/${this.state.username}/interests`, body, config);
-            if (res.data.success) {
-                return this.props.history.push(`/profile/${this.state.username}`);
-            }
-        } catch (err) {
-            console.log(err);
-        }
-        this.setState({ open: false });
+        const username = this.props.match.params.username;
+        this.props.saveInterests(username, this.state.selected);
+        this.handleClose();
     }
 
     handleClose = () => {
@@ -103,13 +92,13 @@ class QuizDialog extends React.Component {
 }
 
 const mapStateToProps = state => ({
-    userStore: state.UserStore
+    user: state.UserStore.user
 });
 
 function mapDispatchToProps (dispatch) {
     return bindActionCreators(
         {
-            // back-end integration with redux-saga
+            saveInterests
         },
         dispatch
     );

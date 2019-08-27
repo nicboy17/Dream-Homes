@@ -3,6 +3,7 @@ import { withStyles } from '@material-ui/styles';
 import { compose, bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import Dialog from '@material-ui/core/Dialog';
+import LinearProgress from '@material-ui/core/LinearProgress';
 import { DialogTitle, DialogContent } from '../components';
 import SnackBar from '../../SnackBar/SnackBar';
 import { login, respond } from '../../../actions/userActions';
@@ -100,15 +101,15 @@ class Login extends React.Component {
     };
 
     render () {
-        const { classes } = this.props;
-
-        if (this.props.userStore.authenticated && !this.state.snackBar) {
-            return (<Redirect to={'/profile/' + this.props.userStore.user.username} />);
+        const { classes, userStore } = this.props;
+        if (userStore.authenticated && !this.state.snackBar) {
+            return (<Redirect to={'/profile/' + userStore.user.username} />);
         }
 
         return (
             <div>
                 <Dialog onClose={this.handleClose} aria-labelledby="dialog-title" open={this.state.open} maxWidth={'md'}>
+                    <this.Loading/>
                     <DialogTitle id="title" title={'Welcome!'} onClose={this.handleClose} />
                     <DialogContent>
                         <LoginForm handleChange={this.handleChange} handleSignIn={this.handleSignIn}
@@ -123,6 +124,14 @@ class Login extends React.Component {
             </div>
         );
     }
+
+    Loading = () => {
+        if (this.state.snackBar) {
+            return <LinearProgress/>;
+        }
+
+        return null;
+    };
 
     emailValidator (value) {
         const email = this.state.email;
