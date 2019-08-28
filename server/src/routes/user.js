@@ -183,9 +183,9 @@ router.post('/:username/posts', [upload.single('image'), UserValidation.addPost,
     if (req.decoded.username !== req.params.username) {
         return res.status(403).json({ success: false, message: 'Cannot create posts for other users'});
     }
-    
+
     const user = await User.findOne({ username: req.params.username }).select('_id').lean();
-    
+
     if (!user) {
         return res.status(404).json({ success: false, message: 'no user found' });
     }
@@ -202,7 +202,7 @@ router.post('/:username/posts', [upload.single('image'), UserValidation.addPost,
 
             return res.status(201).json({ success: true, post, board: req.body.board });
         } catch(err) {
-            return res.status(400).json({err});
+            return res.status(400).json({ success: false, err});
         }
     } else {
         return res.status(400).json({ success: false, message: 'no file provided' });
@@ -246,7 +246,7 @@ router.post ('/:username/unfavourite', [UserValidation.removePostFromFavourites,
 // @access   Private
 router.put('/:username/interests', async (req,res) => {
     try {
-        let user = await User.findOne({username: req.params.username}); 
+        let user = await User.findOne({username: req.params.username});
         if(user._id.toString() !== req.decoded._id.toString()) {
             return res.status(401).json({msg: 'You do not have the authorization to do this'});
         }

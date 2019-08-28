@@ -63,25 +63,20 @@ const interests = [
     { image: garden, title: 'Garden' }
 ];
 
+const Check = ({ selected, interest, classes }) => {
+    if (selected.includes(interest.title)) {
+        return (
+            <Chip
+                classes={{ root: classes.check, colorPrimary: '#f5f5f5', label: classes.label, labelSmall: classes.label }}
+                icon={<DoneIcon classes={{ root: classes.selected }}/>} size="small"
+            />
+        );
+    }
+    return null;
+};
+
 const Interests = ({ handleChange, selected }) => {
     const classes = useStyles();
-
-    const Check = ({ selected, interest, classes }) => {
-        if (selected.includes(interest.title)) {
-            return (
-                <Chip
-                    classes={{
-                        root: classes.check,
-                        colorPrimary: '#f5f5f5',
-                        label: classes.label,
-                        labelSmall: classes.label
-                    }}
-                    icon={<DoneIcon classes={{ root: classes.selected }}/>} size="small"
-                />
-            );
-        }
-        return null;
-    };
 
     return (
         <div className={classes.root}>
@@ -90,7 +85,7 @@ const Interests = ({ handleChange, selected }) => {
                     <GridListTile key={i} classes={{ tile: classes.image }} onClick={() => handleChange(interest.title)} >
                         <img src={interest.image} alt={interest.title} className={classes.image} />
                         <p className={classes.title}>{interest.title}</p>
-                        <Check selected={selected} interest={interest} classes={classes}/>
+                        <Check selected={selected} interest={interest} classes={classes} />
                     </GridListTile>
                 ))}
             </GridList>

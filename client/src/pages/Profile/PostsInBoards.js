@@ -5,7 +5,7 @@ import Tooltip from '@material-ui/core/Tooltip';
 
 import { connect } from 'react-redux';
 import { bindActionCreators, compose } from 'redux';
-import { getBoardPosts } from '../../actions/boardActions';
+import { getBoardPosts } from '../../actions/board';
 import { withRouter } from 'react-router-dom';
 import _ from 'lodash';
 

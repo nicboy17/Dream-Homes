@@ -1,28 +1,42 @@
 import React, { Component } from 'react';
-import { compose, bindActionCreators } from 'redux';
-import { connect } from 'react-redux';
-import SnackBar from '../../components/SnackBar/SnackBar';
-import { Route, withRouter } from 'react-router-dom';
+import { withStyles } from '@material-ui/core/styles';
+import Divider from '@material-ui/core/Divider';
+import ProfileTabs from './ProfileTabs';
+import ProfileHeader from './ProfileHeader';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import InterestQuizDialog from '../../components/Dialog/InterestQuizDialog/QuizDialog';
 import PostDialog from '../../components/Dialog/PostDialog/PostDialog';
 import BoardDialog from '../../components/Dialog/BoardDialog/BoardDialog';
 import EditPicUserDialog from '../../components/Dialog/EditPicUserDialog/EditPicUserDialog';
-import Button from '@material-ui/core/Button';
-import Posts from '../../components/Posts/Posts';
+import { withRouter, Route } from 'react-router-dom';
+import { bindActionCreators, compose } from 'redux';
+import { connect } from 'react-redux';
 import _ from 'lodash';
-import '../stylesheet/Profile.css';
-import { getBoardsandPosts, clearError } from '../../actions/profileActions';
-import { follow, unfollow } from '../../actions/userActions';
-import Boards from './Boards';
-import Profile from './Profile';
+import SnackBar from '../../components/SnackBar/SnackBar';
+import { getBoardsandPosts, clearError } from '../../actions/profile';
+import { follow, unfollow } from '../../actions/user';
+
+const styles = theme => ({
+    root: {
+        margin: theme.spacing(2)
+    },
+    body: {
+        margin: '2rem auto',
+        width: '85%'
+    },
+    tabs: {}
+});
 
 class ProfilePage extends Component {
-    state = {
-        username: '',
-        activePanel: 'board',
-        SnackBar: true
-    };
+    constructor (props) {
+        super(props);
+
+        this.state = {
+            tab: 0
+        };
+
+        this.tabChange = this.tabChange.bind(this);
+    }
 
     componentDidMount () {
         const username = this.props.match.params.username;
@@ -30,13 +44,9 @@ class ProfilePage extends Component {
         this.props.getBoardsandPosts(username);
     }
 
-    toggleTabs = item => {
-        this.setState({ activePanel: `${item}` });
-    };
-
-    onCreate = item => {
-        this.props.history.push(`/profile/${this.state.username}/${item}/create`);
-    };
+    tabChange (e, value) {
+        this.setState({ tab: value });
+    }
 
     onFollow = () => {
         const { follow, profileStore: { user } } = this.props;
@@ -71,7 +81,9 @@ class ProfilePage extends Component {
     };
 
     render () {
-        const { profileStore: { user, boards, posts, favourites, loading } } = this.props;
+        const { classes } = this.props;
+
+        const { userStore, profileStore: { user, boards, posts, favourites, loading } } = this.props;
         if (_.isUndefined(user) || loading) {
             return <CircularProgress className="spinner" />;
         }
@@ -83,88 +95,18 @@ class ProfilePage extends Component {
                     render={props => <PostDialog key={props.match.params.username} {...props} />}
                 />
                 <Route path="/profile/:username/board/create" component={BoardDialog} />
-                <Profile user={this.props.userStore} profile={this.props.profileStore} createHandle={this.onCreate}
-                    followHandle={this.onFollow} unFollowHandle={this.onUnFollow} />
-                <div style={{ display: this.state.activePanel === 'board' ? 'grid' : 'none' }}>
-                    <div className="tabSection">
-                        <div>
-                            <Button color="primary" variant={'contained'}
-                                style={{ margin: '10px' }}>
-                                Boards
-                            </Button>
-                            <Button
-                                color="primary" style={{ margin: '10px' }}
-                                onClick={() => this.toggleTabs('post')}>
-                                Posts
-                            </Button>
-                            <Button color="primary" style={{ margin: '10px' }}
-                                onClick={() => this.toggleTabs('favorite')}>
-                                Favorites
-                            </Button>
-                        </div>
-                        <div />
-                    </div>
-                    <div className="activePanel">
-                        <div className={boards.length === 0 ? 'gridContainer1' : 'gridContainer'}>
-                            <Boards boards={boards} />
-                        </div>
+                <div className={classes.root}>
+                    <ProfileHeader user={userStore} profile={this.props.profileStore} history={this.props.history}
+                        followHandle={() => this.onFollow()} unFollowHandle={() => this.onUnFollow()}/>
+                    <Divider variant={'middle'}/>
+                    <div className={classes.body}>
+                        <ProfileTabs selected={this.state.tab} onChange={this.tabChange} boards={boards} posts={posts} favourites={favourites}/>
                     </div>
                 </div>
-                <div style={{ display: this.state.activePanel === 'post' ? 'grid' : 'none' }}>
-                    <div className="tabSection">
-                        <div>
-                            <Button
-                                color="primary" style={{ margin: '10px' }}
-                                onClick={() => this.toggleTabs('board')}>
-                                Boards
-                            </Button>
-                            <Button
-                                color="primary" style={{ margin: '10px' }}
-                                variant={'contained'}>
-                                Posts
-                            </Button>
-                            <Button
-                                color="primary" style={{ margin: '10px' }}
-                                onClick={() => this.toggleTabs('favorite')}>
-                                Favorites
-                            </Button>
-                        </div>
-                        <div />
-                    </div>
-                    <div className="Panel">
-                        <div className={posts.length === 0 ? 'postContainer1' : 'postContainer'}>
-                            <Posts posts={posts}/>
-                        </div>
-                    </div>
-                </div>
-                <div style={{ display: this.state.activePanel === 'favorite' ? 'grid' : 'none' }}>
-                    <div className="tabSection">
-                        <div>
-                            <Button
-                                color="primary" style={{ margin: '10px' }}
-                                onClick={() => this.toggleTabs('board')}>
-                                Boards
-                            </Button>
-                            <Button
-                                id="post" color="primary" style={{ margin: '10px' }}
-                                onClick={() => this.toggleTabs('post')}>
-                                Posts
-                            </Button>
-                            <Button
-                                color="primary" style={{ margin: '10px' }}
-                                variant={'contained'}>
-                                Favorites
-                            </Button>
-                        </div>
-                        <div />
-                    </div>
-                    <div className="Panel">
-                        <div className={posts.length === 0 ? 'postContainer1' : 'postContainer'}>
-                            <Posts posts={favourites}/>
-                        </div>
-                    </div>
-                </div>
-                {this.renderSnackBarError()}
+                <Route path={'/profile/:username/interest-quiz'} component={InterestQuizDialog}/>
+                <Route path={'/profile/:username/post/create'} component={PostDialog}/>
+                <Route path={'/profile/:username/board/create'} component={BoardDialog}/>
+                <Route path={'/profile/:username/edit'} component={EditPicUserDialog}/>
             </div>
         );
     }
@@ -189,6 +131,7 @@ const mapDispatchToProps = dispatch => {
 
 export default compose(
     withRouter,
+    withStyles(styles),
     connect(
         mapStateToProps,
         mapDispatchToProps

@@ -6,10 +6,12 @@ import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
-import DialogTitle from '@material-ui/core/DialogTitle';
+import { DialogTitle } from '../components';
 import TextField from '@material-ui/core/TextField';
-import { addBoard } from '../../../actions/profileActions';
 import { Redirect } from 'react-router-dom';
+import { respond } from '../../../actions/user';
+import { addBoard } from '../../../actions/board';
+import SnackBar from '../../SnackBar/SnackBar';
 
 const styles = theme => ({
     button: {
@@ -18,12 +20,17 @@ const styles = theme => ({
 });
 
 class BoardDialog extends Component {
-    state = {
-        username: '',
-        title: '',
-        smallText: 'for example <<living room>>',
-        nameError: false
-    };
+    constructor (props) {
+        super(props);
+        this.state = {
+            username: '',
+            title: '',
+            smallText: 'for example <<living room>>',
+            nameError: false
+        };
+
+        this.snackBarClose = this.snackBarClose.bind(this);
+    }
 
     componentDidMount () {
         this.setState({ username: this.props.match.params.username });
@@ -40,9 +47,8 @@ class BoardDialog extends Component {
                 nameError: true
             });
         } else {
-            // Makes a post request to /user/:username/board
             this.props.addBoard({ title: this.state.title }, this.state.username);
-            this.onCloseClick();
+            this.setState({ snackBar: true });
         }
     };
 
@@ -50,56 +56,66 @@ class BoardDialog extends Component {
         this.props.history.push(`/profile/${this.state.username}`);
     };
 
+    snackBarClose (event, reason) {
+        if (reason === 'clickaway') {
+            return;
+        }
+
+        this.setState({ snackBar: false });
+        if (this.props.userStore.success) {
+            this.onCloseClick();
+        }
+        this.props.dispatch(respond());
+    }
+
+    ServerResponse = () => {
+        if (this.props.userStore.success) {
+            return (
+                <SnackBar message={'Board Created'} variant={'success'} open={this.state.snackBar}
+                    onClose={this.snackBarClose} duration={1000}/>
+            );
+        } else if (this.props.userStore.error) {
+            return (
+                <SnackBar message={'Board Creation failed'} variant={'error'}
+                    open={this.state.snackBar} onClose={this.snackBarClose} duration={1500}/>
+            );
+        }
+
+        return null;
+    };
+
     render () {
-        // Redirect user to profile if not authorized
-        const {
-            userStore,
-            match: { params },
-            classes
-        } = this.props;
-        if (userStore.authenticated) {
-            if (userStore.user.username !== params.username) {
-                const redirect = `/profile/${params.username}`;
-                return <Redirect to={redirect} />;
-            }
+        const { userStore, match: { params }, classes } = this.props;
+        if (userStore.authenticated && userStore.user.username !== params.username) {
+            return <Redirect to={`/profile/${params.username}`} />;
         }
         return (
-            <Dialog
-                open={true}
-                onClick={() => this.onCloseClick()}
-                aria-labelledby='board-dialog'
-                maxWidth='xs'
-                fullWidth={true}
-            >
-                <div onClick={e => e.stopPropagation()}>
-                    <DialogTitle style={{ textAlign: 'center' }} id='dialog-title'>
-                        Create a board
-                    </DialogTitle>
-                    <DialogContent>
-                        <TextField
-                            autoFocus
-                            margin='dense'
-                            id='name'
-                            type='name'
-                            label='Name'
-                            fullWidth
-                            onChange={e => this.onChangeText(e)}
-                            value={this.state.title}
-                            helperText={this.state.smallText}
-                            error={this.state.nameError}
-                        />
-                    </DialogContent>
-                    <DialogActions>
-                        <Button
-                            onClick={this.onCreatePress}
-                            color='primary'
-                            className={classes.button}
-                        >
-                            Create
-                        </Button>
-                    </DialogActions>
-                </div>
-            </Dialog>
+            <div>
+                <Dialog open={true} onClick={() => this.onCloseClick()} aria-labelledby='board-dialog' maxWidth='xs'
+                    fullWidth={true}>
+                    <div onClick={e => e.stopPropagation()}>
+                        <DialogTitle style={{ textAlign: 'center' }} id='dialog-title' title={'Create a board'} onClose={() => this.onCloseClick()}/>
+                        <DialogContent>
+                            <TextField
+                                autoFocus
+                                margin='dense'
+                                id='name'
+                                type='name'
+                                label='Name'
+                                fullWidth
+                                onChange={e => this.onChangeText(e)}
+                                value={this.state.title}
+                                helperText={this.state.smallText}
+                                error={this.state.nameError}
+                            />
+                        </DialogContent>
+                        <DialogActions>
+                            <Button onClick={this.onCreatePress} color='primary' className={classes.button}>Create</Button>
+                        </DialogActions>
+                    </div>
+                </Dialog>
+                <this.ServerResponse />
+            </div>
         );
     }
 }
@@ -111,16 +127,11 @@ const mapStateToProps = state => ({
 function mapDispatchToProps (dispatch) {
     return bindActionCreators(
         {
-            addBoard
+            addBoard,
+            dispatch
         },
         dispatch
     );
 }
 
-export default compose(
-    withStyles(styles),
-    connect(
-        mapStateToProps,
-        mapDispatchToProps
-    )
-)(BoardDialog);
+export default compose(withStyles(styles), connect(mapStateToProps, mapDispatchToProps))(BoardDialog);

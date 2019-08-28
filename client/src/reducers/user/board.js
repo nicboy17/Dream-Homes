@@ -16,7 +16,7 @@ export default (state = initialState, action) => {
     case ADD_BOARD_SUCCESS:
         state.user.boards.push(response.board);
         localStorage.setItem('user', JSON.stringify(state.user));
-        return { ...state };
+        return { ...state, success: true };
     case ADD_BOARD_ERROR:
         return { ...state, error: action.err };
     default:

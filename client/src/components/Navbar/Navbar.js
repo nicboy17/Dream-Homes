@@ -4,7 +4,7 @@ import { bindActionCreators, compose } from 'redux';
 import { makeStyles } from '@material-ui/styles';
 import { Link, withRouter } from 'react-router-dom';
 import queryString from 'query-string';
-import { logout } from '../../actions/userActions';
+import { logout } from '../../actions/user';
 import NavMenu from './NavMenu';
 import NavSearch from './NavSearch';
 import { searchPosts } from '../../actions/post';

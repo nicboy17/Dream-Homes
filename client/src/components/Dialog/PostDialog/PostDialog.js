@@ -1,40 +1,43 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { Redirect } from 'react-router-dom';
-import { bindActionCreators } from 'redux';
-import { getBoardsandPosts, addPost } from '../../../actions/profileActions';
-import _ from 'lodash';
-
 import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
-import DialogTitle from '@material-ui/core/DialogTitle';
-import FormContent from './FormContent';
-import SnackBar from '../../SnackBar/SnackBar';
-import FileUploader from './FileUploader';
-import BoardList from './BoardList';
+import { DialogActions, DialogTitle } from '../components';
 import { Chip } from '@material-ui/core';
-import CloseIcon from '@material-ui/icons/Close';
-
+import _ from 'lodash';
+import FormContent from './FormContent';
+import FileUploader from './FileUploader';
+import { Redirect } from 'react-router-dom';
+import { bindActionCreators } from 'redux';
+import { respond } from '../../../actions/user';
+import { getBoardsandPosts } from '../../../actions/profile';
+import { addPost } from '../../../actions/post';
+import SnackBar from '../../SnackBar/SnackBar';
+import BoardList from './BoardList';
 import '../../../pages/stylesheet/Dialog.css';
 
 class PostDialog extends React.Component {
-    state = {
-        title: '',
-        description: '',
-        descriptionError: '',
-        link: '',
-        linkError: '',
-        tag: '',
-        tags: [],
-        tagError: '',
-        titleError: '',
-        board: '',
-        image: [],
-        imageError: '',
-        SnackBar: false
-    };
+    constructor (props) {
+        super(props);
+        this.state = {
+            title: '',
+            description: '',
+            descriptionError: '',
+            link: '',
+            linkError: '',
+            tag: '',
+            tags: [],
+            tagError: '',
+            titleError: '',
+            board: '',
+            image: [],
+            imageError: '',
+            SnackBar: false
+        };
+
+        this.snackBarClose = this.snackBarClose.bind(this);
+    }
 
     componentDidMount = async () => {
         const username = this.props.match.params.username;
@@ -117,19 +120,8 @@ class PostDialog extends React.Component {
     };
 
     // Create post
-    onCreatePress = e => {
-        const {
-            title,
-            link,
-            description,
-            username,
-            image,
-            board,
-            tags,
-            titleError,
-            linkError,
-            descriptionError
-        } = this.state;
+    onCreatePress = (e) => {
+        const { image, title, link, description, titleError, linkError, descriptionError } = this.state;
         e.preventDefault();
         if (image.length < 1) {
             this.setState({ imageError: 'Please include atleast one image', SnackBar: true });
@@ -143,13 +135,41 @@ class PostDialog extends React.Component {
         if (description.length < 3 || description.length > 200) {
             this.setState({ descriptionError: 'Must be atleast 3 to 200 characters' });
         } else if (image.length > 0 && !titleError && !linkError && !descriptionError) {
-            this.props.addPost({ title, link, description, image: image[0], tags, board }, username);
-            this.onCloseClick();
+            this.props.addPost(this.state, this.state.username);
+            this.setState({ snackBar: true });
         }
     };
 
     onCloseClick = () => {
         this.props.history.push(`/profile/${this.state.username}`);
+    };
+
+    snackBarClose (event, reason) {
+        if (reason === 'clickaway') {
+            return;
+        }
+
+        this.setState({ snackBar: false });
+        if (this.props.userStore.success) {
+            this.onCloseClick();
+        }
+        this.props.dispatch(respond());
+    }
+
+    ServerResponse = () => {
+        if (this.props.userStore.success) {
+            return (
+                <SnackBar message={'Post Created'} variant={'success'} open={this.state.snackBar}
+                    onClose={this.snackBarClose} duration={1000}/>
+            );
+        } else if (this.props.userStore.error) {
+            return (
+                <SnackBar message={'Post Creation failed'} variant={'error'}
+                    open={this.state.snackBar} onClose={this.snackBarClose} duration={1500}/>
+            );
+        }
+
+        return null;
     };
 
     render () {
@@ -168,8 +188,7 @@ class PostDialog extends React.Component {
             tagError,
             titleError,
             board,
-            image,
-            imageError
+            image
         } = this.state;
 
         // Redirect user to profile if not authorized
@@ -181,74 +200,61 @@ class PostDialog extends React.Component {
         }
 
         return (
-            <Dialog
-                open={true}
-                onClose={this.handleClose}
-                aria-labelledby="form-dialog-title"
-                onClick={() => this.onCloseClick()}
-            >
-                <div onClick={e => e.stopPropagation()}>
-                    <CloseIcon
-                        className="closeButton"
-                        fontSize="small"
-                        onClick={() => this.onCloseClick()}
-                    />
-                    <DialogTitle style={{ textAlign: 'center' }} id="form-dialog-title">
-                        Create a post
-                    </DialogTitle>
-                    <div className="container">
-                        <div className="splitContainer">
-                            <DialogContent>
-                                <BoardList
-                                    className="boardList"
-                                    boards={this.props.userStore.user.boards}
-                                    handleSelect={this.handleSelectChange}
-                                    value={board}
-                                />
-                                <FormContent
-                                    onChangeText={this.onChangeText}
-                                    titleError={titleError}
-                                    tagError={tagError}
-                                    linkError={linkError}
-                                    descriptionError={descriptionError}
-                                    onSubmitPress={this.onSubmitPress}
-                                    tag={tag}
-                                    title={title}
-                                    description={description}
-                                    link={link}
-                                />
-                                {this.renderTags()}
-                            </DialogContent>
-                        </div>
-                        <div className="splitContainer">
-                            <DialogContent>
-                                <div className="fileUpload" onClick={() => {}}>
-                                    <FileUploader
-                                        onUploadImages={this.onUploadImages}
-                                        files={image}
-                                    />
-                                    {this.renderSmallText()}
-                                </div>
-                            </DialogContent>
-                            <DialogContent />
-                        </div>
-                    </div>
+            <div>
+                <Dialog
+                    open={true}
+                    onClose={this.handleClose}
+                    aria-labelledby='form-dialog-title'
+                    onClick={() => this.onCloseClick()}
+                    maxWidth={'sm'}
 
-                    <div className="dialogAction">
-                        <DialogActions>
-                            <Button onClick={this.onCreatePress} color="primary" className="create">
-                                Create
-                            </Button>
-                        </DialogActions>
+                >
+                    <div onClick={e => e.stopPropagation()}>
+                        <DialogTitle style={{ textAlign: 'center' }} id='dialog-title' title={'Create a post'} onClose={() => this.onCloseClick()}/>
+                        <div className="container">
+                            <div className="splitContainer">
+                                <DialogContent>
+                                    <BoardList
+                                        className="boardList"
+                                        boards={this.props.userStore.user.boards}
+                                        handleSelect={this.handleSelectChange}
+                                        value={board}
+                                    />
+                                    <FormContent
+                                        onChangeText={this.onChangeText}
+                                        titleError={titleError}
+                                        tagError={tagError}
+                                        linkError={linkError}
+                                        descriptionError={descriptionError}
+                                        onSubmitPress={this.onSubmitPress}
+                                        tag={tag}
+                                        title={title}
+                                        description={description}
+                                        link={link}
+                                    />
+                                    {this.renderTags()}
+                                </DialogContent>
+                            </div>
+                            <div className="splitContainer">
+                                <DialogContent>
+                                    <div className="fileUpload" onClick={() => {}}>
+                                        <FileUploader
+                                            onUploadImages={this.onUploadImages}
+                                            files={image}
+                                        />
+                                        {this.renderSmallText()}
+                                    </div>
+                                </DialogContent>
+                                <DialogContent />
+                            </div>
+                        </div>
                     </div>
-                    <SnackBar
-                        message={imageError}
-                        variant="error"
-                        open={this.state.SnackBar}
-                        onClose={() => this.setState({ SnackBar: false })}
-                    />
-                </div>
-            </Dialog>
+                    <DialogActions>
+                        <Button onClick={this.onCreatePress} color='primary' style={{ margin: '1rem auto' }}>Create</Button>
+                    </DialogActions>
+                </Dialog>
+                <this.ServerResponse />
+            </div>
         );
     }
 }
@@ -262,13 +268,11 @@ function mapDispatchToProps (dispatch) {
     return bindActionCreators(
         {
             getBoardsandPosts,
-            addPost
+            addPost,
+            dispatch
         },
         dispatch
     );
 }
 
-export default connect(
-    mapStateToProps,
-    mapDispatchToProps
-)(PostDialog);
+export default connect(mapStateToProps, mapDispatchToProps)(PostDialog);

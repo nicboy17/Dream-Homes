@@ -8,12 +8,12 @@ import { theme } from './themes/theme';
 import './App.css';
 
 import Main from './pages/Main';
-import SignUp from './pages/SignUp.js';
 import Login from './components/Dialog/Login/Login';
+import SignUp from './components/Dialog/SignUp/SignUp';
 import ProfilePage from './pages/Profile/ProfilePage.js';
 
 import PostPage from './pages/Post/PostPage';
-import { getToken } from './actions/userActions';
+import { getToken } from './actions/user';
 
 import PostInBoards from './pages/Profile/PostsInBoards';
 import NavBar from './components/Navbar/Navbar';
@@ -34,6 +34,7 @@ class App extends Component {
                         <Switch>
                             <Route exact path='/' component={withRouter(Main)} />
                             <Route exact path='/login' component={Login} />
+                            <Route exact path='/signup' component={SignUp} />
                             <Route path='/posts/:id' component={PostPage} />
                             <Route path='/profile/:username/following' component={FollowingPage}/>
                             <Route
@@ -42,7 +43,6 @@ class App extends Component {
                                     <ProfilePage key={props.match.params.username} {...props} />
                                 )}
                             />
-                            <Route exact path='/signup' component={SignUp} />
                             <Route path='/board/:id' component={PostInBoards}/>
                         </Switch>
                     </div>

@@ -37,7 +37,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 // eslint-disable-next-line react/prop-types
-const BoardList = ({ boards, handleSelect, value, handleSave, visible }) => {
+const BoardList = ({ boards, handleSelect, value, handleSave, disabled, visible }) => {
     const classes = useStyles();
 
     if (!visible) {
@@ -46,7 +46,7 @@ const BoardList = ({ boards, handleSelect, value, handleSave, visible }) => {
 
     return (
         <form autoComplete='off'>
-            <FormControl className={classes.select} component={'div'}>
+            <FormControl className={classes.select}>
                 <Select value={value} onChange={handleSelect}
                     displayEmpty variant={'outlined'} className={classes.board}
                     inputProps={{
@@ -64,7 +64,7 @@ const BoardList = ({ boards, handleSelect, value, handleSave, visible }) => {
                     })}
                 </Select>
                 <span>
-                    <Button variant="contained" size="medium" color="primary" className={classes.save} onClick={handleSave} href={''}>Save</Button>
+                    <Button variant="contained" size="medium" color="primary" className={classes.save} onClick={handleSave} disabled={disabled}>Save</Button>
                 </span>
             </FormControl>
         </form>

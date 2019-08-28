@@ -3,12 +3,11 @@ import { withStyles } from '@material-ui/styles';
 import { compose, bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import Dialog from '@material-ui/core/Dialog';
-import LinearProgress from '@material-ui/core/LinearProgress';
 import { DialogTitle, DialogContent } from '../components';
 import SnackBar from '../../SnackBar/SnackBar';
-import { login, respond } from '../../../actions/user';
-import { Link, Redirect } from 'react-router-dom';
-import LoginForm from './LoginForm';
+import { register, respond } from '../../../actions/user';
+import { Link } from 'react-router-dom';
+import SignupForm from './SignUpForm';
 
 const styles = theme => ({
     footer: {
@@ -34,20 +33,26 @@ const styles = theme => ({
     }
 });
 
-class Login extends React.Component {
+class SignUp extends React.Component {
     constructor (props) {
         super(props);
 
+        this.nameValidator = this.nameValidator.bind(this);
+        this.usernameValidator = this.usernameValidator.bind(this);
         this.emailValidator = this.emailValidator.bind(this);
         this.passwordValidator = this.passwordValidator.bind(this);
+        this.confirmPasswordValidator = this.confirmPasswordValidator.bind(this);
         this.handleChange = this.handleChange.bind(this);
-        this.handleSignIn = this.handleSignIn.bind(this);
+        this.handleSignUp = this.handleSignUp.bind(this);
         this.snackBarClose = this.snackBarClose.bind(this);
 
         this.state = {
             open: true,
+            name: { value: '', error: false, message: '', validator: this.nameValidator },
+            username: { value: '', error: false, message: '', validator: this.usernameValidator },
             email: { value: '', error: false, message: '', validator: this.emailValidator },
             password: { value: '', error: false, message: '', validator: this.passwordValidator },
+            confirmPassword: { value: '', error: false, message: '', validator: this.confirmPasswordValidator },
             snackBar: false
         };
     }
@@ -59,14 +64,15 @@ class Login extends React.Component {
         this.state[name].validator(value);
     }
 
-    handleSignIn (e) {
+    handleSignUp (e) {
         e.preventDefault();
 
-        this.props.login({
+        this.props.register({
+            name: this.state.name.value,
+            username: this.state.username.value,
             email: this.state.email.value,
             password: this.state.password.value
         });
-
         this.setState({ snackBar: true });
     }
 
@@ -82,17 +88,20 @@ class Login extends React.Component {
 
         this.setState({ snackBar: false });
         this.props.dispatch(respond());
+        if (this.props.userStore.authenticated) {
+            this.props.history.push('profile/' + this.props.userStore.user.username);
+        }
     }
 
     ServerResponse = () => {
         if (this.props.userStore.authenticated) {
             return (
-                <SnackBar message={'Authentication Success'} variant={'success'} open={this.state.snackBar}
+                <SnackBar message={'Sign Up Success'} variant={'success'} open={this.state.snackBar}
                     onClose={this.snackBarClose} duration={1250}/>
             );
         } else if (!this.props.userStore.authenticated && this.props.userStore.error) {
             return (
-                <SnackBar message={'Authentication Failed: email or password is incorrect'} variant={'error'}
+                <SnackBar message={'Sign Up Failed: ' + this.props.userStore.error.message} variant={'error'}
                     open={this.state.snackBar} onClose={this.snackBarClose} duration={2000}/>
             );
         }
@@ -101,23 +110,19 @@ class Login extends React.Component {
     };
 
     render () {
-        const { classes, userStore } = this.props;
-        if (userStore.authenticated && !this.state.snackBar) {
-            return (<Redirect to={'/profile/' + userStore.user.username} />);
-        }
+        const { classes } = this.props;
 
         return (
             <div>
                 <Dialog onClose={this.handleClose} aria-labelledby="dialog-title" open={this.state.open} maxWidth={'md'}>
-                    <this.Loading/>
                     <DialogTitle id="title" title={'Welcome!'} onClose={this.handleClose} />
                     <DialogContent>
-                        <LoginForm handleChange={this.handleChange} handleSignIn={this.handleSignIn}
-                            email={this.state.email} password={this.state.password}
+                        <SignupForm handleChange={this.handleChange} handleSignIn={this.handleSignUp}
+                            name={this.state.name} username={this.state.username} email={this.state.email} password={this.state.password} confirmPassword={this.state.confirmPassword}
                             disabled={this.state.snackBar}/>
                     </DialogContent>
                     <div className={classes.footer}>
-                        <p className={classes.p}>{'Don\'t have an account?'}<Link to='/signup' className={classes.signUp}> Sign Up!</Link></p>
+                        <p className={classes.p}>{'Already a Member?'}<Link to='/login' className={classes.signUp}> Login</Link></p>
                     </div>
                 </Dialog>
                 <this.ServerResponse />
@@ -125,13 +130,41 @@ class Login extends React.Component {
         );
     }
 
-    Loading = () => {
-        if (this.state.snackBar) {
-            return <LinearProgress/>;
-        }
+    nameValidator (value) {
+        const name = this.state.name;
 
-        return null;
-    };
+        if (value === '') {
+            name.error = true;
+            name.message = 'Name must not be empty';
+        } else if (value.length < 3) {
+            name.error = true;
+            name.message = 'name must not be at least 3 characters';
+        } else {
+            name.error = false;
+            name.message = '';
+        }
+        name.value = value;
+
+        this.setState({ name });
+    }
+
+    usernameValidator (value) {
+        const username = this.state.username;
+
+        if (value === '') {
+            username.error = true;
+            username.message = 'Name must not be empty';
+        } else if (value.length < 3) {
+            username.error = true;
+            username.message = 'name must not be at least 3 characters';
+        } else {
+            username.error = false;
+            username.message = '';
+        }
+        username.value = value;
+
+        this.setState({ username });
+    }
 
     emailValidator (value) {
         const email = this.state.email;
@@ -159,6 +192,9 @@ class Login extends React.Component {
         if (value === '' || !value) {
             password.error = true;
             password.message = 'Password must not be empty';
+        } else if (value.length < 8) {
+            password.error = true;
+            password.message = 'password must not be at least 8 characters';
         } else {
             password.error = false;
             password.message = '';
@@ -166,6 +202,25 @@ class Login extends React.Component {
         password.value = value;
 
         this.setState({ password });
+    }
+
+    confirmPasswordValidator (value) {
+        const password = this.state.password.value;
+        const confirm = this.state.confirmPassword;
+
+        if (value === '' || !value) {
+            confirm.error = true;
+            confirm.message = 'Confirm Password must not be empty';
+        } else if (value !== password) {
+            confirm.error = true;
+            confirm.message = 'Confirm Password does not match Password';
+        } else {
+            confirm.error = false;
+            confirm.message = '';
+        }
+        confirm.value = value;
+
+        this.setState({ confirm });
     }
 }
 
@@ -176,11 +231,11 @@ const mapStateToProps = state => ({
 function mapDispatchToProps (dispatch) {
     return bindActionCreators(
         {
-            login,
+            register,
             dispatch
         },
         dispatch
     );
 }
 
-export default compose(withStyles(styles), connect(mapStateToProps, mapDispatchToProps))(Login);
+export default compose(withStyles(styles), connect(mapStateToProps, mapDispatchToProps))(SignUp);

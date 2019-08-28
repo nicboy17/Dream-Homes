@@ -1,7 +1,9 @@
 import {
     GET_TOKEN,
+    REGISTER,
+    REMOVE_ERROR,
+    EDIT_USER,
     LOGIN,
-    LOGIN_RESPONSE,
     LOGOUT,
     SAVE_INTERESTS,
     FOLLOW,
@@ -13,8 +15,18 @@ export const login = user => ({
     user
 });
 
-export const loginResponse = () => ({
-    type: LOGIN_RESPONSE
+export const register = (user) => ({
+    type: REGISTER,
+    user
+});
+
+export const edit = (user) => ({
+    type: EDIT_USER,
+    user
+});
+
+export const respond = () => ({
+    type: REMOVE_ERROR
 });
 
 export const logout = () => ({
