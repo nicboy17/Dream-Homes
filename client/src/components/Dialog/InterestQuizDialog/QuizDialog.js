@@ -6,7 +6,7 @@ import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
 import { DialogTitle, DialogActions, DialogContent } from '../components';
 import Interests from './Interests';
-import { saveInterests } from '../../../actions/userActions';
+import { saveInterests } from '../../../actions/user';
 
 const styles = theme => ({
     root: {

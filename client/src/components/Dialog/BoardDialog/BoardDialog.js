@@ -8,7 +8,9 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import { DialogTitle } from '../components';
 import TextField from '@material-ui/core/TextField';
-import { addBoard, respond } from '../../../actions/userActions';
+import { Redirect } from 'react-router-dom';
+import { respond } from '../../../actions/user';
+import { addBoard } from '../../../actions/board';
 import SnackBar from '../../SnackBar/SnackBar';
 
 const styles = theme => ({
@@ -83,17 +85,9 @@ class BoardDialog extends Component {
     };
 
     render () {
-        // Redirect user to profile if not authorized
-        const {
-            userStore,
-            match: { params },
-            classes
-        } = this.props;
-        if (userStore.authenticated) {
-            if (userStore.user.username !== params.username) {
-                const redirect = `/profile/${params.username}`;
-                return <Redirect to={redirect} />;
-            }
+        const { userStore, match: { params }, classes } = this.props;
+        if (userStore.authenticated && userStore.user.username !== params.username) {
+            return <Redirect to={`/profile/${params.username}`} />;
         }
         return (
             <div>

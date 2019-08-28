@@ -1,6 +1,12 @@
 /* eslint-disable camelcase */
-import { FETCH_POSTS_SUCCESS, FETCH_POSTS_FAIL, SEARCH_POSTS, FETCHING_POSTS } from '../actions/types';
+import { FETCH_POSTS_SUCCESS, FETCH_POSTS_FAIL, SEARCH_POSTS, FETCHING_POSTS, ADD_POST } from '../actions/types';
 import { postService } from '../services/post';
+
+export const addPost = (post, username) => ({
+    type: ADD_POST,
+    post,
+    username
+});
 
 export const searchPosts = (search_filter, easy_filters, userId) => ({
     type: SEARCH_POSTS,

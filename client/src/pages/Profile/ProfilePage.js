@@ -2,19 +2,19 @@ import React, { Component } from 'react';
 import { withStyles } from '@material-ui/core/styles';
 import Divider from '@material-ui/core/Divider';
 import ProfileTabs from './ProfileTabs';
-
 import ProfileHeader from './ProfileHeader';
-import Navbar from '../../components/Navbar/Navbar';
+import CircularProgress from '@material-ui/core/CircularProgress';
 import InterestQuizDialog from '../../components/Dialog/InterestQuizDialog/QuizDialog';
 import PostDialog from '../../components/Dialog/PostDialog/PostDialog';
 import BoardDialog from '../../components/Dialog/BoardDialog/BoardDialog';
 import EditPicUserDialog from '../../components/Dialog/EditPicUserDialog/EditPicUserDialog';
-import { Route } from 'react-router-dom';
+import { withRouter, Route } from 'react-router-dom';
 import { bindActionCreators, compose } from 'redux';
-import { getBoardsandPosts } from '../../actions/userActions';
 import { connect } from 'react-redux';
-import { getBoardsandPosts, clearError } from '../../actions/profileActions';
-import { follow, unfollow } from '../../actions/userActions';
+import _ from 'lodash';
+import SnackBar from '../../components/SnackBar/SnackBar';
+import { getBoardsandPosts, clearError } from '../../actions/profile';
+import { follow, unfollow } from '../../actions/user';
 
 const styles = theme => ({
     root: {
@@ -22,12 +22,12 @@ const styles = theme => ({
     },
     body: {
         margin: '2rem auto',
-        width: '80%'
+        width: '85%'
     },
     tabs: {}
 });
 
-class Profile extends Component {
+class ProfilePage extends Component {
     constructor (props) {
         super(props);
 
@@ -47,10 +47,6 @@ class Profile extends Component {
     tabChange (e, value) {
         this.setState({ tab: value });
     }
-
-    onCreate = item => {
-        this.props.history.push(`/profile/${this.state.username}/${item}/create`);
-    };
 
     onFollow = () => {
         const { follow, profileStore: { user } } = this.props;
@@ -87,7 +83,7 @@ class Profile extends Component {
     render () {
         const { classes } = this.props;
 
-        const { profileStore: { user, boards, posts, favourites, loading } } = this.props;
+        const { userStore, profileStore: { user, boards, posts, favourites, loading } } = this.props;
         if (_.isUndefined(user) || loading) {
             return <CircularProgress className="spinner" />;
         }
@@ -96,14 +92,15 @@ class Profile extends Component {
                 <Route path="/profile/:username/edit" component={EditPicUserDialog} />
                 <Route path="/profile/:username/interest-quiz" component={InterestQuizDialog} />
                 <Route path="/profile/:username/post/create"
-                       render={props => <PostDialog key={props.match.params.username} {...props} />}
+                    render={props => <PostDialog key={props.match.params.username} {...props} />}
                 />
                 <Route path="/profile/:username/board/create" component={BoardDialog} />
                 <div className={classes.root}>
-                    <ProfileHeader user={user} history={this.props.history}/>
+                    <ProfileHeader user={userStore} profile={this.props.profileStore} history={this.props.history}
+                        followHandle={() => this.onFollow()} unFollowHandle={() => this.onUnFollow()}/>
                     <Divider variant={'middle'}/>
                     <div className={classes.body}>
-                        <ProfileTabs selected={this.state.tab} onChange={this.tabChange} boards={boards} posts={posts}/>
+                        <ProfileTabs selected={this.state.tab} onChange={this.tabChange} boards={boards} posts={posts} favourites={favourites}/>
                     </div>
                 </div>
                 <Route path={'/profile/:username/interest-quiz'} component={InterestQuizDialog}/>
@@ -134,6 +131,7 @@ const mapDispatchToProps = dispatch => {
 
 export default compose(
     withRouter,
+    withStyles(styles),
     connect(
         mapStateToProps,
         mapDispatchToProps

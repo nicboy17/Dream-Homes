@@ -49,7 +49,7 @@ const useStyles = makeStyles(theme => ({
         }
     },
     image: {
-        width: '20vw',
+        width: '18vw',
         height: 'auto',
         borderRadius: '1vw',
         boxShadow: '0px 1px 3px grey'

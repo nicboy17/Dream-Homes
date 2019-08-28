@@ -8,8 +8,9 @@ import { Link } from 'react-router-dom';
 
 const useStyles = makeStyles(theme => ({
     root: {
-        margin: theme.spacing(7),
-        maxWidth: '80%'
+        margin: '3rem auto',
+        maxWidth: '85%',
+        padding: '2rem 0 '
     },
     avatar: {
         marginRight: '1.5rem',
@@ -24,8 +25,50 @@ const useStyles = makeStyles(theme => ({
     }
 }));
 
-const ProfileHeader = ({ user, history }) => {
+const ProfileHeader = ({ user, profile, history, followHandle, unFollowHandle }) => {
     const classes = useStyles();
+
+    const FollowButton = () => {
+        if (!user.authenticated) {
+            return null;
+        }
+
+        return !profile.user.isFollowing ? (
+            <Button className="followButton" color="primary" onClick={() => followHandle()}>
+                Follow
+            </Button>
+        ) : (
+            <Button
+                className="followButton"
+                color="primary"
+                variant={'contained'}
+                onClick={() => unFollowHandle()}
+            >
+                unFollow
+            </Button>
+        );
+    };
+
+    const CreateButtons = () => {
+        if (user.authenticated && profile.user._id !== user.user._id) {
+            return <FollowButton />;
+        }
+        return (
+            <div>
+                <Button variant="outlined" size="medium" color="primary" className={classes.button} onClick={() => {
+                    history.push(`/profile/${user.user.username}/board/create`);
+                }}>
+                    Create Board
+                </Button>
+                <Button variant="contained" size="medium" color="primary" className={classes.button}
+                    onClick={() => {
+                        history.push(`/profile/${user.user.username}/post/create`);
+                    }}>
+                    Create Post
+                </Button>
+            </div>
+        );
+    };
 
     return (
         <div className={classes.root}>
@@ -33,34 +76,22 @@ const ProfileHeader = ({ user, history }) => {
                 <div>
                     <Grid container direction="row" justify="center" alignItems="center">
                         <div className={classes.beside}>
-                            <Avatar className={classes.avatar} component={Link} src={user.image}
-                                to={'/profile/' + user.username + '/edit'}/>
+                            <Avatar className={classes.avatar} component={Link} src={user.profile}
+                                to={`/profile/${user.username}/edit`}/>
                         </div>
                         <div className={classes.beside}>
                             <Typography variant="h4" gutterBottom>
-                                {user.name}
+                                {profile.user.name}
                             </Typography>
                             <div>
                                 <Typography variant="caption" gutterBottom className={classes.beside}>
-                                    134 followers | 280 following
+                                    {profile.user.followers} followers | {profile.user.following} following
                                 </Typography>
                             </div>
                         </div>
                     </Grid>
                 </div>
-                <div>
-                    <Button variant="outlined" size="medium" color="primary" className={classes.button} onClick={() => {
-                        history.push('/profile/' + user.username + '/board/create');
-                    }}>
-                        Create Board
-                    </Button>
-                    <Button variant="contained" size="medium" color="primary" className={classes.button}
-                        onClick={() => {
-                            history.push('/profile/' + user.username + '/post/create');
-                        }}>
-                        Create Post
-                    </Button>
-                </div>
+                <CreateButtons />
             </Grid>
         </div>
     );

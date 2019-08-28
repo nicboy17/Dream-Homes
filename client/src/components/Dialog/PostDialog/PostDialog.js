@@ -5,13 +5,14 @@ import Dialog from '@material-ui/core/Dialog';
 import DialogContent from '@material-ui/core/DialogContent';
 import { DialogActions, DialogTitle } from '../components';
 import { Chip } from '@material-ui/core';
-import Grid from '@material-ui/core/Grid';
 import _ from 'lodash';
 import FormContent from './FormContent';
 import FileUploader from './FileUploader';
 import { Redirect } from 'react-router-dom';
 import { bindActionCreators } from 'redux';
-import { getBoardsandPosts, addPost, respond } from '../../../actions/userActions';
+import { respond } from '../../../actions/user';
+import { getBoardsandPosts } from '../../../actions/profile';
+import { addPost } from '../../../actions/post';
 import SnackBar from '../../SnackBar/SnackBar';
 import BoardList from './BoardList';
 import '../../../pages/stylesheet/Dialog.css';
@@ -119,7 +120,8 @@ class PostDialog extends React.Component {
     };
 
     // Create post
-    onCreatePress = async () => {
+    onCreatePress = (e) => {
+        const { image, title, link, description, titleError, linkError, descriptionError } = this.state;
         e.preventDefault();
         if (image.length < 1) {
             this.setState({ imageError: 'Please include atleast one image', SnackBar: true });
@@ -186,8 +188,7 @@ class PostDialog extends React.Component {
             tagError,
             titleError,
             board,
-            image,
-            imageError
+            image
         } = this.state;
 
         // Redirect user to profile if not authorized
@@ -205,14 +206,14 @@ class PostDialog extends React.Component {
                     onClose={this.handleClose}
                     aria-labelledby='form-dialog-title'
                     onClick={() => this.onCloseClick()}
-                    maxWidth={'md'}
+                    maxWidth={'sm'}
 
                 >
                     <div onClick={e => e.stopPropagation()}>
                         <DialogTitle style={{ textAlign: 'center' }} id='dialog-title' title={'Create a post'} onClose={() => this.onCloseClick()}/>
-                        <DialogContent>
-                            <Grid container direction="row" justify="space-between" alignItems="center">
-                                <Grid item xs={6}>
+                        <div className="container">
+                            <div className="splitContainer">
+                                <DialogContent>
                                     <BoardList
                                         className="boardList"
                                         boards={this.props.userStore.user.boards}
@@ -232,19 +233,25 @@ class PostDialog extends React.Component {
                                         link={link}
                                     />
                                     {this.renderTags()}
-                                </Grid>
-                                <Grid item xs={6}>
-                                    <FileUploader
-                                        onUploadImages={this.onUploadImages}
-                                        files={this.state.files}
-                                    />
-                                </Grid>
-                            </Grid>
-                        </DialogContent>
-                        <DialogActions>
-                            <Button onClick={this.onCreatePress} color='primary' style={{ margin: '1rem auto' }}>Create</Button>
-                        </DialogActions>
+                                </DialogContent>
+                            </div>
+                            <div className="splitContainer">
+                                <DialogContent>
+                                    <div className="fileUpload" onClick={() => {}}>
+                                        <FileUploader
+                                            onUploadImages={this.onUploadImages}
+                                            files={image}
+                                        />
+                                        {this.renderSmallText()}
+                                    </div>
+                                </DialogContent>
+                                <DialogContent />
+                            </div>
+                        </div>
                     </div>
+                    <DialogActions>
+                        <Button onClick={this.onCreatePress} color='primary' style={{ margin: '1rem auto' }}>Create</Button>
+                    </DialogActions>
                 </Dialog>
                 <this.ServerResponse />
             </div>

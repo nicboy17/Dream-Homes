@@ -1,21 +1,13 @@
 import {
     GET_TOKEN,
+    REGISTER,
+    REMOVE_ERROR,
+    EDIT_USER,
     LOGIN,
-    LOGIN_RESPONSE,
     LOGOUT,
     SAVE_INTERESTS,
     FOLLOW,
     UNFOLLOW, FETCH_FOLLOWING, FETCH_FOLLOWERS, ADD_FAVOURITE, REMOVE_FAVOURITE
-} from '../actions/types';
-import {
-    ADD_BOARD,
-    ADD_POST,
-    GET_TOKEN,
-    GET_USER_BOARDS_POSTS,
-    LOGIN,
-    REMOVE_ERROR,
-    LOGOUT,
-    REGISTER, EDIT_USER
 } from '../actions/types';
 
 export const login = user => ({

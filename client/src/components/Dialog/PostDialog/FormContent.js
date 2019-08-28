@@ -1,13 +1,5 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import TextField from '@material-ui/core/TextField';
-import { makeStyles } from '@material-ui/styles';
-
-const useStyles = makeStyles(theme => ({
-    root: {
-        display: 'block',
-        padding: theme.spacing(2)
-    }
-}));
 
 const FormContent = ({
     onChangeText,
@@ -21,8 +13,6 @@ const FormContent = ({
     link,
     description
 }) => {
-    const classes = useStyles();
-
     return (
         <Fragment>
             <TextField

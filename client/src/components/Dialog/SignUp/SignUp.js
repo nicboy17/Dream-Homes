@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import Dialog from '@material-ui/core/Dialog';
 import { DialogTitle, DialogContent } from '../components';
 import SnackBar from '../../SnackBar/SnackBar';
-import { register, respond } from '../../../actions/userActions';
+import { register, respond } from '../../../actions/user';
 import { Link } from 'react-router-dom';
 import SignupForm from './SignUpForm';
 

@@ -7,7 +7,7 @@ import { DialogTitle } from '../components';
 import TextField from '@material-ui/core/TextField';
 import Avatar from '@material-ui/core/Avatar';
 import { bindActionCreators, compose } from 'redux';
-import { edit, respond } from '../../../actions/userActions';
+import { edit, respond } from '../../../actions/user';
 import { withStyles } from '@material-ui/styles';
 import { connect } from 'react-redux';
 import SnackBar from '../../SnackBar/SnackBar';
@@ -21,7 +21,7 @@ const styles = theme => ({
     }
 });
 
-class EditPicUserDialog extends Component {
+class EditUserDialog extends Component {
     constructor (props) {
         super(props);
         this.state = {
@@ -40,10 +40,9 @@ class EditPicUserDialog extends Component {
         this.snackBarClose = this.snackBarClose.bind(this);
     }
 
-    // Fetch Name and Picture from UserDB
     componentDidMount = async () => {
         this.setState({
-            profile: this.props.userStore.user.image,
+            profile: this.props.userStore.user.profile,
             username: this.props.match.params.username,
             name: this.props.userStore.user.name
         });
@@ -186,4 +185,4 @@ function mapDispatchToProps (dispatch) {
     );
 }
 
-export default compose(withStyles(styles), connect(mapStateToProps, mapDispatchToProps))(EditPicUserDialog);
+export default compose(withStyles(styles), connect(mapStateToProps, mapDispatchToProps))(EditUserDialog);

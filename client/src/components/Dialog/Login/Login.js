@@ -6,7 +6,7 @@ import Dialog from '@material-ui/core/Dialog';
 import LinearProgress from '@material-ui/core/LinearProgress';
 import { DialogTitle, DialogContent } from '../components';
 import SnackBar from '../../SnackBar/SnackBar';
-import { login, respond } from '../../../actions/userActions';
+import { login, respond } from '../../../actions/user';
 import { Link, Redirect } from 'react-router-dom';
 import LoginForm from './LoginForm';
 

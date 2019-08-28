@@ -6,12 +6,11 @@ import Post from './Post';
 import MorePosts from './MorePosts';
 import Divider from '@material-ui/core/Divider';
 import CircularProgress from '@material-ui/core/CircularProgress';
-import { respond } from '../../actions/userActions';
-import { addPostToBoard } from '../../actions/board';
+import { respond } from '../../actions/user';
 import SnackBar from '../../components/SnackBar/SnackBar';
-import { getBoardsandPosts } from '../../actions/profileActions';
+import { getBoardsandPosts } from '../../actions/profile';
 import { fetchPosts } from '../../actions/post';
-import { addBoardPost } from '../../actions/boardActions';
+import { addBoardPost } from '../../actions/board';
 
 const styles = theme => ({
     post: {
@@ -62,7 +61,7 @@ class PostPage extends React.Component {
 
     save (e) {
         e.preventDefault();
-        this.props.addPostToBoard(this.state.board, this.state.id);
+        this.props.addBoardPost(this.state.board, this.state.id);
         this.setState({ snackBar: true });
     }
 
@@ -119,13 +118,16 @@ class PostPage extends React.Component {
         return (
             <div>
                 <div className={classes.post}>
-                    <Post handleSave={this.save}
+                    <Post
+                        user={user}
+                        id={match.params.id}
+                        handleSave={this.save}
                         handleSelectBoard={this.handleChange}
                         value={this.state.board}
                         disabled={this.state.disabled}
                         post={post(this.props.match.params.id)}
-                          boards={authenticated ? user.boards : []}
-                          authenticated={authenticated}/>
+                        boards={authenticated ? user.boards : []}
+                        authenticated={authenticated}/>
                 </div>
                 <Divider component={'hr'} />
                 <div className={classes.more}>
@@ -151,9 +153,9 @@ function mapDispatchToProps (dispatch) {
     return bindActionCreators(
         {
             getBoardsandPosts,
-            addPostToBoard,
-            dispatch
+            addBoardPost,
             fetchPosts,
+            dispatch
         },
         dispatch
     );

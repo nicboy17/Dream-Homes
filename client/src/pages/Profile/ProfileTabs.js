@@ -5,9 +5,8 @@ import Typography from '@material-ui/core/Typography';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import Box from '@material-ui/core/Box';
-import Boards from './boards';
-import Inspiration from './inspiration';
-import Posts from './posts';
+import Boards from './Boards';
+import Posts from '../../components/Posts/Posts';
 
 function TabPanel (props) {
     const { children, value, index, ...other } = props;
@@ -30,26 +29,26 @@ const useStyles = makeStyles(theme => ({
     root: {}
 }));
 
-const ProfileTabs = ({ selected, onChange, boards, posts }) => {
+const ProfileTabs = ({ selected, onChange, boards, posts, favourites }) => {
     const classes = useStyles();
 
     return (
         <div className={classes.root}>
             <Grid container direction="row" justify="space-between" alignItems="flex-start">
                 <Tabs value={selected} onChange={onChange}>
-                    <Tab label="BOARDS" value={0}/>
-                    <Tab label="INSPIRATION" value={1}/>
-                    <Tab label="MY POSTS" value={2}/>
+                    <Tab label="Boards" value={0} />
+                    <Tab label="Posts" value={1} />
+                    <Tab label="Favourites" value={2} />
                 </Tabs>
             </Grid>
             <TabPanel value={selected} index={0}>
-                <Boards boards={boards}/>
+                <Boards boards={boards} />
             </TabPanel>
             <TabPanel value={selected} index={1}>
-                <Inspiration/>
+                <Posts posts={posts} />
             </TabPanel>
             <TabPanel value={selected} index={2}>
-                <Posts posts={posts}/>
+                <Posts posts={favourites} />
             </TabPanel>
         </div>
     );

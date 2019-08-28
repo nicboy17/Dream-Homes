@@ -1,7 +1,7 @@
-import { axios, addTokenHeaders, Put, Get, Post } from './utils';
+import { axios, createFormData, addTokenHeaders, Put, Get, Post } from './utils';
 
 const signin = (data) => {
-    if (!data.user.image) {
+    if (!data.user.profile) {
         data.user.profile = 'https://team-pineapple.s3.ca-central-1.amazonaws.com/placeholder.jpg';
     }
     localStorage.setItem('token', data.token);
@@ -22,7 +22,6 @@ export const userService = {
     login: (user) => {
         return axios.post('/users/login', user).then(res => {
             return signin(res.data);
-            return res.data;
         }).catch(err => {
             throw err.response.data;
         });
@@ -42,7 +41,7 @@ export const userService = {
         }).catch(err => {
             throw err.response.data;
         });
-    }
+    },
     getUser: () => {
         return JSON.parse(localStorage.getItem('user'));
     },

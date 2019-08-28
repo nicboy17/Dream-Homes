@@ -2,14 +2,6 @@ import React from 'react';
 import { makeStyles } from '@material-ui/styles';
 import { Typography, Grid } from '@material-ui/core';
 import Avatar from '@material-ui/core/Avatar';
-import face from '../../assets/face.jpg';
-import Button from '@material-ui/core/Button';
-import Icon from '@material-ui/core/Icon';
-
-import { withRouter } from 'react-router-dom';
-import { bindActionCreators, compose } from 'redux';
-import { connect } from 'react-redux';
-import { favouritePost, unFavouritePost } from '../../actions/userActions';
 
 const useStyles = makeStyles(theme => ({
     author: {
@@ -36,65 +28,22 @@ const PostDetails = ({ post, history, favouritePost, unFavouritePost, isFavourit
     const classes = useStyles();
     const placeholder = 'https://team-pineapple.s3.ca-central-1.amazonaws.com/placeholder.jpg';
 
-    const onFavourite = () => {
-        favouritePost(post.user.username, match.params.id);
-    };
-
-    const onUnFavourite = () => {
-        unFavouritePost(post.user.username, match.params.id);
-    };
-
-    const FavouriteButton = () => {
-        if (authenticated) {
-            if (isFavourited(match.params.id)) {
-                return <Button onClick={() => onUnFavourite()}><Icon>star</Icon> unFavorite</Button>;
-            }
-            return <Button onClick={() => onFavourite()}><Icon>star</Icon> Favorite</Button>;
-        }
-        return null;
-    };
-
     const date = new Date(post.date).toLocaleString('default', { day: 'numeric', month: 'long', year: 'numeric' });
 
     return (
         <div>
-            <Grid container direction="row" justify="flex-start" alignItems="center" spacing={4} className={classes.author}>
-                <Avatar src={face} component={'div'} className={classes.avatar} />
+            <Grid container direction="row" justify="flex-start" alignItems="center" spacing={4} className={classes.author}
+                onClick={() => history.push(`/profile/${post.user.username}`)}>
+                <Avatar src={post.user.profile || placeholder} component={'div'} className={classes.avatar} />
                 <Typography variant="subtitle2" className={classes.user}>{post.user.name}</Typography>
             </Grid>
             <Grid className={classes.content}>
                 <Typography variant="h5" component="h5" className={classes.title}>{post.title}</Typography>
                 <Typography variant="subtitle2" className={classes.text}>{post.description}</Typography>
                 <p className={classes.date}>{'Published ' + date}</p>
-                <FavouriteButton/>
             </Grid>
         </div>
     );
 };
 
-const mapStateToProps = state => ({
-    isFavourited: (id) => {
-        if (state.UserStore.user.favourites.indexOf(id) !== -1) {
-            return true;
-        }
-        return false;
-    }
-});
-
-function mapDispatchToProps (dispatch) {
-    return bindActionCreators(
-        {
-            favouritePost,
-            unFavouritePost
-        },
-        dispatch
-    );
-}
-
-export default compose(
-    withRouter,
-    connect(
-        mapStateToProps,
-        mapDispatchToProps
-    )
-)(PostDetails);
+export default PostDetails;
