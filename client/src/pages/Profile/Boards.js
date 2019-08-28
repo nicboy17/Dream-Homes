@@ -20,8 +20,9 @@ const useStyles = makeStyles(theme => ({
         paddingLeft: 10
     },
     boardPreview: {
-        display: 'grid',
+        display: 'absolute',
         height: '25vh',
+        width: '100%',
         overflow: 'hidden'
     }
 }));
@@ -35,35 +36,17 @@ const Boards = ({ boards }) => {
         boards.map((board, i) => {
             return (
                 <Card key={i} className={classes.card}>
-                    <Link
-                        to={{ pathname: `/board/${board._id}`, state: { board } }}
-                        className="boardLink"
-                    >
-                        <CardActionArea>
+                    <CardActionArea>
+                        <Link to={{ pathname: `/board/${board._id}`, state: { board } }} className="boardLink">
                             <BoardPreview posts={board.posts} className={classes.boardPreview}/>
-                        </CardActionArea>
-                    </Link>
-                    <div
-                        style={{
-                            display: 'grid',
-                            gridTemplateColumns: '1fr 1fr'
-                        }}
-                    >
+                        </Link>
+                    </CardActionArea>
+                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr' }}>
                         <div>
-                            <Typography variant="h6" className={classes.cardHeader}>
-                                {board.title}
-                            </Typography>
-                            <Typography variant="body1" className={classes.cardHeader}>
-                                {board.posts.length} posts
-                            </Typography>
+                            <Typography variant="h6" className={classes.cardHeader}>{board.title}</Typography>
+                            <Typography variant="body1" className={classes.cardHeader}>{board.posts.length} posts</Typography>
                         </div>
-                        <div
-                            style={{
-                                display: 'grid',
-                                alignContent: 'center',
-                                justifyContent: 'end'
-                            }}
-                        >
+                        <div style={{ display: 'grid', alignContent: 'center', justifyContent: 'end' }}>
                             <DeleteButton item="boards" id={board._id} title={board.title} />
                         </div>
                     </div>

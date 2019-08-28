@@ -24,7 +24,7 @@ const useStyles = makeStyles(theme => ({
     }
 }));
 
-const PostDetails = ({ post, history, favouritePost, unFavouritePost, isFavourited, authenticated, match }) => {
+const PostDetails = ({ post, history }) => {
     const classes = useStyles();
     const placeholder = 'https://team-pineapple.s3.ca-central-1.amazonaws.com/placeholder.jpg';
 

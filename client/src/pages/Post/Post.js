@@ -20,11 +20,13 @@ const useStyles = makeStyles(theme => ({
         fontWeight: 'bold'
     },
     imageContainer: {
-        position: 'relative'
+        position: 'relative',
+        marginTop: '2rem'
     },
     image: {
-        height: '60vh',
+        height: 'auto',
         width: 'auto',
+        maxWidth: '85%',
         float: 'right',
         paddingRight: '3rem'
     },
@@ -36,7 +38,7 @@ const useStyles = makeStyles(theme => ({
     }
 }));
 
-const Post = ({ id, user, post, boards, handleSelectBoard, handleSave, value, profileImage, authenticated, isFavourited, favouritePost, unFavouritePost }) => {
+const Post = ({ id, user, post, boards, handleSelectBoard, handleSave, value, authenticated, isFavourited, favouritePost, unFavouritePost, history }) => {
     const classes = useStyles();
 
     const onFavourite = () => {
@@ -65,7 +67,7 @@ const Post = ({ id, user, post, boards, handleSelectBoard, handleSave, value, pr
             </Grid>
             <Grid item xs={6}>
                 <div className={classes.info}>
-                    <PostDetails post={post} profileImage={profileImage} authenticated={authenticated}/>
+                    <PostDetails post={post} history={history} authenticated={authenticated}/>
                     <BoardList
                         boards={boards}
                         value={value}

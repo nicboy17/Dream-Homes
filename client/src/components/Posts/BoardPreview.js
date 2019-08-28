@@ -6,7 +6,9 @@ import placeholder from '../../assets/image_placeholder.png';
 const useStyles = makeStyles(theme => ({
     imageContainer: {
         // display: 'inline-block',
-        width: '33%'
+        position: 'absolute',
+        width: '32.5%',
+        margin: 1
     },
     image: {
         display: 'block',
@@ -16,7 +18,8 @@ const useStyles = makeStyles(theme => ({
     },
     masonry: {
         margin: '0 auto',
-        position: 'relative',
+        width: '100%!important',
+        height: '100%!important',
         textAlign: 'center',
         color: 'white'
     }
@@ -42,7 +45,7 @@ const BoardPreview = ({ posts, className }) => {
         <div className={className}>
             <Masonry
                 className={classes.masonry}
-                options={{ fitWidth: true }}
+                options={{ fitWidth: true, resize: false, transitionDuration: 0 }}
                 disableImagesLoaded={false}
                 updateOnEachImageLoad={false}
                 imagesLoadedOptions={{}}

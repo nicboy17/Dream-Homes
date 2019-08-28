@@ -7,7 +7,7 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import InterestQuizDialog from '../../components/Dialog/InterestQuizDialog/QuizDialog';
 import PostDialog from '../../components/Dialog/PostDialog/PostDialog';
 import BoardDialog from '../../components/Dialog/BoardDialog/BoardDialog';
-import EditPicUserDialog from '../../components/Dialog/EditPicUserDialog/EditPicUserDialog';
+import EditPicUserDialog from '../../components/Dialog/EditUserDialog/EditUserDialog';
 import { withRouter, Route } from 'react-router-dom';
 import { bindActionCreators, compose } from 'redux';
 import { connect } from 'react-redux';

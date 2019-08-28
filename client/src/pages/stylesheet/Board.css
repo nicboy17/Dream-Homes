@@ -15,10 +15,21 @@
     cursor: pointer;
 }
 
-.boardTitle {
+.boardHeader {
+    padding: 2rem;
+    position: relative;
     text-align: center;
-    text-decoration: underline;
-    margin: 35px;
+    margin-bottom: 2rem;
+}
+
+.boardTitle {
+    display: inline-block;
+    margin: 0;
+}
+
+.boardClose {
+    display: block;
+    float: right;
 }
 
 .grid {

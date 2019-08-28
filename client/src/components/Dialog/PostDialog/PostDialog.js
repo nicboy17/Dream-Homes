@@ -37,6 +37,7 @@ class PostDialog extends React.Component {
         };
 
         this.snackBarClose = this.snackBarClose.bind(this);
+        this.onCreate = this.onCreate.bind(this);
     }
 
     componentDidMount = async () => {
@@ -119,8 +120,7 @@ class PostDialog extends React.Component {
         }
     };
 
-    // Create post
-    onCreatePress = (e) => {
+    onCreate = (e) => {
         const { image, title, link, description, titleError, linkError, descriptionError } = this.state;
         e.preventDefault();
         if (image.length < 1) {
@@ -250,7 +250,7 @@ class PostDialog extends React.Component {
                         </div>
                     </div>
                     <DialogActions>
-                        <Button onClick={this.onCreatePress} color='primary' style={{ margin: '1rem auto' }}>Create</Button>
+                        <Button onClick={this.onCreate} color='primary' style={{ margin: '1rem auto' }}>Create</Button>
                     </DialogActions>
                 </Dialog>
                 <this.ServerResponse />

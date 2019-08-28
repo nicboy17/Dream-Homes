@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import Masonry from 'react-masonry-component';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Tooltip from '@material-ui/core/Tooltip';
+import IconButton from '@material-ui/core/IconButton';
+import CloseIcon from '@material-ui/icons/Close';
 
 import { connect } from 'react-redux';
 import { bindActionCreators, compose } from 'redux';
@@ -58,14 +60,19 @@ class PostInBoards extends Component {
     };
 
     render () {
-        const { match } = this.props;
+        const { match, history } = this.props;
         const board = this.props.board(match.params.id);
         if (!board) {
             return <CircularProgress className="spinner" />;
         }
         return (
             <div>
-                <h1 className="boardTitle">{board.title}</h1>
+                <div className="boardHeader">
+                    <h1 className="boardTitle">{board.title}</h1>
+                    <IconButton aria-label="close" className="boardClose" onClick={() => history.goBack()} href={''}>
+                        <CloseIcon />
+                    </IconButton>
+                </div>
                 <div className="grid">{this.renderPosts()}</div>
             </div>
         );

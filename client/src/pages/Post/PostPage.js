@@ -129,7 +129,7 @@ class PostPage extends React.Component {
                         boards={authenticated ? user.boards : []}
                         authenticated={authenticated}/>
                 </div>
-                <Divider component={'hr'} />
+                <Divider variant={'middle'}/>
                 <div className={classes.more}>
                     <MorePosts posts={morePosts} />
                 </div>

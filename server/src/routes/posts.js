@@ -1,45 +1,35 @@
 const express = require('express');
 const router = express.Router();
-const mongoose = require('mongoose');
 const { User, Post, Board } = require('../models');
 const { auth, pub } = require ('../middleware');
 const PostValidation = require ('./validate/post');
-
-const _ = require('lodash');
 
 // @route    GET users/posts
 // @desc     Get all posts based on user's interests or filter
 // @access   Public
 router.get ('/', [pub, async (req, res) => {
-    const { search_filter = '', easy_filters = '', userId = ''} = req.query;
-    try {
-        let query;
-        let searchTags = [];
+    let { search_filter: search = '', easy_filters: filters = ''} = req.query;
+    let query = {};
+    let user = { interests:[] };
+    if (req.decoded) { user = await User.findById(req.decoded._id).lean(); }
+    if (search) { search = [...search.split(' '), ...user.interests]; }
+    if (filters) { filters = [...filters.split(',')]; }
 
-        if (search_filter) {
-            searchTags = [...searchTags, search_filter];
-        }
-        if (easy_filters) {
-            searchTags = [...searchTags, ...easy_filters.split(',')];
-        }
-        // If logged in with empty search
-        if (_.isEmpty(searchTags) && userId) {
-            // Get user's interest and add interest into search tags
-            const user = await User.findById(mongoose.Types.ObjectId(userId));
-            searchTags = [...searchTags, ...user.interests];
-            query = { tags: { $in: user.interests } };
-        }
-        // Search by filters if present
-        else if (!_.isEmpty(searchTags)) {
-            query = { tags: { $all: searchTags } };
-        // If not logged in will return a bunch of posts
-        } else {
-            query = {};
-        }
-        const posts = await Post.find(query).populate({ path: 'user', select: 'username name profile' }).lean();
-        res.send(posts);
+    if (search.length > 0) {
+        query.tags = { $in: search };
+    }
+    if (filters.length > 0) {
+        query.tags = { $all: filters };
+    }
+    if(search.length > 0 && filters.length > 0) {
+        query = { $and: [ {tags: { $in: search }}, {tags: { $all: filters }} ] };
+    }
+
+    try {
+        const posts = await Post.find(query).populate('user', 'username name profile').lean();
+        return res.status(200).json({ success: true, posts });
     } catch (err) {
-        res.status(500).send('Something went wrong with the server');
+        return res.status(400).json({ err });
     }
 }]);
 
