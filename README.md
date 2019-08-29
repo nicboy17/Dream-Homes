@@ -44,6 +44,6 @@ npm i \
 npm start
 
 ## Contributors
-- [Chris Chan (mrchrischan)](#https://github.com/mrchrischan)
-- [Kevin Cheng (kevncheng)](#https://github.com/kevncheng)
-- [Nick Major (nicboy17)](#https://github.com/nicboy17)
+- [Chris Chan (mrchrischan)](https://github.com/mrchrischan)
+- [Kevin Cheng (kevncheng)](https://github.com/kevncheng)
+- [Nick Major (nicboy17)](https://github.com/nicboy17)
