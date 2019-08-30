@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { deleteItem } from '../../actions/profile';
+// import { deleteItem } from '../../actions/profile';
 import IconButton from '@material-ui/core/IconButton';
 import DeleteIcon from '@material-ui/icons/Delete';
 import Button from '@material-ui/core/Button';
@@ -9,7 +9,7 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
-import _ from 'lodash';
+import { bindActionCreators } from 'redux';
 
 class DeleteButton extends React.Component {
     state = {
@@ -17,8 +17,8 @@ class DeleteButton extends React.Component {
     };
 
     handleOnDeletePress = () => {
-        const { item, id, deleteItem } = this.props;
-        deleteItem(item, id);
+        // const { item, id, deleteItem } = this.props;
+        // deleteItem(item, id);
         this.setState({ open: false });
     };
 
@@ -32,10 +32,8 @@ class DeleteButton extends React.Component {
         } = this.props;
         if (!authenticated) {
             return <div />;
-        } else if (!_.isUndefined(profileInfo)) {
-            if (user._id !== profileInfo._id) {
-                return <div />;
-            }
+        } else if (profileInfo && user._id !== profileInfo._id) {
+            return <div />;
         }
         return (
             <>
@@ -79,7 +77,15 @@ const mapStateToProps = state => ({
     profileStore: state.ProfileStore
 });
 
+function mapDispatchToProps (dispatch) {
+    return bindActionCreators(
+        {
+        },
+        dispatch
+    );
+}
+
 export default connect(
     mapStateToProps,
-    { deleteItem }
+    mapDispatchToProps
 )(DeleteButton);

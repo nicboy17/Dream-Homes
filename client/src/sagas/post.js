@@ -3,10 +3,9 @@ import {
     ADD_POST,
     ADD_POST_ERROR,
     ADD_POST_SUCCESS,
-    FETCH_POSTS_FAIL,
-    FETCH_POSTS_SUCCESS,
     SEARCH_POSTS,
-    FETCHING_POSTS
+    SEARCH_POSTS_SUCCESS,
+    SEARCH_POSTS_ERROR
 } from '../actions/types';
 import { postService } from '../services/post';
 
@@ -25,11 +24,10 @@ export function * addPostSaga () {
 
 function * searchPosts (request) {
     try {
-        yield put({ type: FETCHING_POSTS });
         const response = yield call(postService.searchPosts, request);
-        yield put({ type: FETCH_POSTS_SUCCESS, payload: response });
+        yield put({ type: SEARCH_POSTS_SUCCESS, payload: response });
     } catch (err) {
-        yield put({ type: FETCH_POSTS_FAIL });
+        yield put({ type: SEARCH_POSTS_ERROR, err });
     }
 }
 

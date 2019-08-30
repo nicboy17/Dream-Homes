@@ -1,9 +1,9 @@
 import {
     FOLLOW_SUCCESS,
     UNFOLLOW_SUCCESS,
-    FETCH_FOLLOWING_SUCCESS,
-    FETCH_FOLLOWERS_SUCCESS,
-    FETCH_FOLLOWERS_ERROR,
+    GET_FOLLOWING_SUCCESS,
+    GET_FOLLOWERS_SUCCESS,
+    GET_FOLLOWERS_ERROR,
     UNFOLLOW_ERROR,
     FOLLOW_ERROR
 } from '../../actions/types';
@@ -35,11 +35,11 @@ export default (state = {}, action) => {
     case FOLLOW_ERROR:
     case UNFOLLOW_ERROR:
         return { ...state, error: action.error };
-    case FETCH_FOLLOWING_SUCCESS:
+    case GET_FOLLOWING_SUCCESS:
         return { ...state, following: action.following };
-    case FETCH_FOLLOWERS_ERROR:
+    case GET_FOLLOWERS_ERROR:
         return { ...state, error: action.error };
-    case FETCH_FOLLOWERS_SUCCESS:
+    case GET_FOLLOWERS_SUCCESS:
         return { ...state, followers: action.followers };
     default:
         return state;

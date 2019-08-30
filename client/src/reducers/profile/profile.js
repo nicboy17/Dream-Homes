@@ -1,9 +1,6 @@
 import {
     GET_USER_BOARDS_POSTS_SUCCESS,
     GET_USER_BOARDS_POSTS_ERROR,
-    FETCH_PROFILE_SUCCESS,
-    FETCH_PROFILE_FAIL,
-    FETCHING_PROFILE,
     CLEAR_ERROR, FOLLOW_SUCCESS, UNFOLLOW_SUCCESS, DELETE_SUCCESS, DELETE_FAIL
 } from '../../actions/types';
 
@@ -39,11 +36,6 @@ export default (state = initialState, action) => {
             loading: false,
             error: ''
         };
-    case FETCHING_PROFILE:
-    case FETCH_PROFILE_SUCCESS:
-        return { ...state, user: action.payload, loading: false };
-    case FETCH_PROFILE_FAIL:
-        return { ...state, error: action.payload.error };
     case GET_USER_BOARDS_POSTS_ERROR:
         return { ...state, error: action.err };
     case DELETE_SUCCESS:

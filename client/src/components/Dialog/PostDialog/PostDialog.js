@@ -5,7 +5,6 @@ import Dialog from '@material-ui/core/Dialog';
 import DialogContent from '@material-ui/core/DialogContent';
 import { DialogActions, DialogTitle } from '../components';
 import { Chip } from '@material-ui/core';
-import _ from 'lodash';
 import FormContent from './FormContent';
 import FileUploader from './FileUploader';
 import { Redirect } from 'react-router-dom';
@@ -61,7 +60,7 @@ class PostDialog extends React.Component {
     onSubmitPress = e => {
         const { tags, tag } = this.state;
         if (e.which === 13) {
-            if (_.includes(_.lowerCase(tags), _.lowerCase(tag))) {
+            if (tags.include(tag.lowercase())) {
                 this.setState({ tagError: 'Can not have duplicate tags' });
             } else if (tag.length > 15) {
                 this.setState({ tagError: 'Tags cannot be more than 15 characters' });
@@ -95,8 +94,8 @@ class PostDialog extends React.Component {
         );
     };
 
-    onDeleteTag = tag => {
-        this.setState({ tags: _.without(this.state.tags, tag) });
+    onDeleteTag = del => {
+        this.setState({ tags: this.state.tags.filter(tag => tag !== del) });
     };
 
     // File pond , handle image upload
@@ -108,11 +107,10 @@ class PostDialog extends React.Component {
     };
 
     renderSmallText = () => {
-        if (_.isEmpty(this.state.image)) {
+        if (!this.state.image) {
             return (
                 <div className="smallText">
                     <div style={{ textAlign: 'center', fontSize: 14 }}>
-                        {/* <h1 style={{ fontSize: 14 }}>Maximum 5 files</h1> */}
                         Use high-quality jpg files <br /> less than 32mb
                     </div>
                 </div>

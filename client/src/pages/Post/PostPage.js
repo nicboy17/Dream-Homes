@@ -9,7 +9,7 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import { respond } from '../../actions/user';
 import SnackBar from '../../components/SnackBar/SnackBar';
 import { getBoardsandPosts } from '../../actions/profile';
-import { fetchPosts } from '../../actions/post';
+import { searchPosts } from '../../actions/post';
 import { addBoardPost } from '../../actions/board';
 
 const styles = theme => ({
@@ -48,7 +48,7 @@ class PostPage extends React.Component {
         const id = this.props.match.params.id;
         this.setState({ id });
         if (!this.props.post(id)) {
-            this.props.fetchPosts('', '', '');
+            this.props.searchPosts('', '');
         }
     }
 
@@ -154,7 +154,7 @@ function mapDispatchToProps (dispatch) {
         {
             getBoardsandPosts,
             addBoardPost,
-            fetchPosts,
+            searchPosts,
             dispatch
         },
         dispatch

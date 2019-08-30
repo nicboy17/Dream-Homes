@@ -6,7 +6,6 @@ import {
     SAVE_INTERESTS_SUCCESS,
     SAVE_INTERESTS_ERROR,
     CLEAR_ERROR,
-    CREATE_POST_LOADING,
     EDIT_USER_SUCCESS, DELETE_SUCCESS, DELETE_FAIL, EDIT_USER_ERROR
 } from '../../actions/types';
 
@@ -36,8 +35,6 @@ export default (state = initialState, action) => {
         return { ...state, error: action.payload.error };
     case SAVE_INTERESTS_ERROR:
         return { ...state, error: action.error };
-    case CREATE_POST_LOADING:
-        return { ...state, loading: true, error: {} };
     case DELETE_SUCCESS:
         if (action.payload.item === 'posts') {
             state.user.boards = state.user.boards.map(board => {

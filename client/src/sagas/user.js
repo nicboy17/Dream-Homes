@@ -11,12 +11,12 @@ import {
     GET_TOKEN_SUCCESS,
     LOGOUT,
     LOGOUT_SUCCESS,
-    FETCH_FOLLOWERS,
-    FETCH_FOLLOWING,
-    FETCH_FOLLOWING_SUCCESS,
-    FETCH_FOLLOWING_ERROR,
-    FETCH_FOLLOWERS_SUCCESS,
-    FETCH_FOLLOWERS_ERROR,
+    GET_FOLLOWERS,
+    GET_FOLLOWING,
+    GET_FOLLOWING_SUCCESS,
+    GET_FOLLOWING_ERROR,
+    GET_FOLLOWERS_SUCCESS,
+    GET_FOLLOWERS_ERROR,
     SAVE_INTERESTS,
     SAVE_INTERESTS_SUCCESS,
     SAVE_INTERESTS_ERROR,
@@ -139,25 +139,25 @@ export function * unFavouritePostSaga () {
 function * getFollowing (request) {
     try {
         const response = yield call(userService.getFollowing, request);
-        yield put({ type: FETCH_FOLLOWING_SUCCESS, following: response.following });
+        yield put({ type: GET_FOLLOWING_SUCCESS, following: response.following });
     } catch (err) {
-        yield put({ type: FETCH_FOLLOWING_ERROR, err });
+        yield put({ type: GET_FOLLOWING_ERROR, err });
     }
 }
 
 export function * getFollowingSaga () {
-    yield takeLatest(FETCH_FOLLOWING, getFollowing);
+    yield takeLatest(GET_FOLLOWING, getFollowing);
 }
 
 function * getFollowers (request) {
     try {
         const response = yield call(userService.getFollowers, request);
-        yield put({ type: FETCH_FOLLOWERS_SUCCESS, followers: response.followers });
+        yield put({ type: GET_FOLLOWERS_SUCCESS, followers: response.followers });
     } catch (err) {
-        yield put({ type: FETCH_FOLLOWERS_ERROR, err });
+        yield put({ type: GET_FOLLOWERS_ERROR, err });
     }
 }
 
 export function * getFollowersSaga () {
-    yield takeLatest(FETCH_FOLLOWERS, getFollowers);
+    yield takeLatest(GET_FOLLOWERS, getFollowers);
 }

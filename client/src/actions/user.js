@@ -7,7 +7,11 @@ import {
     LOGOUT,
     SAVE_INTERESTS,
     FOLLOW,
-    UNFOLLOW, FETCH_FOLLOWING, FETCH_FOLLOWERS, ADD_FAVOURITE, REMOVE_FAVOURITE
+    UNFOLLOW,
+    GET_FOLLOWING,
+    GET_FOLLOWERS,
+    ADD_FAVOURITE,
+    REMOVE_FAVOURITE
 } from '../actions/types';
 
 export const login = user => ({
@@ -56,12 +60,12 @@ export const unFavouritePost = (username, post) => ({
 });
 
 export const getFollowing = user => ({
-    type: FETCH_FOLLOWING,
+    type: GET_FOLLOWING,
     user
 });
 
 export const getFollowers = user => ({
-    type: FETCH_FOLLOWERS,
+    type: GET_FOLLOWERS,
     user
 });
 
