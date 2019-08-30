@@ -1,4 +1,4 @@
-import { axios, createFormData, Get } from './utils';
+import { axios, createFormData, Get, Delete } from './utils';
 
 export const postService = {
     addPost: ({ post, username }) => {
@@ -13,9 +13,10 @@ export const postService = {
             throw err;
         });
     },
-    // eslint-disable-next-line camelcase
-    searchPosts: ({ search_filter, easy_filters, userId }) => {
-        // eslint-disable-next-line camelcase
-        return Get(`/posts?userId=${userId}&search_filter=${search_filter}&easy_filters=${easy_filters}`);
+    searchPosts: ({ search, filters }) => {
+        return Get(`/posts?search=${search}&filters=${filters}`);
+    },
+    removePost: ({ post }) => {
+        return Delete(`/posts/${post}`);
     }
 };

@@ -1,4 +1,4 @@
-import { Get, Post, Put } from './utils';
+import { Get, Post, Put, Delete } from './utils';
 
 export const boardService = {
     addBoard: ({ board, username }) => {
@@ -9,5 +9,11 @@ export const boardService = {
     },
     getPosts: ({ id }) => {
         return Get(`/boards/${id}/posts`);
+    },
+    removePost: ({ board, post }) => {
+        return Put(`/boards/${board}`, { post });
+    },
+    removeBoard: ({ board }) => {
+        return Delete(`/board/${board}`);
     }
 };
