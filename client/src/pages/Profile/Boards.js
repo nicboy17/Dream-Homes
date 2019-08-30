@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { Card, makeStyles, Typography } from '@material-ui/core';
 import CardActionArea from '@material-ui/core/CardActionArea';
 import BoardPreview from '../../components/Posts/BoardPreview';
-import DeleteButton from '../../components/Buttons/DeleteButton';
+import Confirm from '../../components/Dialog/Confirm';
 
 const useStyles = makeStyles(theme => ({
     root: {},
@@ -47,7 +47,7 @@ const Boards = ({ boards }) => {
                             <Typography variant="body1" className={classes.cardHeader}>{board.posts.length} posts</Typography>
                         </div>
                         <div style={{ display: 'grid', alignContent: 'center', justifyContent: 'end' }}>
-                            <DeleteButton item="boards" id={board._id} title={board.title} />
+                            <Confirm item="boards" id={board._id} title={board.title} />
                         </div>
                     </div>
                 </Card>
