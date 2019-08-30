@@ -25,8 +25,6 @@ class Search extends Component {
         searchPosts(search, filters);
     };
 
-    renderPosts = () => <Posts posts={this.props.posts.posts} />;
-
     renderEmptyError = () => {
         if (!this.props.posts.posts.length) {
             return (
@@ -58,9 +56,7 @@ class Search extends Component {
                         <Button className='option'>Simple</Button>
                     </div>
                 </div>
-                <div>
-                    {this.renderPosts()}
-                </div>
+                <Posts posts={this.props.posts.posts} />
                 <div>
                     {this.renderEmptyError()}
                 </div>

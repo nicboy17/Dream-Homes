@@ -58,7 +58,7 @@ const useStyles = makeStyles(theme => ({
     }
 }));
 
-const Posts = ({ posts, notFoundMessage = 'Sorry, no posts found' }) => {
+const Posts = ({ posts, deleteButtonVisible = false, notFoundMessage = 'Sorry, no posts found' }) => {
     const classes = useStyles();
 
     const images = posts.map((post, i) => {
@@ -68,12 +68,9 @@ const Posts = ({ posts, notFoundMessage = 'Sorry, no posts found' }) => {
                     <img src={post.image} alt={post.title} className={classes.image} />
                     <p className={classes.title}>{post.title}</p>
                 </Link>
-                <Confirm
-                    item="posts"
-                    id={post._id}
-                    title={post.title}
-                    className={classes.deleteIconContainer}
-                />
+                {
+                    deleteButtonVisible ? <Confirm item="posts" id={post._id} title={post.title} className={classes.deleteIconContainer}/> : null
+                }
             </div>
         );
     });

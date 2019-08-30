@@ -45,7 +45,7 @@ const ProfileTabs = ({ selected, onChange, boards, posts, favourites }) => {
                 <Boards boards={boards} />
             </TabPanel>
             <TabPanel value={selected} index={1}>
-                <Posts posts={posts} />
+                <Posts posts={posts} deleteButtonVisible={true} />
             </TabPanel>
             <TabPanel value={selected} index={2}>
                 <Posts posts={favourites} />
