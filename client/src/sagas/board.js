@@ -1,14 +1,15 @@
 import { call, put, takeEvery } from '@redux-saga/core/effects';
 import {
     ADD_BOARD,
-    ADD_BOARD_ERROR,
     ADD_BOARD_SUCCESS,
     ADD_BOARD_POST,
     ADD_BOARD_POST_SUCCESS,
-    ADD_BOARD_POST_ERROR,
     GET_BOARD_POSTS,
     GET_BOARD_POSTS_SUCCESS,
-    GET_BOARD_POSTS_ERROR
+    REMOVE_BOARD_POST,
+    REMOVE_BOARD_POST_SUCCESS,
+    BOARD_ERROR, REMOVE_BOARD,
+    REMOVE_BOARD_SUCCESS
 } from '../actions/types';
 import { boardService } from '../services/board';
 
@@ -17,7 +18,7 @@ function * addBoard (request) {
         const response = yield call(boardService.addBoard, request);
         yield put({ type: ADD_BOARD_SUCCESS, response });
     } catch (err) {
-        yield put({ type: ADD_BOARD_ERROR, err });
+        yield put({ type: BOARD_ERROR, err });
     }
 }
 
@@ -30,7 +31,7 @@ function * addPost (request) {
         const response = yield call(boardService.addPost, request);
         yield put({ type: ADD_BOARD_POST_SUCCESS, response });
     } catch (err) {
-        yield put({ type: ADD_BOARD_POST_ERROR, err });
+        yield put({ type: BOARD_ERROR, err });
     }
 }
 
@@ -43,10 +44,36 @@ function * getBoardPosts (request) {
         const response = yield call(boardService.getPosts, request);
         yield put({ type: GET_BOARD_POSTS_SUCCESS, response });
     } catch (err) {
-        yield put({ type: GET_BOARD_POSTS_ERROR, err });
+        yield put({ type: BOARD_ERROR, err });
     }
 }
 
 export function * getBoardPostsSaga () {
     yield takeEvery(GET_BOARD_POSTS, getBoardPosts);
+}
+
+function * removePost (request) {
+    try {
+        yield call(boardService.removePost, request);
+        yield put({ type: REMOVE_BOARD_POST_SUCCESS, request });
+    } catch (err) {
+        yield put({ type: BOARD_ERROR, err });
+    }
+}
+
+export function * removePostSaga () {
+    yield takeEvery(REMOVE_BOARD_POST, removePost);
+}
+
+function * removeBoard (request) {
+    try {
+        yield call(boardService.removeBoard, request);
+        yield put({ type: REMOVE_BOARD_SUCCESS, ...request });
+    } catch (err) {
+        yield put({ type: BOARD_ERROR, err });
+    }
+}
+
+export function * removeBoardSaga () {
+    yield takeEvery(REMOVE_BOARD, removeBoard);
 }

@@ -1,5 +1,5 @@
-import boards from '../user/board';
-import favourites from '../user/favourite';
+import boards from './board';
+import favourites from './favourite';
 import follow from './follow';
 import user from './user';
 
