@@ -37,14 +37,6 @@ const ProfileTabs = ({ userStore, profileStore, selected, onChange, removeBoard,
     const classes = useStyles();
     const removeVisible = userStore.authenticated && profileStore.user._id === userStore.user._id;
 
-    const deleteBoard = (board) => {
-        removeBoard(board);
-    };
-
-    const deletePost = (post) => {
-        removePost(post);
-    };
-
     return (
         <div className={classes.root}>
             <Grid container direction="row" justify="space-between" alignItems="flex-start">
@@ -55,10 +47,10 @@ const ProfileTabs = ({ userStore, profileStore, selected, onChange, removeBoard,
                 </Tabs>
             </Grid>
             <TabPanel value={selected} index={0}>
-                <Boards boards={profileStore.boards} deleteHandle={removeVisible ? deleteBoard : false} />
+                <Boards boards={profileStore.boards} deleteHandle={removeVisible ? removeBoard : false} />
             </TabPanel>
             <TabPanel value={selected} index={1}>
-                <Posts posts={profileStore.posts} deleteHandle={removeVisible ? deletePost : false} />
+                <Posts posts={profileStore.posts} deleteHandle={removeVisible ? removePost : false} />
             </TabPanel>
             <TabPanel value={selected} index={2}>
                 <Posts posts={profileStore.favourites} />

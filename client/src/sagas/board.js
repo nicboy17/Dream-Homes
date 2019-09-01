@@ -54,6 +54,12 @@ export function * getBoardPostsSaga () {
 }
 
 function * removePost (request) {
+    const confirmed = yield call(confirmSaga, {
+        title: 'Remove Post from Board',
+        message: 'Are you sure you want to remove this post?'
+    });
+    if (!confirmed) { return; }
+
     try {
         yield call(boardService.removePost, request);
         yield put({ type: REMOVE_BOARD_POST_SUCCESS, ...request });

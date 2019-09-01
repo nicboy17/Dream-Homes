@@ -8,6 +8,7 @@ import {
     SEARCH_POSTS_ERROR, REMOVE_POST, REMOVE_POST_SUCCESS, POST_ERROR
 } from '../actions/types';
 import { postService } from '../services/post';
+import { confirmSaga } from './confirm';
 
 function * addPost (request) {
     try {
@@ -36,6 +37,12 @@ export function * searchPostSaga () {
 }
 
 function * removePost (request) {
+    const confirmed = yield call(confirmSaga, {
+        title: 'Delete Post',
+        message: 'Are you sure you want to delete this post?'
+    });
+    if (!confirmed) { return; }
+
     try {
         yield call(postService.removePost, request);
         yield put({ type: REMOVE_POST_SUCCESS, post: request.post });
