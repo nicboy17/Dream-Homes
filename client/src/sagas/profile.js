@@ -5,7 +5,7 @@ import {
     GET_USER_BOARDS_POSTS_ERROR,
     FOLLOW_SUCCESS,
     FOLLOW_ERROR,
-    FOLLOW, UNFOLLOW_SUCCESS, UNFOLLOW_ERROR, UNFOLLOW
+    FOLLOW, UNFOLLOW_SUCCESS, UNFOLLOW_ERROR, UNFOLLOW, OPEN_SNACKBAR
 } from '../actions/types';
 import { profileService } from '../services/profile';
 
@@ -25,9 +25,11 @@ export function * getBoardsPostsSaga () {
 function * follow (request) {
     try {
         yield call(profileService.follow, request);
+        yield put({ type: OPEN_SNACKBAR, message: 'Success: Following', variant: 'success', duration: 1250 });
         yield put({ type: FOLLOW_SUCCESS, payload: request.followee });
     } catch (err) {
-        yield put({ type: FOLLOW_ERROR, payload: 'could not follow user' });
+        yield put({ type: OPEN_SNACKBAR, message: 'Error: could not follow', variant: 'error', duration: 1500 });
+        yield put({ type: FOLLOW_ERROR, err });
     }
 }
 
@@ -38,9 +40,11 @@ export function * followSaga () {
 function * unFollow (request) {
     try {
         yield call(profileService.unfollow, request);
+        yield put({ type: OPEN_SNACKBAR, message: 'Success: unFollowed', variant: 'success', duration: 1250 });
         yield put({ type: UNFOLLOW_SUCCESS, payload: request.followee });
     } catch (err) {
-        yield put({ type: UNFOLLOW_ERROR, payload: 'could not unfollow user' });
+        yield put({ type: OPEN_SNACKBAR, message: 'Error: could not follow', variant: 'error', duration: 1500 });
+        yield put({ type: UNFOLLOW_ERROR, err });
     }
 }
 

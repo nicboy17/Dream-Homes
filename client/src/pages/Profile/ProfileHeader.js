@@ -79,7 +79,7 @@ const ProfileHeader = ({ user, profile, history, followHandle, unFollowHandle })
                     <Grid container direction="row" justify="center" alignItems="center">
                         <div className={classes.beside}>
                             <Avatar className={classes.avatar} component={Link} src={profile.user.profile}
-                                to={`/profile/${user.username}/edit`}/>
+                                to={`/profile/${user.user.username}/edit`}/>
                         </div>
                         <div className={classes.beside}>
                             <Typography variant="h4" gutterBottom>

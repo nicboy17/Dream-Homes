@@ -9,9 +9,7 @@ import DialogContent from '@material-ui/core/DialogContent';
 import { DialogTitle } from '../components';
 import TextField from '@material-ui/core/TextField';
 import { Redirect } from 'react-router-dom';
-import { respond } from '../../../actions/user';
 import { addBoard } from '../../../actions/board';
-import SnackBar from '../../SnackBar/SnackBar';
 
 const styles = theme => ({
     button: {
@@ -28,8 +26,6 @@ class BoardDialog extends Component {
             smallText: 'for example <<living room>>',
             nameError: false
         };
-
-        this.snackBarClose = this.snackBarClose.bind(this);
     }
 
     componentDidMount () {
@@ -48,40 +44,12 @@ class BoardDialog extends Component {
             });
         } else {
             this.props.addBoard({ title: this.state.title }, this.state.username);
-            this.setState({ snackBar: true });
+            this.onCloseClick();
         }
     };
 
     onCloseClick = () => {
         this.props.history.push(`/profile/${this.state.username}`);
-    };
-
-    snackBarClose (event, reason) {
-        if (reason === 'clickaway') {
-            return;
-        }
-
-        this.setState({ snackBar: false });
-        if (this.props.userStore.success) {
-            this.onCloseClick();
-        }
-        this.props.dispatch(respond());
-    }
-
-    ServerResponse = () => {
-        if (this.props.userStore.success) {
-            return (
-                <SnackBar message={'Board Created'} variant={'success'} open={this.state.snackBar}
-                    onClose={this.snackBarClose} duration={1000}/>
-            );
-        } else if (this.props.userStore.error) {
-            return (
-                <SnackBar message={'Board Creation failed'} variant={'error'}
-                    open={this.state.snackBar} onClose={this.snackBarClose} duration={1500}/>
-            );
-        }
-
-        return null;
     };
 
     render () {
@@ -90,45 +58,42 @@ class BoardDialog extends Component {
             return <Redirect to={`/profile/${params.username}`} />;
         }
         return (
-            <div>
-                <Dialog open={true} onClick={() => this.onCloseClick()} aria-labelledby='board-dialog' maxWidth='xs'
-                    fullWidth={true}>
-                    <div onClick={e => e.stopPropagation()}>
-                        <DialogTitle style={{ textAlign: 'center' }} id='dialog-title' title={'Create a board'} onClose={() => this.onCloseClick()}/>
-                        <DialogContent>
-                            <TextField
-                                autoFocus
-                                margin='dense'
-                                id='name'
-                                type='name'
-                                label='Name'
-                                fullWidth
-                                onChange={e => this.onChangeText(e)}
-                                value={this.state.title}
-                                helperText={this.state.smallText}
-                                error={this.state.nameError}
-                            />
-                        </DialogContent>
-                        <DialogActions>
-                            <Button onClick={this.onCreatePress} color='primary' className={classes.button}>Create</Button>
-                        </DialogActions>
-                    </div>
-                </Dialog>
-                <this.ServerResponse />
-            </div>
+            <Dialog open={true} onClick={() => this.onCloseClick()} aria-labelledby='board-dialog' maxWidth='xs'
+                fullWidth={true}>
+                <div onClick={e => e.stopPropagation()}>
+                    <DialogTitle style={{ textAlign: 'center' }} id='dialog-title' title={'Create a board'} onClose={() => this.onCloseClick()}/>
+                    <DialogContent>
+                        <TextField
+                            autoFocus
+                            margin='dense'
+                            id='name'
+                            type='name'
+                            label='Name'
+                            fullWidth
+                            onChange={e => this.onChangeText(e)}
+                            value={this.state.title}
+                            helperText={this.state.smallText}
+                            error={this.state.nameError}
+                        />
+                    </DialogContent>
+                    <DialogActions>
+                        <Button onClick={this.onCreatePress} color='primary' className={classes.button}>Create</Button>
+                    </DialogActions>
+                </div>
+            </Dialog>
         );
     }
 }
 
 const mapStateToProps = state => ({
-    userStore: state.UserStore
+    userStore: state.UserStore,
+    snackBarStore: state.SnackBarStore
 });
 
 function mapDispatchToProps (dispatch) {
     return bindActionCreators(
         {
-            addBoard,
-            dispatch
+            addBoard
         },
         dispatch
     );

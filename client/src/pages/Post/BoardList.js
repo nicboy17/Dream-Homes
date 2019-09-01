@@ -36,7 +36,6 @@ const useStyles = makeStyles(theme => ({
     }
 }));
 
-// eslint-disable-next-line react/prop-types
 const BoardList = ({ boards, handleSelect, value, handleSave, disabled, visible }) => {
     const classes = useStyles();
 

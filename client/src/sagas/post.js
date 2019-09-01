@@ -5,7 +5,7 @@ import {
     ADD_POST_SUCCESS,
     SEARCH_POSTS,
     SEARCH_POSTS_SUCCESS,
-    SEARCH_POSTS_ERROR, REMOVE_POST, REMOVE_POST_SUCCESS, POST_ERROR
+    SEARCH_POSTS_ERROR, REMOVE_POST, REMOVE_POST_SUCCESS, POST_ERROR, OPEN_SNACKBAR
 } from '../actions/types';
 import { postService } from '../services/post';
 import { confirmSaga } from './confirm';
@@ -13,8 +13,10 @@ import { confirmSaga } from './confirm';
 function * addPost (request) {
     try {
         const response = yield call(postService.addPost, request);
+        yield put({ type: OPEN_SNACKBAR, message: 'Success: Post Added', variant: 'success', duration: 1250 });
         yield put({ type: ADD_POST_SUCCESS, response });
     } catch (err) {
+        yield put({ type: OPEN_SNACKBAR, message: 'Error: could not follow', variant: 'error', duration: 1500 });
         yield put({ type: ADD_POST_ERROR, err });
     }
 }
@@ -45,8 +47,10 @@ function * removePost (request) {
 
     try {
         yield call(postService.removePost, request);
+        yield put({ type: OPEN_SNACKBAR, message: 'Success: Post removed', variant: 'success', duration: 1250 });
         yield put({ type: REMOVE_POST_SUCCESS, post: request.post });
     } catch (err) {
+        yield put({ type: OPEN_SNACKBAR, message: 'Error: could not be removed', variant: 'error', duration: 1500 });
         yield put({ type: POST_ERROR, err });
     }
 }

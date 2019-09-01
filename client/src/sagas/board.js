@@ -9,7 +9,7 @@ import {
     REMOVE_BOARD_POST,
     REMOVE_BOARD_POST_SUCCESS,
     BOARD_ERROR, REMOVE_BOARD,
-    REMOVE_BOARD_SUCCESS
+    REMOVE_BOARD_SUCCESS, OPEN_SNACKBAR
 } from '../actions/types';
 import { boardService } from '../services/board';
 import { confirmSaga } from './confirm';
@@ -17,8 +17,10 @@ import { confirmSaga } from './confirm';
 function * addBoard (request) {
     try {
         const response = yield call(boardService.addBoard, request);
+        yield put({ type: OPEN_SNACKBAR, message: 'Board Addition Success', variant: 'success', duration: 1250 });
         yield put({ type: ADD_BOARD_SUCCESS, response });
     } catch (err) {
+        yield put({ type: OPEN_SNACKBAR, message: 'Board Addition Failed', variant: 'error', duration: 1500 });
         yield put({ type: BOARD_ERROR, err });
     }
 }
@@ -81,8 +83,10 @@ function * removeBoard (request) {
 
     try {
         yield call(boardService.removeBoard, request);
+        yield put({ type: OPEN_SNACKBAR, message: 'Board Deleted', variant: 'success', duration: 1250 });
         yield put({ type: REMOVE_BOARD_SUCCESS, board: request.board });
     } catch (err) {
+        yield put({ type: OPEN_SNACKBAR, message: 'Board Deletion Failed', variant: 'error', duration: 1500 });
         yield put({ type: BOARD_ERROR, err });
     }
 }
