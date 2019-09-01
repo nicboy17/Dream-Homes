@@ -12,6 +12,7 @@ import {
     REMOVE_BOARD_SUCCESS
 } from '../actions/types';
 import { boardService } from '../services/board';
+import { confirmSaga } from './confirm';
 
 function * addBoard (request) {
     try {
@@ -66,6 +67,12 @@ export function * removePostSaga () {
 }
 
 function * removeBoard (request) {
+    const confirmed = yield call(confirmSaga, {
+        title: 'Delete Board',
+        message: 'Are you sure you want to delete this board?'
+    });
+    if (!confirmed) { return; }
+
     try {
         yield call(boardService.removeBoard, request);
         yield put({ type: REMOVE_BOARD_SUCCESS, board: request.board });

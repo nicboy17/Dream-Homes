@@ -40,7 +40,7 @@ export default (state = {}, action) => {
         };
     case REMOVE_BOARD_SUCCESS:
         state.boards = state.boards.filter(board => board._id !== action.board);
-        return { ...state, loading: false };
+        return { ...state, loading: false, success: true };
     case BOARD_ERROR:
         return { ...state, loading: false, error: action.err };
     default:

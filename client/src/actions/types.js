@@ -84,3 +84,9 @@ export const GET_FOLLOWERS_SUCCESS = 'GET_FOLLOWERS_SUCCESS';
 export const GET_FOLLOWERS_ERROR = 'GET_FOLLOWERS_ERROR';
 
 export const CLEAR_ERROR = 'CLEAR_ERROR';
+
+// Confirm Dialog
+export const OPEN_CONFIRM = 'OPEN_CONFIRM';
+export const CLOSE_CONFIRM = 'CLOSE_CONFIRM';
+export const CONFIRM_YES = 'CONFIRM_YES';
+export const CONFIRM_NO = 'CONFIRM_NO';

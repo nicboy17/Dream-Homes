@@ -11,7 +11,6 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { removePost } from '../../actions/post';
 import { removeBoard } from '../../actions/board';
-import Confirm from '../../components/Dialog/Confirm';
 
 function TabPanel (props) {
     const { children, value, index, ...other } = props;
@@ -37,26 +36,13 @@ const useStyles = makeStyles(theme => ({
 const ProfileTabs = ({ userStore, profileStore, selected, onChange, removeBoard, removePost }) => {
     const classes = useStyles();
     const removeVisible = userStore.authenticated && profileStore.user._id === userStore.user._id;
-    const [confirm, setConfirm] = React.useState({
-        open: false,
-        title: '',
-        item: '',
-        operation: null
-    });
-
-    const handleConfirm = (val) => {
-        if (val === true) {
-            confirm.operation(confirm.item);
-        }
-        setConfirm({ open: false });
-    };
 
     const deleteBoard = (board) => {
-        setConfirm({ open: true, title: 'Board', item: board, operation: removeBoard });
+        removeBoard(board);
     };
 
     const deletePost = (post) => {
-        setConfirm({ open: true, title: 'Post', item: post, operation: removePost });
+        removePost(post);
     };
 
     return (
@@ -77,7 +63,6 @@ const ProfileTabs = ({ userStore, profileStore, selected, onChange, removeBoard,
             <TabPanel value={selected} index={2}>
                 <Posts posts={profileStore.favourites} />
             </TabPanel>
-            <Confirm open={confirm.open} title={confirm.title} item={confirm.item} handleChange={handleConfirm} />
         </div>
     );
 };
