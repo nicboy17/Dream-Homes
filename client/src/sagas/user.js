@@ -24,7 +24,7 @@ import {
     ADD_FAVOURITE_SUCCESS,
     ADD_FAVOURITE_ERROR,
     REMOVE_FAVOURITE,
-    REMOVE_FAVOURITE_SUCCESS, REMOVE_FAVOURITE_ERROR
+    REMOVE_FAVOURITE_SUCCESS, REMOVE_FAVOURITE_ERROR, OPEN_SNACKBAR
 } from '../actions/types';
 import { userService } from '../services/user';
 
@@ -47,6 +47,7 @@ call redux with put
  */
 function * login (request) {
     try {
+        yield put({ type: OPEN_SNACKBAR, message: 'authentication success', variant: 'success', duration: 1000 });
         const response = yield call(userService.login, request.user);
         yield put({ type: LOGIN_SUCCESS, response });
     } catch (error) {
