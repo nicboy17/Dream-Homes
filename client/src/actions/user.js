@@ -19,12 +19,12 @@ export const login = user => ({
     user
 });
 
-export const register = (user) => ({
+export const register = user => ({
     type: REGISTER,
     user
 });
 
-export const edit = (user) => ({
+export const edit = user => ({
     type: EDIT_USER,
     user
 });

@@ -20,7 +20,7 @@ export const Get = url => {
     });
 };
 
-export const Post = (url, body) => {
+export const Post = (url, body = {}) => {
     return axios.post(url, body).then(res => {
         return res.data;
     }).catch(err => {
@@ -28,7 +28,7 @@ export const Post = (url, body) => {
     });
 };
 
-export const Put = (url, body) => {
+export const Put = (url, body = {}) => {
     return axios.put(url, body).then(res => {
         return res.data;
     }).catch(err => {
@@ -36,7 +36,7 @@ export const Put = (url, body) => {
     });
 };
 
-export const Delete = (url, body) => {
+export const Delete = (url, body = {}) => {
     return axios.delete(url, body).then(res => {
         return res.data;
     }).catch(err => {

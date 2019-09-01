@@ -50,7 +50,9 @@ const ProfileHeader = ({ user, profile, history, followHandle, unFollowHandle })
     };
 
     const CreateButtons = () => {
-        if (user.authenticated && profile.user._id !== user.user._id) {
+        if (!user.authenticated) {
+            return null;
+        } else if (profile.user._id !== user.user._id) {
             return <FollowButton />;
         }
         return (

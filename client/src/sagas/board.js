@@ -1,4 +1,4 @@
-import { call, put, takeEvery } from '@redux-saga/core/effects';
+import { call, put, takeEvery, takeLatest } from '@redux-saga/core/effects';
 import {
     ADD_BOARD,
     ADD_BOARD_SUCCESS,
@@ -55,20 +55,20 @@ export function * getBoardPostsSaga () {
 function * removePost (request) {
     try {
         yield call(boardService.removePost, request);
-        yield put({ type: REMOVE_BOARD_POST_SUCCESS, request });
+        yield put({ type: REMOVE_BOARD_POST_SUCCESS, ...request });
     } catch (err) {
         yield put({ type: BOARD_ERROR, err });
     }
 }
 
 export function * removePostSaga () {
-    yield takeEvery(REMOVE_BOARD_POST, removePost);
+    yield takeLatest(REMOVE_BOARD_POST, removePost);
 }
 
 function * removeBoard (request) {
     try {
         yield call(boardService.removeBoard, request);
-        yield put({ type: REMOVE_BOARD_SUCCESS, ...request });
+        yield put({ type: REMOVE_BOARD_SUCCESS, board: request.board });
     } catch (err) {
         yield put({ type: BOARD_ERROR, err });
     }

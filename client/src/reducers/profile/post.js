@@ -14,7 +14,7 @@ export default (state = {}, action) => {
             error: response.error
         };
     case REMOVE_POST_SUCCESS:
-        state.posts = state.boards.filter(board => board._id !== action.board);
+        state.posts = state.posts.filter(post => post._id !== action.post);
         state.boards = state.boards.map(board => {
             board.posts = board.posts.filter(post => post._id !== action.post);
             return board;

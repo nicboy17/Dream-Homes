@@ -3,7 +3,8 @@ import { Link } from 'react-router-dom';
 import { Card, makeStyles, Typography } from '@material-ui/core';
 import CardActionArea from '@material-ui/core/CardActionArea';
 import BoardPreview from '../../components/Posts/BoardPreview';
-import Confirm from '../../components/Dialog/Confirm';
+import IconButton from '@material-ui/core/IconButton';
+import DeleteIcon from '@material-ui/icons/Delete';
 
 const useStyles = makeStyles(theme => ({
     root: {},
@@ -24,11 +25,34 @@ const useStyles = makeStyles(theme => ({
         height: '25vh',
         width: '100%',
         overflow: 'hidden'
+    },
+    deleteIconContainer: {
+        marginRight: 10,
+        right: 0,
+        top: 10,
+        backgroundColor: 'grey'
+    },
+    deleteIcon: {
+        color: 'white'
     }
 }));
 
-const Boards = ({ boards }) => {
+const Boards = ({ boards, deleteHandle = false }) => {
     const classes = useStyles();
+
+    const deleteBoard = (board) => {
+        if (!deleteHandle) {
+            return null;
+        }
+
+        return (
+            <div style={{ display: 'grid', alignContent: 'center', justifyContent: 'end' }}>
+                <IconButton size="medium" onClick={() => deleteHandle(board)} className={classes.deleteIconContainer}>
+                    <DeleteIcon className={classes.deleteIcon} />
+                </IconButton>
+            </div>
+        );
+    };
 
     return boards.length === 0 ? (
         <h2>There are no boards</h2>
@@ -46,9 +70,7 @@ const Boards = ({ boards }) => {
                             <Typography variant="h6" className={classes.cardHeader}>{board.title}</Typography>
                             <Typography variant="body1" className={classes.cardHeader}>{board.posts.length} posts</Typography>
                         </div>
-                        <div style={{ display: 'grid', alignContent: 'center', justifyContent: 'end' }}>
-                            <Confirm item="boards" id={board._id} title={board.title} />
-                        </div>
+                        {deleteBoard(board._id)}
                     </div>
                 </Card>
             );

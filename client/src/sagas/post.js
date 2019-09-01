@@ -37,8 +37,8 @@ export function * searchPostSaga () {
 
 function * removePost (request) {
     try {
-        const response = yield call(postService.removePost, request);
-        yield put({ type: REMOVE_POST_SUCCESS, response });
+        yield call(postService.removePost, request);
+        yield put({ type: REMOVE_POST_SUCCESS, post: request.post });
     } catch (err) {
         yield put({ type: POST_ERROR, err });
     }

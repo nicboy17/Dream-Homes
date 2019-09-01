@@ -78,17 +78,14 @@ router.put('/:id/remove', [BoardValidation.removePost, async (req, res) => {
 
 router.delete ('/:id', [BoardValidation.delete, async (req, res) => {
     try {
-        const board = await Board.findOneAndDelete ({
-            _id: req.params.id,
-            user: req.decoded._id
-        }).lean ();
+        const board = await Board.findOneAndDelete ({ _id: req.params.id, user: req.decoded._id }).lean();
         if (!board) {
-            return res.status (404).json ({ success: false, message: 'no board found' });
+            return res.status (404).json({ success: false, message: 'no board found' });
         }
 
-        return res.status (204).json ({});
+        return res.status (204).json({});
     } catch (err) {
-        return res.status (400).json ({ success: false, err });
+        return res.status (400).json({ success: false, err });
     }
 }]);
 

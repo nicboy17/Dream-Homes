@@ -14,6 +14,6 @@ export const boardService = {
         return Put(`/boards/${board}`, { post });
     },
     removeBoard: ({ board }) => {
-        return Delete(`/board/${board}`);
+        return Delete(`/boards/${board}`);
     }
 };

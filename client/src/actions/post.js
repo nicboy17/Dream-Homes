@@ -1,7 +1,7 @@
 /* eslint-disable camelcase */
 import {
     SEARCH_POSTS,
-    ADD_POST, DELETE_POST
+    ADD_POST, REMOVE_POST
 } from '../actions/types';
 
 export const addPost = (post, username) => ({
@@ -17,6 +17,6 @@ export const searchPosts = (search, filters) => ({
 });
 
 export const removePost = post => ({
-    type: DELETE_POST,
+    type: REMOVE_POST,
     post
 });

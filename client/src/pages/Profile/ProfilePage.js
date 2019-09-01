@@ -82,7 +82,7 @@ class ProfilePage extends Component {
     render () {
         const { classes } = this.props;
 
-        const { userStore, profileStore: { user, boards, posts, favourites, loading } } = this.props;
+        const { userStore, profileStore: { user, loading } } = this.props;
         if (!user || loading) {
             return <CircularProgress className="spinner" />;
         }
@@ -99,7 +99,7 @@ class ProfilePage extends Component {
                         followHandle={() => this.onFollow()} unFollowHandle={() => this.onUnFollow()}/>
                     <Divider variant={'middle'}/>
                     <div className={classes.body}>
-                        <ProfileTabs selected={this.state.tab} onChange={this.tabChange} boards={boards} posts={posts} favourites={favourites}/>
+                        <ProfileTabs selected={this.state.tab} onChange={this.tabChange} />
                     </div>
                 </div>
                 <Route path={'/profile/:username/interest-quiz'} component={InterestQuizDialog}/>

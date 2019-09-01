@@ -2,7 +2,8 @@ import React from 'react';
 import { makeStyles } from '@material-ui/styles';
 import { Link } from 'react-router-dom';
 import Masonry from 'react-masonry-component';
-import Confirm from '../Dialog/Confirm';
+import DeleteIcon from '@material-ui/icons/Delete';
+import IconButton from '@material-ui/core/IconButton';
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -58,8 +59,20 @@ const useStyles = makeStyles(theme => ({
     }
 }));
 
-const Posts = ({ posts, deleteButtonVisible = false, notFoundMessage = 'Sorry, no posts found' }) => {
+const Posts = ({ posts, deleteHandle = false, notFoundMessage = 'Sorry, no posts found' }) => {
     const classes = useStyles();
+
+    const deletePost = (post) => {
+        if (!deleteHandle) {
+            return null;
+        }
+
+        return (
+            <IconButton size="medium" style={{ marginRight: '10px' }} onClick={() => deleteHandle(post)} className={classes.deleteIconContainer}>
+                <DeleteIcon style={{ color: 'white' }} />
+            </IconButton>
+        );
+    };
 
     const images = posts.map((post, i) => {
         return (
@@ -68,9 +81,7 @@ const Posts = ({ posts, deleteButtonVisible = false, notFoundMessage = 'Sorry, n
                     <img src={post.image} alt={post.title} className={classes.image} />
                     <p className={classes.title}>{post.title}</p>
                 </Link>
-                {
-                    deleteButtonVisible ? <Confirm item="posts" id={post._id} title={post.title} className={classes.deleteIconContainer}/> : null
-                }
+                {deletePost(post._id)}
             </div>
         );
     });
