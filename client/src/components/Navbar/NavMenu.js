@@ -14,9 +14,6 @@ const useStyles = makeStyles(theme => ({
         width: '50px',
         height: '50px',
         borderRadius: '50px'
-    },
-    menu: {
-        marginTop: '4rem'
     }
 }));
 
@@ -32,25 +29,25 @@ const NavMenu = ({ authenticated, user, handleLogOutClicked, history }) => {
         setMenu(null);
     }
 
-    const onProfileClick = () => {
-        history.push('/profile/' + user.username);
-    };
-
     if (authenticated) {
         return (
             <div className={classes.root}>
                 <Avatar className={classes.cornerIcon} src={user.profile} onClick={handleClick}/>
                 <Menu
+                    elevation={0}
+                    getContentAnchorEl={null}
+                    anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+                    transformOrigin={{ vertical: 'top', horizontal: 'center' }}
                     anchorEl={open}
                     keepMounted
                     open={Boolean(open)}
                     onClose={handleClose}
                     className={classes.menu}
                 >
-                    <MenuItem onClick = {() => onProfileClick()}>
+                    <MenuItem component={Link} to={`/profile/${user.username}`}>
                         Profile
                     </MenuItem>
-                    <MenuItem component={Link} to={'/profile/' + user.username + '/interest-quiz'}>
+                    <MenuItem component={Link} to={`/profile/${user.username}/interest-quiz`}>
                         Interest Quiz
                     </MenuItem>
                     <MenuItem component={Link} to='/' onClick={handleLogOutClicked}>

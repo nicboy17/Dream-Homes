@@ -84,7 +84,7 @@ router.put('/:username', [upload.single('image'), UserValidation.updateUser, asy
     if(req.file) { update.profile = req.file.location; }
     if (req.body.name) { update.name = req.body.name; }
     try {
-        const user = await User.findOneAndUpdate({ username: req.params.username }, update, { new:true }).select('-password').lean();
+        const user = await User.findOneAndUpdate({ username: req.params.username }, update, { new: true }).select('-password').lean();
         if(!user) {
             return res.status(404).json({ success: false, message: 'User not found' });
         }
@@ -243,23 +243,22 @@ router.post ('/:username/unfavourite', [UserValidation.removePostFromFavourites,
 // @desc     Update user interests
 // @access   Private
 router.put('/:username/interests', async (req,res) => {
+    if (req.decoded.username !== req.params.username) {
+        return res.status(403).json({ success: false, message: 'Cannot create posts for other users'});
+    }
+
     try {
-        let user = await User.findOne({username: req.params.username});
-        if(user._id.toString() !== req.decoded._id.toString()) {
-            return res.status(401).json({msg: 'You do not have the authorization to do this'});
+        let user = await User.findByIdAndUpdate(req.decoded._id, { interests: req.body.interests }, { new: true })
+            .select('-password -posts -boards -favourites')
+            .lean();
+
+        if (!user) {
+            return res.status (404).json ({ success: false, message: 'User not found' });
         }
-        if(!user) {
-            return res.status(404).json({msg: 'User not found'});
-        }
-        user.interests = (req.body.interests);
-        await user.save();
-        res.json(user);
+
+        return res.status(200).json({ success: true, user });
     } catch (err) {
-        // Check to see if it is a valid object id
-        if(err.kind === 'ObjectId') {
-            return res.status(404).json({msg: 'The user does not exist'});
-        }
-        return res.status(500).send('Server Error');
+        return res.status(400).json({ err });
     }
 });
 

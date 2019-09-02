@@ -38,6 +38,9 @@ class ProfilePage extends Component {
         const username = this.props.match.params.username;
         this.setState({ username: username });
         this.props.getBoardsandPosts(username);
+        if (this.props.userStore.user.takeQuiz) {
+            this.props.history.push(`/profile/${this.props.userStore.user.username}/interest-quiz`);
+        }
     }
 
     onFollow = () => {
@@ -58,6 +61,7 @@ class ProfilePage extends Component {
         if (!user) {
             return <CircularProgress className="spinner" />;
         }
+
         return (
             <div>
                 <Route path="/profile/:username/edit" component={EditPicUserDialog} />

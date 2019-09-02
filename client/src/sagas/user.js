@@ -51,6 +51,7 @@ function * login (request) {
         yield put({ type: OPEN_SNACKBAR, message: 'Authentication success', variant: 'success', duration: 1250 });
         yield put({ type: LOGIN_SUCCESS, response });
     } catch (error) {
+        console.log(error);
         yield put({ type: LOGIN_ERROR, error });
         yield put({ type: OPEN_SNACKBAR, message: 'Authentication failed', variant: 'error', duration: 1500 });
     }
@@ -105,7 +106,7 @@ function * saveInterests (request) {
     try {
         const response = yield call(userService.saveInterests, request);
         yield put({ type: OPEN_SNACKBAR, message: 'User Interests Saved', variant: 'success', duration: 1250 });
-        yield put({ type: SAVE_INTERESTS_SUCCESS, user: response });
+        yield put({ type: SAVE_INTERESTS_SUCCESS, user: response.user });
     } catch (err) {
         yield put({ type: OPEN_SNACKBAR, message: 'User Interests could not saved', variant: 'error', duration: 1500 });
         yield put({ type: SAVE_INTERESTS_ERROR, err });

@@ -38,7 +38,7 @@ const useStyles = makeStyles(theme => ({
     }
 }));
 
-const Navbar = ({ userStore, loadingStore, logout, history, location, searchPosts }) => {
+const Navbar = ({ userStore, loadingStore, loading, logout, history, location, searchPosts }) => {
     const [search, setSearch] = React.useState('');
     const classes = useStyles();
 
@@ -49,12 +49,11 @@ const Navbar = ({ userStore, loadingStore, logout, history, location, searchPost
 
     const handleSearch = event => {
         event.preventDefault();
-        // eslint-disable-next-line camelcase
-        const { easy_filters = '' } = queryString.parse(location.search);
+        const { filters = '' } = queryString.parse(location.search);
         if (userStore.authenticated) {
-            searchPosts(search, easy_filters, userStore.user._id);
+            searchPosts(search, filters, userStore.user._id);
         } else {
-            searchPosts(search, easy_filters, '');
+            searchPosts(search, filters, '');
         }
         history.push('/');
     };
@@ -73,17 +72,8 @@ const Navbar = ({ userStore, loadingStore, logout, history, location, searchPost
         }
 
         return (
-            <Link
-                to={`/profile/${userStore.user.username}/following`}
-                style={{
-                    textDecoration: 'none'
-                }}>
-                <Button style={{
-                    border: 'none',
-                    padding: '0',
-                    borderRadius: '7.5px'
-                }}
-                >
+            <Link to={`/profile/${userStore.user.username}/following`} style={{ textDecoration: 'none' }}>
+                <Button style={{ border: 'none', padding: '0', borderRadius: '7.5px' }}>
                     Following
                 </Button>
             </Link>
@@ -111,32 +101,16 @@ const Navbar = ({ userStore, loadingStore, logout, history, location, searchPost
                         handleSearch={handleSearch}
                         handleChange={handleSearchChange}
                         clear={clearSearch}
+                        loading={loading}
                     />
-                    <Grid
-                        container
-                        direction="row"
-                        justify="space-evenly"
-                        alignItems="center"
-                    >
-                        <Link to='/' style={{
-                            textDecoration: 'none'
-                        }}
-                        >
-                            <Button style={{
-                                border: 'none',
-                                padding: '0',
-                                borderRadius: '7.5px'
-                            }}
-                            >
+                    <Grid container direction="row" justify="space-evenly" alignItems="center">
+                        <Link to='/' style={{ textDecoration: 'none' }}>
+                            <Button style={{ border: 'none', padding: '0', borderRadius: '7.5px' }}>
                                 Home
                             </Button>
                         </Link>
-                        {Following()}
-                        <NavMenu
-                            user={userStore.user}
-                            handleLogOutClicked={handleLogOutClicked}
-                            authenticated={userStore.authenticated}
-                        />
+                        <Following />
+                        <NavMenu user={userStore.user} handleLogOutClicked={handleLogOutClicked} authenticated={userStore.authenticated}/>
                     </Grid>
                 </div>
                 <div className={classes.headerBottomBorder} >
@@ -150,6 +124,7 @@ const Navbar = ({ userStore, loadingStore, logout, history, location, searchPost
 
 const mapStateToProps = state => ({
     userStore: state.UserStore,
+    loading: state.PostStore.loading,
     loadingStore: state.LoadingStore
 });
 

@@ -19,13 +19,14 @@ export default (state = initialState, action) => {
 
     switch (type) {
     case LOGIN_SUCCESS:
-        return { authenticated: true, user: response.user, token: response.token };
+        return { authenticated: true, user: { ...response.user, takeQuiz: !response.user.interests.length }, token: response.token };
     case LOGIN_ERROR:
         return { ...state, authenticated: false, error: action.error };
     case LOGOUT_SUCCESS:
         return { authenticated: false };
     case SAVE_INTERESTS_SUCCESS:
         state.user.interests = action.user.interests;
+        state.user.takeQuiz = false;
         localStorage.setItem('user', JSON.stringify(state.user));
         return { ...state };
     case GET_TOKEN_SUCCESS:

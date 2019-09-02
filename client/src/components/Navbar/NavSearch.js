@@ -5,9 +5,6 @@ import InputAdornment from '@material-ui/core/InputAdornment';
 import SearchIcon from '@material-ui/icons/Search';
 import CloseIcon from '@material-ui/icons/Close';
 import CircularProgress from '@material-ui/core/CircularProgress';
-import { connect } from 'react-redux';
-import { compose } from 'redux';
-import { withRouter } from 'react-router-dom';
 
 const useStyles = makeStyles(theme => ({
     headerSearch: {
@@ -43,7 +40,7 @@ const useStyles = makeStyles(theme => ({
     }
 }));
 
-const NavSearch = ({ search, handleSearch, handleChange, clear, posts: { loading }, history }) => {
+const NavSearch = ({ search, handleSearch, handleChange, clear, loading }) => {
     const classes = useStyles();
 
     function renderClearButton () {
@@ -81,8 +78,4 @@ const NavSearch = ({ search, handleSearch, handleChange, clear, posts: { loading
     );
 };
 
-const mapStateToProps = state => ({
-    posts: state.PostStore
-});
-
-export default compose(withRouter, connect(mapStateToProps))(NavSearch);
+export default NavSearch;
