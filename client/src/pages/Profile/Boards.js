@@ -51,7 +51,7 @@ const Boards = ({ boards, deleteHandle = false }) => {
         );
     };
 
-    return boards.length === 0 ? (
+    return !boards.length ? (
         <h2>There are no boards</h2>
     ) : (
         boards.map((board, i) => {
