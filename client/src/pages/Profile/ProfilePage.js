@@ -11,7 +11,6 @@ import EditPicUserDialog from '../../components/Dialog/EditUserDialog/EditUserDi
 import { withRouter, Route } from 'react-router-dom';
 import { bindActionCreators, compose } from 'redux';
 import { connect } from 'react-redux';
-import _ from 'lodash';
 import SnackBar from '../../components/SnackBar/SnackBar';
 import { getBoardsandPosts, clearError } from '../../actions/profile';
 import { follow, unfollow } from '../../actions/user';
@@ -65,12 +64,12 @@ class ProfilePage extends Component {
             profileStore: { error },
             clearError
         } = this.props;
-        if (!_.isEmpty(error)) {
+        if (error) {
             return (
                 <SnackBar
                     message={error.message}
                     variant={error.status}
-                    open={!_.isEmpty(error)}
+                    open={!!error}
                     onClose={() => {
                         this.setState({ SnackBar: false });
                         clearError();
@@ -83,8 +82,8 @@ class ProfilePage extends Component {
     render () {
         const { classes } = this.props;
 
-        const { userStore, profileStore: { user, boards, posts, favourites, loading } } = this.props;
-        if (_.isUndefined(user) || loading) {
+        const { userStore, profileStore: { user, loading } } = this.props;
+        if (!user || loading) {
             return <CircularProgress className="spinner" />;
         }
         return (
@@ -100,7 +99,7 @@ class ProfilePage extends Component {
                         followHandle={() => this.onFollow()} unFollowHandle={() => this.onUnFollow()}/>
                     <Divider variant={'middle'}/>
                     <div className={classes.body}>
-                        <ProfileTabs selected={this.state.tab} onChange={this.tabChange} boards={boards} posts={posts} favourites={favourites}/>
+                        <ProfileTabs selected={this.state.tab} onChange={this.tabChange} />
                     </div>
                 </div>
                 <Route path={'/profile/:username/interest-quiz'} component={InterestQuizDialog}/>

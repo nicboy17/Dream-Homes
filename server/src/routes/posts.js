@@ -8,7 +8,7 @@ const PostValidation = require ('./validate/post');
 // @desc     Get all posts based on user's interests or filter
 // @access   Public
 router.get ('/', [pub, async (req, res) => {
-    let { search_filter: search = '', easy_filters: filters = ''} = req.query;
+    let { search = '', filters = ''} = req.query;
     let query = {};
     let user = { interests:[] };
     if (req.decoded) { user = await User.findById(req.decoded._id).lean(); }

@@ -5,10 +5,9 @@ import { connect } from 'react-redux';
 import Dialog from '@material-ui/core/Dialog';
 import LinearProgress from '@material-ui/core/LinearProgress';
 import { DialogTitle, DialogContent } from '../components';
-import SnackBar from '../../SnackBar/SnackBar';
-import { login, respond } from '../../../actions/user';
 import { Link, Redirect } from 'react-router-dom';
 import LoginForm from './LoginForm';
+import { login } from '../../../actions/user';
 
 const styles = theme => ({
     footer: {
@@ -42,13 +41,11 @@ class Login extends React.Component {
         this.passwordValidator = this.passwordValidator.bind(this);
         this.handleChange = this.handleChange.bind(this);
         this.handleSignIn = this.handleSignIn.bind(this);
-        this.snackBarClose = this.snackBarClose.bind(this);
 
         this.state = {
             open: true,
             email: { value: '', error: false, message: '', validator: this.emailValidator },
-            password: { value: '', error: false, message: '', validator: this.passwordValidator },
-            snackBar: false
+            password: { value: '', error: false, message: '', validator: this.passwordValidator }
         };
     }
 
@@ -66,8 +63,6 @@ class Login extends React.Component {
             email: this.state.email.value,
             password: this.state.password.value
         });
-
-        this.setState({ snackBar: true });
     }
 
     handleClose = () => {
@@ -75,58 +70,30 @@ class Login extends React.Component {
         this.props.history.push('/');
     };
 
-    snackBarClose (event, reason) {
-        if (reason === 'clickaway') {
-            return;
-        }
-
-        this.setState({ snackBar: false });
-        this.props.dispatch(respond());
-    }
-
-    ServerResponse = () => {
-        if (this.props.userStore.authenticated) {
-            return (
-                <SnackBar message={'Authentication Success'} variant={'success'} open={this.state.snackBar}
-                    onClose={this.snackBarClose} duration={1250}/>
-            );
-        } else if (!this.props.userStore.authenticated && this.props.userStore.error) {
-            return (
-                <SnackBar message={'Authentication Failed: email or password is incorrect'} variant={'error'}
-                    open={this.state.snackBar} onClose={this.snackBarClose} duration={2000}/>
-            );
-        }
-
-        return null;
-    };
-
     render () {
-        const { classes, userStore } = this.props;
-        if (userStore.authenticated && !this.state.snackBar) {
+        const { classes, userStore, snackBarStore } = this.props;
+        if (userStore.authenticated && !snackBarStore.open) {
             return (<Redirect to={'/profile/' + userStore.user.username} />);
         }
 
         return (
-            <div>
-                <Dialog onClose={this.handleClose} aria-labelledby="dialog-title" open={this.state.open} maxWidth={'md'}>
-                    <this.Loading/>
-                    <DialogTitle id="title" title={'Welcome!'} onClose={this.handleClose} />
-                    <DialogContent>
-                        <LoginForm handleChange={this.handleChange} handleSignIn={this.handleSignIn}
-                            email={this.state.email} password={this.state.password}
-                            disabled={this.state.snackBar}/>
-                    </DialogContent>
-                    <div className={classes.footer}>
-                        <p className={classes.p}>{'Don\'t have an account?'}<Link to='/signup' className={classes.signUp}> Sign Up!</Link></p>
-                    </div>
-                </Dialog>
-                <this.ServerResponse />
-            </div>
+            <Dialog onClose={this.handleClose} aria-labelledby="dialog-title" open={this.state.open} maxWidth={'md'}>
+                <this.Loading/>
+                <DialogTitle id="title" title={'Welcome!'} onClose={this.handleClose} />
+                <DialogContent>
+                    <LoginForm handleChange={this.handleChange} handleSignIn={this.handleSignIn}
+                        email={this.state.email} password={this.state.password}
+                        disabled={snackBarStore.open}/>
+                </DialogContent>
+                <div className={classes.footer}>
+                    <p className={classes.p}>{'Don\'t have an account?'}<Link to='/signup' className={classes.signUp}> Sign Up!</Link></p>
+                </div>
+            </Dialog>
         );
     }
 
     Loading = () => {
-        if (this.state.snackBar) {
+        if (this.props.snackBarStore.open) {
             return <LinearProgress/>;
         }
 
@@ -170,14 +137,14 @@ class Login extends React.Component {
 }
 
 const mapStateToProps = state => ({
-    userStore: state.UserStore
+    userStore: state.UserStore,
+    snackBarStore: state.SnackBarStore
 });
 
 function mapDispatchToProps (dispatch) {
     return bindActionCreators(
         {
-            login,
-            dispatch
+            login
         },
         dispatch
     );

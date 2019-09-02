@@ -1,6 +1,5 @@
 import {
-    ADD_BOARD_SUCCESS,
-    ADD_BOARD_ERROR
+    ADD_BOARD_SUCCESS, REMOVE_BOARD_SUCCESS
 } from '../../actions/types';
 
 const initialState = {
@@ -17,8 +16,10 @@ export default (state = initialState, action) => {
         state.user.boards.push(response.board);
         localStorage.setItem('user', JSON.stringify(state.user));
         return { ...state, success: true };
-    case ADD_BOARD_ERROR:
-        return { ...state, error: action.err };
+    case REMOVE_BOARD_SUCCESS:
+        state.user.boards = state.user.boards.filter(board => board._id !== action.board);
+        localStorage.setItem('user', JSON.stringify(state.user));
+        return { ...state, success: true };
     default:
         return state;
     }

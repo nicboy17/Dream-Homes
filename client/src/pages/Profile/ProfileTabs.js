@@ -7,6 +7,10 @@ import Tab from '@material-ui/core/Tab';
 import Box from '@material-ui/core/Box';
 import Boards from './Boards';
 import Posts from '../../components/Posts/Posts';
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
+import { removePost } from '../../actions/post';
+import { removeBoard } from '../../actions/board';
 
 function TabPanel (props) {
     const { children, value, index, ...other } = props;
@@ -29,8 +33,9 @@ const useStyles = makeStyles(theme => ({
     root: {}
 }));
 
-const ProfileTabs = ({ selected, onChange, boards, posts, favourites }) => {
+const ProfileTabs = ({ userStore, profileStore, selected, onChange, removeBoard, removePost }) => {
     const classes = useStyles();
+    const removeVisible = userStore.authenticated && profileStore.user._id === userStore.user._id;
 
     return (
         <div className={classes.root}>
@@ -42,16 +47,34 @@ const ProfileTabs = ({ selected, onChange, boards, posts, favourites }) => {
                 </Tabs>
             </Grid>
             <TabPanel value={selected} index={0}>
-                <Boards boards={boards} />
+                <Boards boards={profileStore.boards} deleteHandle={removeVisible ? removeBoard : false} />
             </TabPanel>
             <TabPanel value={selected} index={1}>
-                <Posts posts={posts} />
+                <Posts posts={profileStore.posts} deleteHandle={removeVisible ? removePost : false} />
             </TabPanel>
             <TabPanel value={selected} index={2}>
-                <Posts posts={favourites} />
+                <Posts posts={profileStore.favourites} />
             </TabPanel>
         </div>
     );
 };
 
-export default ProfileTabs;
+const mapStateToProps = state => ({
+    userStore: state.UserStore,
+    profileStore: state.ProfileStore
+});
+
+const mapDispatchToProps = dispatch => {
+    return bindActionCreators(
+        {
+            removeBoard,
+            removePost
+        },
+        dispatch
+    );
+};
+
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(ProfileTabs);

@@ -50,7 +50,9 @@ const ProfileHeader = ({ user, profile, history, followHandle, unFollowHandle })
     };
 
     const CreateButtons = () => {
-        if (user.authenticated && profile.user._id !== user.user._id) {
+        if (!user.authenticated) {
+            return null;
+        } else if (profile.user._id !== user.user._id) {
             return <FollowButton />;
         }
         return (
@@ -77,7 +79,7 @@ const ProfileHeader = ({ user, profile, history, followHandle, unFollowHandle })
                     <Grid container direction="row" justify="center" alignItems="center">
                         <div className={classes.beside}>
                             <Avatar className={classes.avatar} component={Link} src={profile.user.profile}
-                                to={`/profile/${user.username}/edit`}/>
+                                to={`/profile/${user.user.username}/edit`}/>
                         </div>
                         <div className={classes.beside}>
                             <Typography variant="h4" gutterBottom>

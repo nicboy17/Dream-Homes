@@ -1,7 +1,5 @@
 import React, { Component } from 'react';
-import Masonry from 'react-masonry-component';
 import CircularProgress from '@material-ui/core/CircularProgress';
-import Tooltip from '@material-ui/core/Tooltip';
 import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
 
@@ -9,54 +7,14 @@ import { connect } from 'react-redux';
 import { bindActionCreators, compose } from 'redux';
 import { getBoardPosts } from '../../actions/board';
 import { withRouter } from 'react-router-dom';
-import _ from 'lodash';
 
 import '../stylesheet/Board.css';
+import Posts from '../../components/Posts/Posts';
 
 class PostInBoards extends Component {
     componentDidMount = () => {
         const { getBoardPosts, match } = this.props;
         getBoardPosts(match.params.id);
-    };
-
-    renderPosts = () => {
-        const { history, match } = this.props;
-        const board = this.props.board(match.params.id);
-        const posts = _.isEmpty(board.posts)
-            ? []
-            : board.posts.map(post => {
-                return (
-                    <Tooltip
-                        title={
-                            <div>
-                                <h1>{post.title}</h1>
-                                <p>{post.description}</p>
-                            </div>
-                        }
-                        key={post._id}
-                    >
-                        <img
-                            src={post.image}
-                            alt=""
-                            className="postImg"
-                            onClick={() => history.push(`/posts/${post._id}`)}
-                        />
-                    </Tooltip>
-                );
-            });
-        return board.posts.length === 0 ? (
-            <h2
-                style={{
-                    textAlign: 'center'
-                }}
-            >
-                You have no posts in this board :(
-            </h2>
-        ) : (
-            <Masonry elementType={'div'} options={{ fitWidth: true, gutter: 15 }}>
-                {posts}
-            </Masonry>
-        );
     };
 
     render () {
@@ -73,7 +31,7 @@ class PostInBoards extends Component {
                         <CloseIcon />
                     </IconButton>
                 </div>
-                <div className="grid">{this.renderPosts()}</div>
+                <Posts posts={board.posts} />
             </div>
         );
     }

@@ -2,7 +2,8 @@ import React from 'react';
 import { makeStyles } from '@material-ui/styles';
 import { Link } from 'react-router-dom';
 import Masonry from 'react-masonry-component';
-import DeleteButton from '../Buttons/DeleteButton';
+import DeleteIcon from '@material-ui/icons/Delete';
+import IconButton from '@material-ui/core/IconButton';
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -10,19 +11,15 @@ const useStyles = makeStyles(theme => ({
         justifyContent: 'center'
     },
     title: {
-        display: 'none',
-        marginLeft: '15px',
-        padding: '10px 0 10px 0',
+        padding: '1rem 0 1rem 0',
         fontWeight: 'bold',
         fontSize: 15,
         color: 'white',
         position: 'absolute',
-        bottom: 0,
-        left: -5,
-        width: '60%',
-        textAlign: 'center',
-        backgroundColor: 'rgba(0, 0, 0, 0.6)',
-        borderRadius: '25px'
+        bottom: -10,
+        left: 0,
+        width: '100%',
+        textAlign: 'center'
     },
     deleteIconContainer: {
         display: 'none',
@@ -62,8 +59,20 @@ const useStyles = makeStyles(theme => ({
     }
 }));
 
-const Posts = ({ posts, notFoundMessage = 'Sorry, no posts found' }) => {
+const Posts = ({ posts, deleteHandle = false, notFoundMessage = 'Sorry, no posts found' }) => {
     const classes = useStyles();
+
+    const deletePost = (post) => {
+        if (!deleteHandle) {
+            return null;
+        }
+
+        return (
+            <IconButton size="medium" style={{ marginRight: '10px' }} onClick={() => deleteHandle(post)} className={classes.deleteIconContainer}>
+                <DeleteIcon style={{ color: 'white' }} />
+            </IconButton>
+        );
+    };
 
     const images = posts.map((post, i) => {
         return (
@@ -72,12 +81,7 @@ const Posts = ({ posts, notFoundMessage = 'Sorry, no posts found' }) => {
                     <img src={post.image} alt={post.title} className={classes.image} />
                     <p className={classes.title}>{post.title}</p>
                 </Link>
-                <DeleteButton
-                    item="posts"
-                    id={post._id}
-                    title={post.title}
-                    className={classes.deleteIconContainer}
-                />
+                {deletePost(post._id)}
             </div>
         );
     });

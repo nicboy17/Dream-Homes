@@ -9,6 +9,9 @@ import Snackbar from '@material-ui/core/Snackbar';
 import SnackbarContent from '@material-ui/core/SnackbarContent';
 import WarningIcon from '@material-ui/icons/Warning';
 import { makeStyles } from '@material-ui/core/styles';
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
+import { close } from '../../actions/snackbar';
 
 const variantIcon = {
     success: CheckCircleIcon,
@@ -17,7 +20,7 @@ const variantIcon = {
     info: InfoIcon
 };
 
-const useStyles1 = makeStyles(theme => ({
+const useStyles = makeStyles(theme => ({
     success: {
         backgroundColor: green[600]
     },
@@ -41,9 +44,13 @@ const useStyles1 = makeStyles(theme => ({
     }
 }));
 
-function SnackBar ({ message, onClose, variant, open, duration = 4000 }) {
-    const classes = useStyles1();
-    const Icon = variantIcon[variant];
+function SnackBar ({ snackBarStore, close }) {
+    const classes = useStyles();
+    const Icon = variantIcon[snackBarStore.variant];
+
+    if (!snackBarStore.message) {
+        return null;
+    }
 
     return (
         <Snackbar
@@ -51,21 +58,21 @@ function SnackBar ({ message, onClose, variant, open, duration = 4000 }) {
                 vertical: 'bottom',
                 horizontal: 'left'
             }}
-            open={open}
-            autoHideDuration={duration}
-            onClose={onClose}
+            open={snackBarStore.open}
+            autoHideDuration={snackBarStore.duration}
+            onClose={close}
         >
             <SnackbarContent
-                className={classes[variant]}
+                className={classes[snackBarStore.variant]}
                 aria-describedby="snackbar"
                 message={
                     <span id="snackbar" className={classes.message}>
                         <Icon className={classes.icon} />
-                        {message}
+                        {snackBarStore.message}
                     </span>
                 }
                 action={[
-                    <IconButton key="close" aria-label="close" color="inherit" onClick={onClose}>
+                    <IconButton key="close" aria-label="close" color="inherit" onClick={close}>
                         <CloseIcon className={classes.icon} />
                     </IconButton>
                 ]}
@@ -74,4 +81,17 @@ function SnackBar ({ message, onClose, variant, open, duration = 4000 }) {
     );
 }
 
-export default SnackBar;
+const mapStateToProps = state => ({
+    snackBarStore: state.SnackBarStore
+});
+
+function mapDispatchToProps (dispatch) {
+    return bindActionCreators(
+        {
+            close
+        },
+        dispatch
+    );
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(SnackBar);

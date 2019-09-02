@@ -2,10 +2,9 @@
 import React, { Component } from 'react';
 
 import { connect } from 'react-redux';
-import { fetchPosts } from '../actions/post';
+import { searchPosts } from '../actions/post';
 
 import queryString from 'query-string';
-import _ from 'lodash';
 
 import Posts from '../components/Posts/Posts';
 import SnackBar from '../components/SnackBar/SnackBar';
@@ -16,25 +15,18 @@ import './stylesheet/Content.css';
 
 class Search extends Component {
     state = {
-        SnackBar: _.isEmpty(this.props.posts.posts)
+        SnackBar: false
     };
 
     componentDidMount = () => {
-        const { location, fetchPosts, user: { authenticated, user } } = this.props;
+        const { location, searchPosts } = this.props;
         const query = queryString.parse(location.search);
-        const { search_filter = '', easy_filters = '' } = query;
-        if (authenticated) {
-            const { _id = '' } = user;
-            fetchPosts(search_filter, easy_filters, _id);
-        } else {
-            fetchPosts(search_filter, easy_filters, '');
-        }
+        const { search = '', filters = '' } = query;
+        searchPosts(search, filters);
     };
 
-    renderPosts = () => <Posts posts={this.props.posts.posts} />;
-
     renderEmptyError = () => {
-        if (_.isEmpty(this.props.posts.posts)) {
+        if (!this.props.posts.posts.length) {
             return (
                 <SnackBar
                     message='There are no posts'
@@ -49,7 +41,7 @@ class Search extends Component {
     render () {
         if (this.props.posts.loading) {
             return <CircularProgress className = 'spinner'/>;
-        };
+        }
         return (
             <div>
                 <div className='placeholder' />
@@ -64,9 +56,7 @@ class Search extends Component {
                         <Button className='option'>Simple</Button>
                     </div>
                 </div>
-                <div>
-                    {this.renderPosts()}
-                </div>
+                <Posts posts={this.props.posts.posts} />
                 <div>
                     {this.renderEmptyError()}
                 </div>
@@ -82,5 +72,5 @@ const mapStateToProps = state => ({
 
 export default connect(
     mapStateToProps,
-    { fetchPosts }
+    { searchPosts }
 )(Search);

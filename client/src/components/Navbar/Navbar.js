@@ -10,6 +10,7 @@ import NavSearch from './NavSearch';
 import { searchPosts } from '../../actions/post';
 import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
+import LinearProgress from '@material-ui/core/LinearProgress';
 
 const useStyles = makeStyles(theme => ({
     header: {
@@ -37,16 +38,16 @@ const useStyles = makeStyles(theme => ({
     }
 }));
 
-const Navbar = ({ userStore, logout, history, location, searchPosts }) => {
+const Navbar = ({ userStore, loadingStore, logout, history, location, searchPosts }) => {
     const [search, setSearch] = React.useState('');
     const classes = useStyles();
 
-    function handleLogOutClicked () {
+    const handleLogOutClicked = () => {
         logout();
         history.replace('/');
-    }
+    };
 
-    function handleSearch (event) {
+    const handleSearch = event => {
         event.preventDefault();
         // eslint-disable-next-line camelcase
         const { easy_filters = '' } = queryString.parse(location.search);
@@ -56,17 +57,17 @@ const Navbar = ({ userStore, logout, history, location, searchPosts }) => {
             searchPosts(search, easy_filters, '');
         }
         history.push('/');
-    }
+    };
 
-    function handleSearchChange (event) {
+    const handleSearchChange = event => {
         setSearch(event.target.value);
-    }
+    };
 
-    function clearSearch () {
+    const clearSearch = () => {
         setSearch('');
-    }
+    };
 
-    function Following () {
+    const Following = () => {
         if (!userStore.authenticated) {
             return null;
         }
@@ -87,7 +88,15 @@ const Navbar = ({ userStore, logout, history, location, searchPosts }) => {
                 </Button>
             </Link>
         );
-    }
+    };
+
+    const Loading = () => {
+        if (loadingStore.loading) {
+            return <LinearProgress/>;
+        }
+
+        return null;
+    };
 
     return (
         <div>
@@ -130,7 +139,9 @@ const Navbar = ({ userStore, logout, history, location, searchPosts }) => {
                         />
                     </Grid>
                 </div>
-                <div className={classes.headerBottomBorder} />
+                <div className={classes.headerBottomBorder} >
+                    <Loading/>
+                </div>
             </div>
             <div className={classes.placeholderHeader}>placeholder</div>
         </div>
@@ -138,7 +149,8 @@ const Navbar = ({ userStore, logout, history, location, searchPosts }) => {
 };
 
 const mapStateToProps = state => ({
-    userStore: state.UserStore
+    userStore: state.UserStore,
+    loadingStore: state.LoadingStore
 });
 
 function mapDispatchToProps (dispatch) {

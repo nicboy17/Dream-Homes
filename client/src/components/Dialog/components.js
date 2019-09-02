@@ -47,7 +47,7 @@ const DialogContent = withStyles(theme => ({
 
 const DialogActions = withStyles(theme => ({
     root: {
-        margin: 0,
+        margin: '0 auto',
         padding: theme.spacing(1),
         marginBottom: '2rem'
     }

@@ -14,7 +14,7 @@ export default (state = initialState, action) => {
     return {
         ...boards(state, action),
         favourites: favourites(state.favourites, action),
-        posts: posts(state.posts, action),
+        ...posts(state, action),
         ...profile(state, action)
     };
 };

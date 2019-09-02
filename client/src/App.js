@@ -18,6 +18,8 @@ import { getToken } from './actions/user';
 import PostInBoards from './pages/Profile/PostsInBoards';
 import NavBar from './components/Navbar/Navbar';
 import FollowingPage from './pages/Following/FollowingPage';
+import Confirm from './components/Dialog/Confirm';
+import SnackBar from './components/SnackBar/SnackBar';
 
 class App extends Component {
     constructor (props) {
@@ -47,6 +49,8 @@ class App extends Component {
                         </Switch>
                     </div>
                 </BrowserRouter>
+                <Confirm/>
+                <SnackBar/>
             </MuiThemeProvider>
         );
     }

@@ -161,7 +161,7 @@ class EditUserDialog extends Component {
                             />
                         </DialogContent>
                         <DialogActions>
-                            <Button onClick={this.onSavePress} color="primary" className={classes.button}>Done!</Button>
+                            <Button onClick={this.onSavePress} color="primary" className={classes.button}>Done</Button>
                         </DialogActions>
                     </div>
                 </Dialog>
