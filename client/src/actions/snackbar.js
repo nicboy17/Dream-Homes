@@ -3,7 +3,7 @@ import {
     CLOSE_SNACKBAR
 } from './types';
 
-export const open = (message, variant, duration) => ({
+export const open = ({ message, variant, duration }) => ({
     type: OPEN_SNACKBAR,
     message,
     variant,

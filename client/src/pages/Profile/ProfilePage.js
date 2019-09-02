@@ -11,7 +11,6 @@ import EditPicUserDialog from '../../components/Dialog/EditUserDialog/EditUserDi
 import { withRouter, Route } from 'react-router-dom';
 import { bindActionCreators, compose } from 'redux';
 import { connect } from 'react-redux';
-import SnackBar from '../../components/SnackBar/SnackBar';
 import { getBoardsandPosts, clearError } from '../../actions/profile';
 import { follow, unfollow } from '../../actions/user';
 
@@ -31,10 +30,8 @@ class ProfilePage extends Component {
         super(props);
 
         this.state = {
-            tab: 0
+            following: false
         };
-
-        this.tabChange = this.tabChange.bind(this);
     }
 
     componentDidMount () {
@@ -43,47 +40,22 @@ class ProfilePage extends Component {
         this.props.getBoardsandPosts(username);
     }
 
-    tabChange (e, value) {
-        this.setState({ tab: value });
-    }
-
     onFollow = () => {
         const { follow, profileStore: { user } } = this.props;
         follow(user._id);
-        this.setState({ followedOrNot: !this.state.followedOrNot });
+        this.setState({ following: true });
     };
 
     onUnFollow = () => {
         const { unfollow, profileStore: { user } } = this.props;
         unfollow(user._id);
-        this.setState({ followedOrNot: !this.state.followedOrNot });
-    };
-
-    renderSnackBarError = () => {
-        const {
-            profileStore: { error },
-            clearError
-        } = this.props;
-        if (error) {
-            return (
-                <SnackBar
-                    message={error.message}
-                    variant={error.status}
-                    open={!!error}
-                    onClose={() => {
-                        this.setState({ SnackBar: false });
-                        clearError();
-                    }}
-                />
-            );
-        }
+        this.setState({ following: false });
     };
 
     render () {
-        const { classes } = this.props;
+        const { classes, userStore, profileStore: { user } } = this.props;
 
-        const { userStore, profileStore: { user, loading } } = this.props;
-        if (!user || loading) {
+        if (!user) {
             return <CircularProgress className="spinner" />;
         }
         return (
@@ -99,7 +71,7 @@ class ProfilePage extends Component {
                         followHandle={() => this.onFollow()} unFollowHandle={() => this.onUnFollow()}/>
                     <Divider variant={'middle'}/>
                     <div className={classes.body}>
-                        <ProfileTabs selected={this.state.tab} onChange={this.tabChange} />
+                        <ProfileTabs />
                     </div>
                 </div>
                 <Route path={'/profile/:username/interest-quiz'} component={InterestQuizDialog}/>

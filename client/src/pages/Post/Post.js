@@ -81,7 +81,7 @@ const Post = ({ id, user, post, boards, handleSelectBoard, handleSave, value, au
     );
 };
 const mapStateToProps = state => ({
-    isFavourited: (id) => {
+    isFavourited: id => {
         if (state.UserStore.user.favourites.indexOf(id) !== -1) {
             return true;
         }

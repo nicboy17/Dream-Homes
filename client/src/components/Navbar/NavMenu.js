@@ -21,7 +21,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const NavMenu = ({ authenticated, user, handleLogOutClicked, history }) => {
-    const [open, setMenu] = React.useState(false);
+    const [open, setMenu] = React.useState(null);
     const classes = useStyles();
 
     function handleClick (event) {
@@ -29,7 +29,7 @@ const NavMenu = ({ authenticated, user, handleLogOutClicked, history }) => {
     }
 
     function handleClose () {
-        setMenu(false);
+        setMenu(null);
     }
 
     const onProfileClick = () => {
@@ -39,13 +39,8 @@ const NavMenu = ({ authenticated, user, handleLogOutClicked, history }) => {
     if (authenticated) {
         return (
             <div className={classes.root}>
-                <Avatar
-                    className={classes.cornerIcon}
-                    src={user.profile}
-                    onClick={handleClick}
-                />
+                <Avatar className={classes.cornerIcon} src={user.profile} onClick={handleClick}/>
                 <Menu
-                    id='simple-menu'
                     anchorEl={open}
                     keepMounted
                     open={Boolean(open)}
@@ -58,11 +53,7 @@ const NavMenu = ({ authenticated, user, handleLogOutClicked, history }) => {
                     <MenuItem component={Link} to={'/profile/' + user.username + '/interest-quiz'}>
                         Interest Quiz
                     </MenuItem>
-                    <MenuItem
-                        component={Link}
-                        to='/'
-                        onClick={handleLogOutClicked}
-                    >
+                    <MenuItem component={Link} to='/' onClick={handleLogOutClicked}>
                         Logout
                     </MenuItem>
                 </Menu>
@@ -72,12 +63,7 @@ const NavMenu = ({ authenticated, user, handleLogOutClicked, history }) => {
         return (
             <div>
                 <Link to='/login' style={{ textDecoration: 'none', color: 'black' }}>
-                    <Button
-                        style={{
-                            border: 'none',
-                            padding: '0',
-                            borderRadius: '7.5px'
-                        }}>
+                    <Button style={{ border: 'none', padding: '0', borderRadius: '7.5px' }}>
                         Log In
                     </Button>
                 </Link>

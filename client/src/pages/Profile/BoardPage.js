@@ -5,20 +5,20 @@ import CloseIcon from '@material-ui/icons/Close';
 
 import { connect } from 'react-redux';
 import { bindActionCreators, compose } from 'redux';
-import { getBoardPosts } from '../../actions/board';
+import { getBoardPosts, removePost } from '../../actions/board';
 import { withRouter } from 'react-router-dom';
 
 import '../stylesheet/Board.css';
 import Posts from '../../components/Posts/Posts';
 
-class PostInBoards extends Component {
+class BoardPage extends Component {
     componentDidMount = () => {
         const { getBoardPosts, match } = this.props;
         getBoardPosts(match.params.id);
     };
 
     render () {
-        const { match, history } = this.props;
+        const { match, history, removeVisible, removePost } = this.props;
         const board = this.props.board(match.params.id);
         if (!board) {
             return <CircularProgress className="spinner" />;
@@ -31,13 +31,14 @@ class PostInBoards extends Component {
                         <CloseIcon />
                     </IconButton>
                 </div>
-                <Posts posts={board.posts} />
+                <Posts posts={board.posts} deleteHandle={removeVisible ? (post) => removePost(this.props.match.params.id, post) : false} board={board._id}/>
             </div>
         );
     }
 }
 
 const mapStateToProps = state => ({
+    removeVisible: state.UserStore.authenticated && state.ProfileStore.user._id === state.UserStore.user._id,
     board: (id) => {
         if (state.ProfileStore.boards.length) {
             return state.ProfileStore.boards.find(board => board._id === id);
@@ -49,7 +50,8 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => {
     return bindActionCreators(
         {
-            getBoardPosts
+            getBoardPosts,
+            removePost
         },
         dispatch
     );
@@ -61,4 +63,4 @@ export default compose(
         mapStateToProps,
         mapDispatchToProps
     )
-)(PostInBoards);
+)(BoardPage);

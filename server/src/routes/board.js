@@ -32,28 +32,17 @@ router.use(auth);
 // @access   Private
 router.put('/:id/post', async (req, res) => {
     try {
-        const board = await Board.findById(req.params.id);
+        const board = await Board.findOneAndUpdate({
+            _id: req.params.id,
+            user: req.decoded._id
+        }, { $addToSet: { posts: req.body.post }} ).lean();
         if (!board) {
             return res.status(404).json({ msg: 'Board not found' });
         }
-        if (board.user.toString() !== req.decoded._id.toString()) {
-            return res.status(403).json({ msg: 'You do not have the authorization to add to this board' });
-        }
-        // Check to see if post has already been added to board
-        if (
-            board.posts.filter(post => post.toString() === req.body._id).length > 0
-        ) {
-            return res.status(400).json({ msg: 'Post has already been added to the board' });
-        }
-        board.posts.unshift(req.body._id);
-        await board.save();
-        res.json(board);
+
+        res.status(200).json({ success: true, board });
     } catch (err) {
-        // Check to see if it is a valid object id
-        if (err.kind === 'ObjectId') {
-            return res.status(404).json({ msg: 'The board or post does not exist' });
-        }
-        return res.status(500).send(err);
+        return res.status(400).json({ err });
     }
 });
 
@@ -65,7 +54,7 @@ router.put('/:id/remove', [BoardValidation.removePost, async (req, res) => {
         const board = await Board.findOneAndUpdate({
             _id: req.params.id,
             user: req.decoded._id
-        }, { 'pull': { posts: req.body.post } }).lean();
+        }, { $pull: { posts: req.body.post } }).lean();
         if (!board) {
             return res.status(404).json({ success: false, message: 'Board not found' });
         }

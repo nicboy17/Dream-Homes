@@ -61,6 +61,11 @@ const useStyles = makeStyles(theme => ({
 
 const Posts = ({ posts, deleteHandle = false, notFoundMessage = 'Sorry, no posts found' }) => {
     const classes = useStyles();
+    if (!posts.length) {
+        return (
+            <h2>{ notFoundMessage }</h2>
+        );
+    }
 
     const deletePost = (post) => {
         if (!deleteHandle) {
@@ -85,12 +90,6 @@ const Posts = ({ posts, deleteHandle = false, notFoundMessage = 'Sorry, no posts
             </div>
         );
     });
-
-    if (!posts.length) {
-        return (
-            <h2>{ notFoundMessage }</h2>
-        );
-    }
 
     return (
         <div className={classes.root}>

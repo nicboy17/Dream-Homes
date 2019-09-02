@@ -1,5 +1,4 @@
 import React from 'react';
-import { makeStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import Tabs from '@material-ui/core/Tabs';
@@ -9,6 +8,7 @@ import Boards from './Boards';
 import Posts from '../../components/Posts/Posts';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
+import { tabChange } from '../../actions/profile';
 import { removePost } from '../../actions/post';
 import { removeBoard } from '../../actions/board';
 
@@ -29,30 +29,23 @@ function TabPanel (props) {
     );
 }
 
-const useStyles = makeStyles(theme => ({
-    root: {}
-}));
-
-const ProfileTabs = ({ userStore, profileStore, selected, onChange, removeBoard, removePost }) => {
-    const classes = useStyles();
-    const removeVisible = userStore.authenticated && profileStore.user._id === userStore.user._id;
-
+const ProfileTabs = ({ removeVisible, profileStore, tabChange, removeBoard, removePost }) => {
     return (
-        <div className={classes.root}>
+        <div>
             <Grid container direction="row" justify="space-between" alignItems="flex-start">
-                <Tabs value={selected} onChange={onChange}>
+                <Tabs value={profileStore.tab} onChange={(e, val) => tabChange(val)}>
                     <Tab label="Boards" value={0} />
                     <Tab label="Posts" value={1} />
                     <Tab label="Favourites" value={2} />
                 </Tabs>
             </Grid>
-            <TabPanel value={selected} index={0}>
+            <TabPanel value={profileStore.tab} index={0}>
                 <Boards boards={profileStore.boards} deleteHandle={removeVisible ? removeBoard : false} />
             </TabPanel>
-            <TabPanel value={selected} index={1}>
+            <TabPanel value={profileStore.tab} index={1}>
                 <Posts posts={profileStore.posts} deleteHandle={removeVisible ? removePost : false} />
             </TabPanel>
-            <TabPanel value={selected} index={2}>
+            <TabPanel value={profileStore.tab} index={2}>
                 <Posts posts={profileStore.favourites} />
             </TabPanel>
         </div>
@@ -60,7 +53,7 @@ const ProfileTabs = ({ userStore, profileStore, selected, onChange, removeBoard,
 };
 
 const mapStateToProps = state => ({
-    userStore: state.UserStore,
+    removeVisible: state.UserStore.authenticated && state.ProfileStore.user._id === state.UserStore.user._id,
     profileStore: state.ProfileStore
 });
 
@@ -68,7 +61,8 @@ const mapDispatchToProps = dispatch => {
     return bindActionCreators(
         {
             removeBoard,
-            removePost
+            removePost,
+            tabChange
         },
         dispatch
     );

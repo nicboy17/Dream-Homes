@@ -7,7 +7,9 @@ const initialState = {
     boards: {},
     favourites: {},
     posts: {},
-    profile: {}
+    profile: {},
+    user: {},
+    tab: 0
 };
 
 export default (state = initialState, action) => {
