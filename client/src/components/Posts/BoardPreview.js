@@ -33,7 +33,7 @@ const BoardPreview = ({ posts, className }) => {
         posts.push({ image: placeholder, _id: `placeholder${i}` });
     }
 
-    const images = posts.map((post, i) => {
+    const images = [...posts].map((post, i) => {
         return (
             <div className={classes.imageContainer} key={i}>
                 <img src={post.image} alt={post._id} className={classes.image}/>

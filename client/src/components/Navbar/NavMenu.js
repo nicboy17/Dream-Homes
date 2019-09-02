@@ -21,7 +21,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const NavMenu = ({ authenticated, user, handleLogOutClicked, history }) => {
-    const [open, setMenu] = React.useState(null);
+    const [open, setMenu] = React.useState(false);
     const classes = useStyles();
 
     function handleClick (event) {
@@ -29,7 +29,7 @@ const NavMenu = ({ authenticated, user, handleLogOutClicked, history }) => {
     }
 
     function handleClose () {
-        setMenu(null);
+        setMenu(false);
     }
 
     const onProfileClick = () => {

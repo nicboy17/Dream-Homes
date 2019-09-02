@@ -2,12 +2,12 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { Card, makeStyles, Typography } from '@material-ui/core';
 import CardActionArea from '@material-ui/core/CardActionArea';
+import CardActions from '@material-ui/core/CardActions';
 import BoardPreview from '../../components/Posts/BoardPreview';
 import IconButton from '@material-ui/core/IconButton';
 import DeleteIcon from '@material-ui/icons/Delete';
 
 const useStyles = makeStyles(theme => ({
-    root: {},
     card: {
         height: '33vh',
         width: '26vw',
@@ -27,9 +27,8 @@ const useStyles = makeStyles(theme => ({
         overflow: 'hidden'
     },
     deleteIconContainer: {
+        marginLeft: 'auto',
         marginRight: 10,
-        right: 0,
-        top: 10,
         backgroundColor: 'grey'
     },
     deleteIcon: {
@@ -46,11 +45,9 @@ const Boards = ({ boards, deleteHandle = false }) => {
         }
 
         return (
-            <div style={{ display: 'grid', alignContent: 'center', justifyContent: 'end' }}>
-                <IconButton size="medium" onClick={() => deleteHandle(board)} className={classes.deleteIconContainer}>
-                    <DeleteIcon className={classes.deleteIcon} />
-                </IconButton>
-            </div>
+            <IconButton size="medium" onClick={() => deleteHandle(board)} className={classes.deleteIconContainer}>
+                <DeleteIcon className={classes.deleteIcon} />
+            </IconButton>
         );
     };
 
@@ -65,13 +62,13 @@ const Boards = ({ boards, deleteHandle = false }) => {
                             <BoardPreview posts={board.posts} className={classes.boardPreview}/>
                         </Link>
                     </CardActionArea>
-                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr' }}>
+                    <CardActions disableSpacing>
                         <div>
                             <Typography variant="h6" className={classes.cardHeader}>{board.title}</Typography>
                             <Typography variant="body1" className={classes.cardHeader}>{board.posts.length} posts</Typography>
                         </div>
                         {deleteBoard(board._id)}
-                    </div>
+                    </CardActions>
                 </Card>
             );
         })
