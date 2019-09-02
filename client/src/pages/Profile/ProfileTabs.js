@@ -29,9 +29,7 @@ function TabPanel (props) {
     );
 }
 
-const ProfileTabs = ({ userStore, profileStore, tabChange, removeBoard, removePost }) => {
-    const removeVisible = userStore.authenticated && profileStore.user._id === userStore.user._id;
-
+const ProfileTabs = ({ removeVisible, profileStore, tabChange, removeBoard, removePost }) => {
     return (
         <div>
             <Grid container direction="row" justify="space-between" alignItems="flex-start">
@@ -55,7 +53,7 @@ const ProfileTabs = ({ userStore, profileStore, tabChange, removeBoard, removePo
 };
 
 const mapStateToProps = state => ({
-    userStore: state.UserStore,
+    removeVisible: state.UserStore.authenticated && state.ProfileStore.user._id === state.UserStore.user._id,
     profileStore: state.ProfileStore
 });
 

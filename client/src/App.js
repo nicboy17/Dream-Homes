@@ -15,7 +15,7 @@ import ProfilePage from './pages/Profile/ProfilePage.js';
 import PostPage from './pages/Post/PostPage';
 import { getToken } from './actions/user';
 
-import PostInBoards from './pages/Profile/PostsInBoards';
+import BoardPage from './pages/Profile/BoardPage';
 import NavBar from './components/Navbar/Navbar';
 import FollowingPage from './pages/Following/FollowingPage';
 import Confirm from './components/Dialog/Confirm';
@@ -45,7 +45,7 @@ class App extends Component {
                                     <ProfilePage key={props.match.params.username} {...props} />
                                 )}
                             />
-                            <Route path='/board/:id' component={PostInBoards}/>
+                            <Route path='/board/:id' component={BoardPage}/>
                         </Switch>
                     </div>
                 </BrowserRouter>

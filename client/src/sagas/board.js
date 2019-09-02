@@ -1,4 +1,4 @@
-import { call, put, takeEvery, takeLatest } from '@redux-saga/core/effects';
+import { call, put, takeEvery } from '@redux-saga/core/effects';
 import {
     ADD_BOARD,
     ADD_BOARD_SUCCESS,
@@ -13,6 +13,7 @@ import {
 } from '../actions/types';
 import { boardService } from '../services/board';
 import { confirmSaga } from './confirm';
+import { open } from '../actions/snackbar';
 
 function * addBoard (request) {
     try {
@@ -34,8 +35,10 @@ export function * addBoardSaga () {
 function * addPost (request) {
     try {
         const response = yield call(boardService.addPost, request);
+        yield put({ type: OPEN_SNACKBAR, message: 'Post Added to Board', variant: 'success', duration: 1250 });
         yield put({ type: ADD_BOARD_POST_SUCCESS, response });
     } catch (err) {
+        yield put({ type: OPEN_SNACKBAR, message: 'Post Addition Failed', variant: 'error', duration: 1500 });
         yield put({ type: BOARD_ERROR, err });
     }
 }
@@ -66,14 +69,16 @@ function * removePost (request) {
 
     try {
         yield call(boardService.removePost, request);
-        yield put({ type: REMOVE_BOARD_POST_SUCCESS, ...request });
+        yield put(open({ message: 'Removed post from board', variant: 'success', duration: 1250 }));
+        yield put({ type: REMOVE_BOARD_POST_SUCCESS, board: request.board, post: request.post });
     } catch (err) {
+        yield put(open({ message: 'Error: could not remove post from board', variant: 'error', duration: 1500 }));
         yield put({ type: BOARD_ERROR, err });
     }
 }
 
 export function * removePostSaga () {
-    yield takeLatest(REMOVE_BOARD_POST, removePost);
+    yield takeEvery(REMOVE_BOARD_POST, removePost);
 }
 
 function * removeBoard (request) {
@@ -85,10 +90,10 @@ function * removeBoard (request) {
 
     try {
         yield call(boardService.removeBoard, request);
-        yield put({ type: OPEN_SNACKBAR, message: 'Board Deleted', variant: 'success', duration: 1250 });
+        yield put(open({ message: 'Board Deleted', variant: 'success', duration: 1250 }));
         yield put({ type: REMOVE_BOARD_SUCCESS, board: request.board });
     } catch (err) {
-        yield put({ type: OPEN_SNACKBAR, message: 'Board Deletion Failed', variant: 'error', duration: 1500 });
+        yield put(open({ message: 'Board Deletion Failed', variant: 'error', duration: 1500 }));
         yield put({ type: BOARD_ERROR, err });
     }
 }

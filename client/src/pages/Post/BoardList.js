@@ -48,19 +48,14 @@ const BoardList = ({ boards, handleSelect, value, handleSave, disabled, visible 
             <FormControl className={classes.select}>
                 <Select value={value} onChange={handleSelect}
                     displayEmpty variant={'outlined'} className={classes.board}
-                    inputProps={{
-                        name: 'board',
-                        id: 'board'
-                    }}
+                    inputProps={{ name: 'board', id: 'board' }}
                 >
                     <MenuItem value="">Select board</MenuItem>
-                    {boards.map((board, i) => {
-                        return (
-                            <MenuItem key={i} value={board._id}>
-                                {board.title}
-                            </MenuItem>
-                        );
-                    })}
+                    {boards.map((board, i) => (
+                        <MenuItem key={i} value={board._id} >
+                            {board.title}
+                        </MenuItem>
+                    ))}
                 </Select>
                 <span>
                     <Button variant="contained" size="medium" color="primary" className={classes.save} onClick={handleSave} disabled={disabled}>Save</Button>

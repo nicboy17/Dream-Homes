@@ -61,7 +61,6 @@ const useStyles = makeStyles(theme => ({
 
 const Posts = ({ posts, deleteHandle = false, notFoundMessage = 'Sorry, no posts found' }) => {
     const classes = useStyles();
-
     if (!posts.length) {
         return (
             <h2>{ notFoundMessage }</h2>

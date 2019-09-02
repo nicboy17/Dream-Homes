@@ -5,13 +5,13 @@ export const boardService = {
         return Post(`/users/${username}/board`, board);
     },
     addPost: ({ board, post }) => {
-        return Put(`/boards/${board}/post`, { _id: post });
+        return Put(`/boards/${board}/post`, { post });
     },
     getPosts: ({ id }) => {
         return Get(`/boards/${id}/posts`);
     },
     removePost: ({ board, post }) => {
-        return Put(`/boards/${board}`, { post });
+        return Put(`/boards/${board}/remove`, { post });
     },
     removeBoard: ({ board }) => {
         return Delete(`/boards/${board}`);

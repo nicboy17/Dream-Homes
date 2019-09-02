@@ -26,8 +26,14 @@ export default (state = {}, action) => {
         state.boards.push(response.board);
         return { ...state };
     case ADD_BOARD_POST_SUCCESS:
-        state.boards.find(board => board._id === response._id).posts = response.posts;
-        return { ...state };
+        return { ...state,
+            boards: state.boards.map(board => {
+                if (board._id === response.board._id) {
+                    board = response.board;
+                }
+                return board;
+            })
+        };
     case REMOVE_BOARD_POST_SUCCESS:
         return { ...state,
             loading: false,
