@@ -1,7 +1,7 @@
 import {
     OPEN_SNACKBAR,
     CLOSE_SNACKBAR
-} from '../actions/types';
+} from '../../actions/types';
 
 const initialState = { open: false, message: '', variant: 'success', duration: 0 };
 

@@ -9,14 +9,16 @@ import {
     REMOVE_BOARD_POST,
     REMOVE_BOARD_POST_SUCCESS,
     BOARD_ERROR, REMOVE_BOARD,
-    REMOVE_BOARD_SUCCESS, OPEN_SNACKBAR
+    REMOVE_BOARD_SUCCESS, OPEN_SNACKBAR, START_LOADING, STOP_LOADING
 } from '../actions/types';
 import { boardService } from '../services/board';
 import { confirmSaga } from './confirm';
 
 function * addBoard (request) {
     try {
+        yield put({ type: START_LOADING });
         const response = yield call(boardService.addBoard, request);
+        yield put({ type: STOP_LOADING });
         yield put({ type: OPEN_SNACKBAR, message: 'Board Addition Success', variant: 'success', duration: 1250 });
         yield put({ type: ADD_BOARD_SUCCESS, response });
     } catch (err) {

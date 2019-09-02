@@ -9,10 +9,8 @@ import FormContent from './FormContent';
 import FileUploader from './FileUploader';
 import { Redirect } from 'react-router-dom';
 import { bindActionCreators } from 'redux';
-import { respond } from '../../../actions/user';
 import { getBoardsandPosts } from '../../../actions/profile';
 import { addPost } from '../../../actions/post';
-import SnackBar from '../../SnackBar/SnackBar';
 import BoardList from './BoardList';
 import '../../../pages/stylesheet/Dialog.css';
 
@@ -30,12 +28,10 @@ class PostDialog extends React.Component {
             tagError: '',
             titleError: '',
             board: '',
-            image: [],
-            imageError: '',
-            SnackBar: false
+            image: '',
+            imageError: ''
         };
 
-        this.snackBarClose = this.snackBarClose.bind(this);
         this.onCreate = this.onCreate.bind(this);
     }
 
@@ -60,7 +56,7 @@ class PostDialog extends React.Component {
     onSubmitPress = e => {
         const { tags, tag } = this.state;
         if (e.which === 13) {
-            if (tags.include(tag.lowercase())) {
+            if (tags.includes(tag)) {
                 this.setState({ tagError: 'Can not have duplicate tags' });
             } else if (tag.length > 15) {
                 this.setState({ tagError: 'Tags cannot be more than 15 characters' });
@@ -103,7 +99,7 @@ class PostDialog extends React.Component {
         const filterFiles = fileItems.filter(
             fileItem => fileItem.file.type.toString() === 'image/jpeg'
         );
-        this.setState({ image: filterFiles.map(filterFile => filterFile.file) });
+        this.setState({ image: filterFiles.map(filterFile => filterFile.file)[0] });
     };
 
     renderSmallText = () => {
@@ -122,52 +118,24 @@ class PostDialog extends React.Component {
         const { image, title, link, description, titleError, linkError, descriptionError } = this.state;
         e.preventDefault();
         if (image.length < 1) {
-            this.setState({ imageError: 'Please include atleast one image', SnackBar: true });
+            this.setState({ imageError: 'Please include at least one image' });
         }
         if (title.length < 3 || title.length > 15) {
-            this.setState({ titleError: 'Must be atleast 3 or less than 15 characters' });
+            this.setState({ titleError: 'Must be at least 3 or less than 15 characters' });
         }
         if (link.length < 3 || link.length > 15) {
-            this.setState({ linkError: 'Must be atleast 3 or less than 15 characters' });
+            this.setState({ linkError: 'Must be at least 3 or less than 15 characters' });
         }
         if (description.length < 3 || description.length > 200) {
-            this.setState({ descriptionError: 'Must be atleast 3 to 200 characters' });
+            this.setState({ descriptionError: 'Must be at least 3 to 200 characters' });
         } else if (image.length > 0 && !titleError && !linkError && !descriptionError) {
-            this.props.addPost(this.state, this.state.username);
-            this.setState({ snackBar: true });
+
         }
+        this.props.addPost(this.state, this.state.username);
     };
 
     onCloseClick = () => {
         this.props.history.push(`/profile/${this.state.username}`);
-    };
-
-    snackBarClose (event, reason) {
-        if (reason === 'clickaway') {
-            return;
-        }
-
-        this.setState({ snackBar: false });
-        if (this.props.userStore.success) {
-            this.onCloseClick();
-        }
-        this.props.dispatch(respond());
-    }
-
-    ServerResponse = () => {
-        if (this.props.userStore.success) {
-            return (
-                <SnackBar message={'Post Created'} variant={'success'} open={this.state.snackBar}
-                    onClose={this.snackBarClose} duration={1000}/>
-            );
-        } else if (this.props.userStore.error) {
-            return (
-                <SnackBar message={'Post Creation failed'} variant={'error'}
-                    open={this.state.snackBar} onClose={this.snackBarClose} duration={1500}/>
-            );
-        }
-
-        return null;
     };
 
     render () {
@@ -198,76 +166,73 @@ class PostDialog extends React.Component {
         }
 
         return (
-            <div>
-                <Dialog
-                    open={true}
-                    onClose={this.handleClose}
-                    aria-labelledby='form-dialog-title'
-                    onClick={() => this.onCloseClick()}
-                    maxWidth={'sm'}
+            <Dialog
+                open={true}
+                onClose={this.handleClose}
+                aria-labelledby='form-dialog-title'
+                onClick={() => this.onCloseClick()}
+                maxWidth={'sm'}
 
-                >
-                    <div onClick={e => e.stopPropagation()}>
-                        <DialogTitle style={{ textAlign: 'center' }} id='dialog-title' title={'Create a post'} onClose={() => this.onCloseClick()}/>
-                        <div className="container">
-                            <div className="splitContainer">
-                                <DialogContent>
-                                    <BoardList
-                                        className="boardList"
-                                        boards={this.props.userStore.user.boards}
-                                        handleSelect={this.handleSelectChange}
-                                        value={board}
+            >
+                <div onClick={e => e.stopPropagation()}>
+                    <DialogTitle style={{ textAlign: 'center' }} id='dialog-title' title={'Create a post'} onClose={() => this.onCloseClick()}/>
+                    <div className="container">
+                        <div className="splitContainer">
+                            <DialogContent>
+                                <BoardList
+                                    className="boardList"
+                                    boards={this.props.userStore.user.boards}
+                                    handleSelect={this.handleSelectChange}
+                                    value={board}
+                                />
+                                <FormContent
+                                    onChangeText={this.onChangeText}
+                                    titleError={titleError}
+                                    tagError={tagError}
+                                    linkError={linkError}
+                                    descriptionError={descriptionError}
+                                    onSubmitPress={this.onSubmitPress}
+                                    tag={tag}
+                                    title={title}
+                                    description={description}
+                                    link={link}
+                                />
+                                {this.renderTags()}
+                            </DialogContent>
+                        </div>
+                        <div className="splitContainer">
+                            <DialogContent>
+                                <div className="fileUpload" onClick={() => {}}>
+                                    <FileUploader
+                                        onUploadImages={this.onUploadImages}
+                                        files={image}
                                     />
-                                    <FormContent
-                                        onChangeText={this.onChangeText}
-                                        titleError={titleError}
-                                        tagError={tagError}
-                                        linkError={linkError}
-                                        descriptionError={descriptionError}
-                                        onSubmitPress={this.onSubmitPress}
-                                        tag={tag}
-                                        title={title}
-                                        description={description}
-                                        link={link}
-                                    />
-                                    {this.renderTags()}
-                                </DialogContent>
-                            </div>
-                            <div className="splitContainer">
-                                <DialogContent>
-                                    <div className="fileUpload" onClick={() => {}}>
-                                        <FileUploader
-                                            onUploadImages={this.onUploadImages}
-                                            files={image}
-                                        />
-                                        {this.renderSmallText()}
-                                    </div>
-                                </DialogContent>
-                                <DialogContent />
-                            </div>
+                                    {this.renderSmallText()}
+                                </div>
+                            </DialogContent>
+                            <DialogContent />
                         </div>
                     </div>
-                    <DialogActions>
-                        <Button onClick={this.onCreate} color='primary' style={{ margin: '1rem auto' }}>Create</Button>
-                    </DialogActions>
-                </Dialog>
-                <this.ServerResponse />
-            </div>
+                </div>
+                <DialogActions>
+                    <Button onClick={this.onCreate} color='primary' style={{ margin: '1rem auto' }}>Create</Button>
+                </DialogActions>
+            </Dialog>
         );
     }
 }
 
 const mapStateToProps = state => ({
     userStore: state.UserStore,
-    profileStore: state.ProfileStore
+    profileStore: state.ProfileStore,
+    snackBarStore: state.SnackBarStore
 });
 
 function mapDispatchToProps (dispatch) {
     return bindActionCreators(
         {
             getBoardsandPosts,
-            addPost,
-            dispatch
+            addPost
         },
         dispatch
     );

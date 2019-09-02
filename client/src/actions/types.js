@@ -94,3 +94,7 @@ export const CONFIRM_NO = 'CONFIRM_NO';
 // Snackbar
 export const OPEN_SNACKBAR = 'OPEN_SNACKBAR';
 export const CLOSE_SNACKBAR = 'CLOSE_SNACKBAR';
+
+// Loading
+export const START_LOADING = 'START_LOADING';
+export const STOP_LOADING = 'STOP_LOADING';

@@ -154,7 +154,6 @@ router.get ('/:id/followers', async (req, res) => {
     }
 });
 
-// TODO: add to board route ?
 // @route    POST users/:username/board
 // @desc     Create user board
 // @access   Private
@@ -175,7 +174,6 @@ router.post('/:username/board', [UserValidation.addBoard, async (req, res) => {
 }]);
 
 
-// TODO: add to post route ?
 // @route    POST users/:username/posts
 // @desc     Create new post
 // @access   Private

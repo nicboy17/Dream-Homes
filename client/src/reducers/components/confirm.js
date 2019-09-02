@@ -1,7 +1,7 @@
 import {
     OPEN_CONFIRM,
     CLOSE_CONFIRM
-} from '../actions/types';
+} from '../../actions/types';
 
 const initialState = { open: false };
 
