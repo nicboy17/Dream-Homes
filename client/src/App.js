@@ -2,14 +2,12 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { MuiThemeProvider } from '@material-ui/core';
-import { BrowserRouter, Route, Switch, withRouter } from 'react-router-dom';
+import { BrowserRouter, Route, Switch } from 'react-router-dom';
 
 import { theme } from './themes/theme';
 import './App.css';
 
 import Main from './pages/Main';
-import Login from './components/Dialog/Login/Login';
-import SignUp from './components/Dialog/SignUp/SignUp';
 import ProfilePage from './pages/Profile/ProfilePage.js';
 
 import PostPage from './pages/Post/PostPage';
@@ -34,9 +32,9 @@ class App extends Component {
                     <NavBar />
                     <div>
                         <Switch>
-                            <Route exact path='/' component={withRouter(Main)} />
-                            <Route exact path='/login' component={Login} />
-                            <Route exact path='/signup' component={SignUp} />
+                            <Route exact path='/' component={Main} />
+                            <Route path='/login' component={Main} />
+                            <Route path='/signup' component={Main} />
                             <Route path='/posts/:id' component={PostPage} />
                             <Route path='/profile/:username/following' component={FollowingPage}/>
                             <Route

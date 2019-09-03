@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators, compose } from 'redux';
 import { getFollowing } from '../../actions/user';
 import { withStyles } from '@material-ui/styles';
-import Users from './Users';
+import Users from '../../components/Users/Users';
 
 const styles = theme => ({
     root: {

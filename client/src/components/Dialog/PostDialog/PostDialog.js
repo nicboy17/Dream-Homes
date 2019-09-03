@@ -43,17 +43,15 @@ class PostDialog extends React.Component {
         this.setState({ username });
     };
 
-    onChangeText = e => {
+    changeTitle = e => {
         this.setState({ [e.target.id]: e.target.value, [`${e.target.id}Error`]: '' });
     };
 
-    // Board
-    handleSelectChange = e => {
+    changeBoard = e => {
         this.setState({ board: e.target.value });
     };
 
-    // Create a tag
-    onSubmitPress = e => {
+    createTag = e => {
         const { tags, tag } = this.state;
         if (e.which === 13) {
             if (tags.includes(tag)) {
@@ -70,31 +68,26 @@ class PostDialog extends React.Component {
         }
     };
 
-    renderTags = () => {
-        return (
-            <>
-                {this.state.tags.map((tag, i) => {
-                    return (
-                        <Chip
-                            key={i}
-                            label={tag}
-                            onDelete={() => this.onDeleteTag(tag)}
-                            style={{ margin: 2 }}
-                            size="small"
-                            variant="outlined"
-                            className="chip"
-                        />
-                    );
-                })}
-            </>
-        );
+    Tags = () => {
+        return this.state.tags.map((tag, i) => {
+            return (
+                <Chip
+                    key={i}
+                    label={tag}
+                    onDelete={() => this.onDeleteTag(tag)}
+                    style={{ margin: 2 }}
+                    size="small"
+                    variant="outlined"
+                    className="chip"
+                />
+            );
+        });
     };
 
     onDeleteTag = del => {
         this.setState({ tags: this.state.tags.filter(tag => tag !== del) });
     };
 
-    // File pond , handle image upload
     onUploadImages = fileItems => {
         const filterFiles = fileItems.filter(
             fileItem => fileItem.file.type.toString() === 'image/jpeg'
@@ -129,9 +122,8 @@ class PostDialog extends React.Component {
         if (description.length < 3 || description.length > 200) {
             this.setState({ descriptionError: 'Must be at least 3 to 200 characters' });
         } else if (image.length > 0 && !titleError && !linkError && !descriptionError) {
-
+            this.props.addPost(this.state, this.state.username);
         }
-        this.props.addPost(this.state, this.state.username);
     };
 
     onCloseClick = () => {
@@ -139,30 +131,10 @@ class PostDialog extends React.Component {
     };
 
     render () {
-        const {
-            userStore,
-            match: { params }
-        } = this.props;
+        const { userStore, match: { params } } = this.props;
 
-        const {
-            title,
-            description,
-            descriptionError,
-            link,
-            linkError,
-            tag,
-            tagError,
-            titleError,
-            board,
-            image
-        } = this.state;
-
-        // Redirect user to profile if not authorized
-        if (userStore.authenticated) {
-            if (userStore.user.username !== params.username) {
-                const redirect = `/profile/${params.username}`;
-                return <Redirect to={redirect} />;
-            }
+        if (userStore.authenticated && userStore.user.username !== params.username) {
+            return <Redirect to={`/profile/${params.username}`} />;
         }
 
         return (
@@ -181,23 +153,23 @@ class PostDialog extends React.Component {
                             <DialogContent>
                                 <BoardList
                                     className="boardList"
-                                    boards={this.props.userStore.user.boards}
-                                    handleSelect={this.handleSelectChange}
-                                    value={board}
+                                    boards={userStore.user.boards}
+                                    handleSelect={this.changeBoard}
+                                    value={this.state.board}
                                 />
                                 <FormContent
-                                    onChangeText={this.onChangeText}
-                                    titleError={titleError}
-                                    tagError={tagError}
-                                    linkError={linkError}
-                                    descriptionError={descriptionError}
-                                    onSubmitPress={this.onSubmitPress}
-                                    tag={tag}
-                                    title={title}
-                                    description={description}
-                                    link={link}
+                                    onChangeText={this.changeTitle}
+                                    titleError={this.state.titleError}
+                                    tagError={this.state.tagError}
+                                    linkError={this.state.linkError}
+                                    descriptionError={this.state.descriptionError}
+                                    onSubmitPress={this.createTag}
+                                    tag={this.state.tag}
+                                    title={this.state.title}
+                                    description={this.state.description}
+                                    link={this.state.link}
                                 />
-                                {this.renderTags()}
+                                <this.Tags/>
                             </DialogContent>
                         </div>
                         <div className="splitContainer">
@@ -205,7 +177,7 @@ class PostDialog extends React.Component {
                                 <div className="fileUpload" onClick={() => {}}>
                                     <FileUploader
                                         onUploadImages={this.onUploadImages}
-                                        files={image}
+                                        files={this.state.image}
                                     />
                                     {this.renderSmallText()}
                                 </div>

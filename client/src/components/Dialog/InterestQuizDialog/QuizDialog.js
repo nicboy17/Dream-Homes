@@ -4,7 +4,7 @@ import { compose, bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
-import { DialogTitle, DialogActions, DialogContent } from '../components';
+import { DialogTitle, DialogActions, DialogContent, Transition } from '../components';
 import Interests from './Interests';
 import { saveInterests } from '../../../actions/user';
 
@@ -76,7 +76,7 @@ class QuizDialog extends React.Component {
         const { classes } = this.props;
 
         return (
-            <Dialog onClose={this.handleClose} aria-labelledby="customized-dialog-title" open={this.state.open} maxWidth={'md'}>
+            <Dialog onClose={this.handleClose} TransitionComponent={Transition} open={this.state.open} maxWidth={'md'}>
                 <DialogTitle id="title" title={'Select your interests:'} onClose={this.handleClose} />
                 <DialogContent>
                     <Interests handleChange={this.handleChange} selected={this.state.selected} />

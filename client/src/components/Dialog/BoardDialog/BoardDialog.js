@@ -57,6 +57,7 @@ class BoardDialog extends Component {
         if (userStore.authenticated && userStore.user.username !== params.username) {
             return <Redirect to={`/profile/${params.username}`} />;
         }
+
         return (
             <Dialog open={true} onClick={() => this.onCloseClick()} aria-labelledby='board-dialog' maxWidth='xs'
                 fullWidth={true}>

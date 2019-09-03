@@ -4,7 +4,7 @@ import { compose, bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import Dialog from '@material-ui/core/Dialog';
 import LinearProgress from '@material-ui/core/LinearProgress';
-import { DialogTitle, DialogContent } from '../components';
+import { DialogTitle, DialogContent, Transition } from '../components';
 import { Link, Redirect } from 'react-router-dom';
 import LoginForm from './LoginForm';
 import { login } from '../../../actions/user';
@@ -41,6 +41,7 @@ class Login extends React.Component {
         this.passwordValidator = this.passwordValidator.bind(this);
         this.handleChange = this.handleChange.bind(this);
         this.handleSignIn = this.handleSignIn.bind(this);
+        this.handleClose = this.handleClose.bind(this);
 
         this.state = {
             open: true,
@@ -65,7 +66,7 @@ class Login extends React.Component {
         });
     }
 
-    handleClose = () => {
+    handleClose () {
         this.setState({ open: false });
         this.props.history.push('/');
     };
@@ -77,7 +78,7 @@ class Login extends React.Component {
         }
 
         return (
-            <Dialog onClose={this.handleClose} aria-labelledby="dialog-title" open={this.state.open} maxWidth={'md'}>
+            <Dialog onClose={this.handleClose} TransitionComponent={Transition} open={this.state.open} maxWidth={'md'}>
                 <this.Loading/>
                 <DialogTitle id="title" title={'Welcome!'} onClose={this.handleClose} />
                 <DialogContent>

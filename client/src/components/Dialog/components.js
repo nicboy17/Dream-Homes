@@ -1,4 +1,5 @@
 import { withStyles } from '@material-ui/styles';
+import Slide from '@material-ui/core/Slide';
 import MuiDialogTitle from '@material-ui/core/DialogTitle/DialogTitle';
 import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
@@ -53,4 +54,8 @@ const DialogActions = withStyles(theme => ({
     }
 }))(MuiDialogActions);
 
-export { DialogTitle, DialogContent, DialogActions };
+const Transition = React.forwardRef(function Transition (props, ref) {
+    return <Slide direction="up" ref={ref} {...props} />;
+});
+
+export { DialogTitle, DialogContent, DialogActions, Transition };

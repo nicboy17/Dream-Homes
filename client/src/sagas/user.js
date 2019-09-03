@@ -24,16 +24,19 @@ import {
     ADD_FAVOURITE_SUCCESS,
     ADD_FAVOURITE_ERROR,
     REMOVE_FAVOURITE,
-    REMOVE_FAVOURITE_SUCCESS, REMOVE_FAVOURITE_ERROR, OPEN_SNACKBAR, START_LOADING, STOP_LOADING
+    REMOVE_FAVOURITE_SUCCESS, REMOVE_FAVOURITE_ERROR, START_LOADING, STOP_LOADING
 } from '../actions/types';
 import { userService } from '../services/user';
+import { open } from '../actions/snackbar';
 
 function * register (request) {
     try {
         const response = yield call(userService.register, request.user);
+        yield put(open({ message: 'Registration success', variant: 'success', duration: 1250 }));
         yield put({ type: LOGIN_SUCCESS, response });
     } catch (error) {
         yield put({ type: LOGIN_ERROR, error });
+        yield put(open({ message: 'Registration failed', variant: 'error', duration: 1500 }));
     }
 }
 
@@ -44,11 +47,11 @@ export function * registerSaga () {
 function * login (request) {
     try {
         const response = yield call(userService.login, request.user);
-        yield put({ type: OPEN_SNACKBAR, message: 'Authentication success', variant: 'success', duration: 1250 });
+        yield put(open({ message: 'Authentication success', variant: 'success', duration: 1250 }));
         yield put({ type: LOGIN_SUCCESS, response });
     } catch (error) {
         yield put({ type: LOGIN_ERROR, error });
-        yield put({ type: OPEN_SNACKBAR, message: 'Authentication failed', variant: 'error', duration: 1500 });
+        yield put(open({ message: 'Authentication failed', variant: 'error', duration: 1500 }));
     }
 }
 
@@ -60,10 +63,10 @@ function * edit (request) {
     try {
         yield put({ type: START_LOADING });
         const response = yield call(userService.edit, request.user);
-        yield put({ type: OPEN_SNACKBAR, message: 'User updated', variant: 'success', duration: 1250 });
+        yield put(open({ message: 'User updated', variant: 'success', duration: 1250 }));
         yield put({ type: EDIT_USER_SUCCESS, response });
     } catch (error) {
-        yield put({ type: OPEN_SNACKBAR, message: 'User could not be updated', variant: 'error', duration: 1500 });
+        yield put(open({ message: 'User could not be updated', variant: 'error', duration: 1500 }));
         yield put({ type: EDIT_USER_ERROR, error });
     }
     yield put({ type: STOP_LOADING });
@@ -99,10 +102,10 @@ export function * getTokenSaga () {
 function * saveInterests (request) {
     try {
         const response = yield call(userService.saveInterests, request);
-        yield put({ type: OPEN_SNACKBAR, message: 'User Interests Saved', variant: 'success', duration: 1250 });
+        yield put(open({ message: 'User Interests Saved', variant: 'success', duration: 1250 }));
         yield put({ type: SAVE_INTERESTS_SUCCESS, user: response.user });
     } catch (err) {
-        yield put({ type: OPEN_SNACKBAR, message: 'User Interests could not saved', variant: 'error', duration: 1500 });
+        yield put(open({ message: 'User Interests could not saved', variant: 'error', duration: 1500 }));
         yield put({ type: SAVE_INTERESTS_ERROR, err });
     }
 }
@@ -114,10 +117,10 @@ export function * saveInterestsSaga () {
 function * favouritePost (request) {
     try {
         yield call(userService.favouritePost, request);
-        yield put({ type: OPEN_SNACKBAR, message: 'Saved to Favourites', variant: 'success', duration: 1250 });
+        yield put(open({ message: 'Saved to Favourites', variant: 'success', duration: 1250 }));
         yield put({ type: ADD_FAVOURITE_SUCCESS, post: request.post });
     } catch (err) {
-        yield put({ type: OPEN_SNACKBAR, message: 'Error: could not save', variant: 'error', duration: 1500 });
+        yield put(open({ message: 'Error: could not save', variant: 'error', duration: 1500 }));
         yield put({ type: ADD_FAVOURITE_ERROR, err });
     }
 }
@@ -129,10 +132,10 @@ export function * favouritePostSaga () {
 function * unFavouritePost (request) {
     try {
         yield call(userService.unFavouritePost, request);
-        yield put({ type: OPEN_SNACKBAR, message: 'Removed from Favourites', variant: 'success', duration: 1250 });
+        yield put(open({ message: 'Removed from Favourites', variant: 'success', duration: 1250 }));
         yield put({ type: REMOVE_FAVOURITE_SUCCESS, post: request.post });
     } catch (err) {
-        yield put({ type: OPEN_SNACKBAR, message: 'Error: could not save', variant: 'error', duration: 1500 });
+        yield put(open({ message: 'Error: could not save', variant: 'error', duration: 1500 }));
         yield put({ type: REMOVE_FAVOURITE_ERROR, err });
     }
 }
