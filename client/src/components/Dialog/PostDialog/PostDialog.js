@@ -110,7 +110,7 @@ class PostDialog extends React.Component {
     onCreate = (e) => {
         const { image, title, link, description, titleError, linkError, descriptionError } = this.state;
         e.preventDefault();
-        if (image.length < 1) {
+        if (!image) {
             this.setState({ imageError: 'Please include at least one image' });
         }
         if (title.length < 3 || title.length > 15) {
@@ -121,7 +121,7 @@ class PostDialog extends React.Component {
         }
         if (description.length < 3 || description.length > 200) {
             this.setState({ descriptionError: 'Must be at least 3 to 200 characters' });
-        } else if (image.length > 0 && !titleError && !linkError && !descriptionError) {
+        } else if (image && !titleError && !linkError && !descriptionError) {
             this.props.addPost(this.state, this.state.username);
         }
     };
