@@ -13,14 +13,13 @@ const useStyles = makeStyles(theme => ({
         display: 'block',
         width: '100%',
         height: 'auto',
-        borderRadius: '1vw'
+        borderRadius: 7
     },
     masonry: {
         margin: '0 auto',
         width: '100%!important',
         height: '100%!important',
-        textAlign: 'center',
-        color: 'white'
+        textAlign: 'center'
     }
 }));
 

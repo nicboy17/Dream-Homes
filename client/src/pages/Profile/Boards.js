@@ -17,14 +17,25 @@ const useStyles = makeStyles(theme => ({
     cardImg: {
         height: '32vh'
     },
+    summary: {
+        display: 'block',
+        width: '50%',
+        paddingLeft: '1rem'
+    },
     cardHeader: {
-        paddingLeft: 10
+        display: 'block'
+    },
+    posts: {
+        display: 'block',
+        color: 'gray',
+        fontSize: 14
     },
     boardPreview: {
         display: 'absolute',
         height: '25vh',
         width: '100%',
-        overflow: 'hidden'
+        overflow: 'hidden',
+        backgroundColor: '#F5F5F5'
     },
     deleteIconContainer: {
         marginLeft: 'auto',
@@ -56,16 +67,16 @@ const Boards = ({ boards, deleteHandle = false }) => {
     ) : (
         boards.map((board, i) => {
             return (
-                <Card key={i} className={classes.card}>
+                <Card key={i} className={classes.card} raised={true}>
                     <CardActionArea>
                         <Link to={{ pathname: `/board/${board._id}`, state: { board } }} className="boardLink">
                             <BoardPreview posts={board.posts} className={classes.boardPreview}/>
                         </Link>
                     </CardActionArea>
                     <CardActions disableSpacing>
-                        <div>
+                        <div className={classes.summary}>
                             <Typography variant="h6" className={classes.cardHeader}>{board.title}</Typography>
-                            <Typography variant="body1" className={classes.cardHeader}>{board.posts.length} posts</Typography>
+                            <Typography variant="body1" className={classes.posts}>{board.posts.length} posts</Typography>
                         </div>
                         {deleteBoard(board._id)}
                     </CardActions>
