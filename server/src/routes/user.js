@@ -15,7 +15,7 @@ router.post('/register', [UserValidation.register, async (req, res) => {
         const user = await User.create(req.body);
         return res.status(201).json({
             success: true,
-            user: { ...user.toObject (), 'followers': 0, 'following': 0 },
+            user: { ...user.toObject (), 'followers': 0, 'following': 0, boards: [], posts: [], favourites: [] },
             token: user.loginToken ()
         });
     } catch (err) {
