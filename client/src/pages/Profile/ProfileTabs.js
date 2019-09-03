@@ -53,7 +53,6 @@ const ProfileTabs = ({ removeVisible, profileStore, tabChange, removeBoard, remo
 };
 
 const mapStateToProps = state => ({
-    removeVisible: state.UserStore.authenticated && state.ProfileStore.user._id === state.UserStore.user._id,
     profileStore: state.ProfileStore
 });
 

@@ -25,7 +25,7 @@ const useStyles = makeStyles(theme => ({
     }
 }));
 
-const ProfileHeader = ({ user, profile, history, followHandle, unFollowHandle }) => {
+const ProfileHeader = ({ user, profile, history, followHandle, unFollowHandle, removeVisible }) => {
     const classes = useStyles();
 
     const FollowButton = () => {
@@ -78,8 +78,13 @@ const ProfileHeader = ({ user, profile, history, followHandle, unFollowHandle })
                 <div>
                     <Grid container direction="row" justify="center" alignItems="center">
                         <div className={classes.beside}>
-                            <Avatar className={classes.avatar} component={Link} src={profile.user.profile}
-                                to={`/profile/${user.user.username}/edit`}/>
+                            {
+                                removeVisible ? (
+                                    <Avatar className={classes.avatar} component={Link} src={profile.user.profile} to={`/profile/${user.user.username}/edit`}/>
+                                ) : (
+                                    <Avatar className={classes.avatar} src={profile.user.profile}/>
+                                )
+                            }
                         </div>
                         <div className={classes.beside}>
                             <Typography variant="h4" gutterBottom>

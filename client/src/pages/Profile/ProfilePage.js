@@ -35,11 +35,10 @@ class ProfilePage extends Component {
     }
 
     componentDidMount () {
-        const username = this.props.match.params.username;
-        this.setState({ username: username });
-        this.props.getBoardsandPosts(username);
-        if (this.props.userStore.user.takeQuiz) {
-            this.props.history.push(`/profile/${this.props.userStore.user.username}/interest-quiz`);
+        const { match, getBoardsandPosts, userStore, history } = this.props;
+        getBoardsandPosts(match.params.username);
+        if (userStore.authenticated && userStore.user.takeQuiz) {
+            history.push(`/profile/${userStore.user.username}/interest-quiz`);
         }
     }
 
@@ -56,7 +55,7 @@ class ProfilePage extends Component {
     };
 
     render () {
-        const { classes, userStore, profileStore: { user } } = this.props;
+        const { classes, userStore, profileStore: { user }, removeVisible } = this.props;
 
         if (!user) {
             return <CircularProgress className="spinner" />;
@@ -72,10 +71,10 @@ class ProfilePage extends Component {
                 <Route path="/profile/:username/board/create" component={BoardDialog} />
                 <div className={classes.root}>
                     <ProfileHeader user={userStore} profile={this.props.profileStore} history={this.props.history}
-                        followHandle={() => this.onFollow()} unFollowHandle={() => this.onUnFollow()}/>
+                        followHandle={() => this.onFollow()} unFollowHandle={() => this.onUnFollow()} removeVisible={removeVisible}/>
                     <Divider variant={'middle'}/>
                     <div className={classes.body}>
-                        <ProfileTabs />
+                        <ProfileTabs removeVisible={removeVisible} />
                     </div>
                 </div>
                 <Route path={'/profile/:username/interest-quiz'} component={InterestQuizDialog}/>
@@ -88,6 +87,7 @@ class ProfilePage extends Component {
 }
 
 const mapStateToProps = state => ({
+    removeVisible: state.UserStore.authenticated && state.ProfileStore.user._id === state.UserStore.user._id,
     userStore: state.UserStore,
     profileStore: state.ProfileStore
 });

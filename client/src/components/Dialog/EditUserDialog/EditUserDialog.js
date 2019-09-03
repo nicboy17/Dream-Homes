@@ -18,9 +18,13 @@ const styles = theme => ({
     name: {
         marginLeft: theme.spacing(5)
     },
+    label: {
+        position: 'relative'
+    },
     input: {
         position: 'absolute',
         left: 0,
+        right: 100,
         opacity: 0,
         top: 0,
         bottom: 0,
@@ -100,9 +104,9 @@ class EditUserDialog extends Component {
                 <DialogTitle id="title" title={'Edit profile image and/or name'} onClose={this.onCloseClicked} />
                 <div onClick = {e => e.stopPropagation()}>
                     <DialogContent style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-                        <label type="button" id="profileUpload" htmlFor="selectImage" key={this.state.profile}>
+                        <label type="button" id="profileUpload" htmlFor="selectImage" key={this.state.profile} className={classes.label}>
                             <Avatar
-                                style={{ height: 100, width: 100, margin: 10 }}
+                                style={{ height: 140, width: 140, margin: 10 }}
                                 src={this.state.profile}
                             />
                             <input
