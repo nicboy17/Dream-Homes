@@ -24,7 +24,7 @@ import {
     ADD_FAVOURITE_SUCCESS,
     ADD_FAVOURITE_ERROR,
     REMOVE_FAVOURITE,
-    REMOVE_FAVOURITE_SUCCESS, REMOVE_FAVOURITE_ERROR, OPEN_SNACKBAR
+    REMOVE_FAVOURITE_SUCCESS, REMOVE_FAVOURITE_ERROR, OPEN_SNACKBAR, START_LOADING, STOP_LOADING
 } from '../actions/types';
 import { userService } from '../services/user';
 
@@ -41,29 +41,24 @@ export function * registerSaga () {
     yield takeLatest(REGISTER, register);
 }
 
-/*
-call user service login
-call redux with put
- */
 function * login (request) {
     try {
         const response = yield call(userService.login, request.user);
         yield put({ type: OPEN_SNACKBAR, message: 'Authentication success', variant: 'success', duration: 1250 });
         yield put({ type: LOGIN_SUCCESS, response });
     } catch (error) {
-        console.log(error);
         yield put({ type: LOGIN_ERROR, error });
         yield put({ type: OPEN_SNACKBAR, message: 'Authentication failed', variant: 'error', duration: 1500 });
     }
 }
 
-// listen for 'LOGIN' action -> call login*
 export function * loginSaga () {
     yield takeLatest(LOGIN, login);
 }
 
 function * edit (request) {
     try {
+        yield put({ type: START_LOADING });
         const response = yield call(userService.edit, request.user);
         yield put({ type: OPEN_SNACKBAR, message: 'User updated', variant: 'success', duration: 1250 });
         yield put({ type: EDIT_USER_SUCCESS, response });
@@ -71,9 +66,9 @@ function * edit (request) {
         yield put({ type: OPEN_SNACKBAR, message: 'User could not be updated', variant: 'error', duration: 1500 });
         yield put({ type: EDIT_USER_ERROR, error });
     }
+    yield put({ type: STOP_LOADING });
 }
 
-// listen for 'LOGIN' action -> call login*
 export function * editSaga () {
     yield takeLatest(EDIT_USER, edit);
 }
@@ -83,7 +78,6 @@ function * logout () {
     yield put({ type: LOGOUT_SUCCESS });
 }
 
-// listen for 'LOGIN' action -> call login*
 export function * logoutSaga () {
     yield takeLatest(LOGOUT, logout);
 }

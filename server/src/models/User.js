@@ -29,7 +29,7 @@ const user = new mongoose.Schema({
         required: true,
         validate: userValidator.password
     },
-    image: {
+    profile: {
         type: String,
         required: false
     },

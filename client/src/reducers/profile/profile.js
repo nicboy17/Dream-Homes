@@ -3,12 +3,14 @@ import {
     GET_USER_BOARDS_POSTS_ERROR,
     CLEAR_ERROR,
     FOLLOW_SUCCESS,
-    UNFOLLOW_SUCCESS, PROFILE_TAB_CHANGE
+    UNFOLLOW_SUCCESS, PROFILE_TAB_CHANGE, EDIT_USER_SUCCESS
 } from '../../actions/types';
 
 export default (state = {}, action) => {
     const { type, response } = action;
     switch (type) {
+    case EDIT_USER_SUCCESS:
+        return { ...state, user: { ...state.user, profile: response.user.profile, name: response.user.name } };
     case GET_USER_BOARDS_POSTS_SUCCESS:
         return { ...state, ...response };
     case PROFILE_TAB_CHANGE:

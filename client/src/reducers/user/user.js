@@ -32,9 +32,9 @@ export default (state = initialState, action) => {
     case GET_TOKEN_SUCCESS:
         return { ...state, authenticated: true, user: action.user, token: action.token };
     case EDIT_USER_SUCCESS:
-        return { ...state, user: { ...state.user, ...action.payload.user } };
+        return { ...state, user: { ...state.user, profile: response.user.profile, name: response.user.name } };
     case EDIT_USER_ERROR:
-        return { ...state, error: action.payload.error };
+        return { ...state, error: action.error };
     case SAVE_INTERESTS_ERROR:
         return { ...state, error: action.error };
     case CLEAR_ERROR:

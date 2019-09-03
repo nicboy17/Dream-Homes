@@ -7,17 +7,24 @@ import { DialogTitle } from '../components';
 import TextField from '@material-ui/core/TextField';
 import Avatar from '@material-ui/core/Avatar';
 import { bindActionCreators, compose } from 'redux';
-import { edit, respond } from '../../../actions/user';
+import { edit } from '../../../actions/user';
 import { withStyles } from '@material-ui/styles';
 import { connect } from 'react-redux';
-import SnackBar from '../../SnackBar/SnackBar';
 
 const styles = theme => ({
     button: {
         margin: '1rem auto'
     },
-    input: {
+    name: {
         marginLeft: theme.spacing(5)
+    },
+    input: {
+        position: 'absolute',
+        left: 0,
+        opacity: 0,
+        top: 0,
+        bottom: 0,
+        width: '100%'
     }
 });
 
@@ -31,16 +38,17 @@ class EditUserDialog extends Component {
             username: '',
             image: '',
             profile: '',
-            snackBar: false,
             smallText: '',
             nameError: false
         };
 
+        this.onChangeText = this.onChangeText.bind(this);
+        this.onChangeImage = this.onChangeImage.bind(this);
+        this.onCloseClicked = this.onCloseClicked.bind(this);
         this.onSavePress = this.onSavePress.bind(this);
-        this.snackBarClose = this.snackBarClose.bind(this);
     }
 
-    componentDidMount = async () => {
+    componentDidMount = () => {
         this.setState({
             profile: this.props.userStore.user.profile,
             username: this.props.match.params.username,
@@ -49,13 +57,10 @@ class EditUserDialog extends Component {
     };
 
     onChangeText = e => {
+        e.preventDefault();
         this.setState({
             name: e.target.value.replace(/[^a-zA-Z0-9 ]/g, '')
         });
-    };
-
-    handleFileUpload = () => {
-        document.getElementById('selectImage').click();
     };
 
     onChangeImage = e => {
@@ -71,7 +76,8 @@ class EditUserDialog extends Component {
         this.props.history.push(`/profile/${this.state.username}`);
     };
 
-    onSavePress = () => {
+    onSavePress = e => {
+        e.preventDefault();
         if (this.state.name.length < 3 || this.state.name.length > 25) {
             this.setState({
                 smallText: 'Name must at least 3 to 25 characters long',
@@ -83,90 +89,50 @@ class EditUserDialog extends Component {
                 name: this.state.name,
                 image: this.state.image
             });
-            this.setState({ snackBar: true });
+            this.onCloseClicked();
         }
-    };
-
-    snackBarClose (event, reason) {
-        if (reason === 'clickaway') {
-            return;
-        }
-
-        this.setState({ snackBar: false });
-        if (this.props.userStore.success) {
-            this.props.history.push('/profile/' + this.state.username);
-        }
-        this.props.dispatch(respond());
-    }
-
-    // TODO: Refactor into seperate component
-    ServerResponse = () => {
-        if (this.props.userStore.success) {
-            return (
-                <SnackBar message={'User Updated'} variant={'success'} open={this.state.snackBar}
-                    onClose={this.snackBarClose} duration={1250}/>
-            );
-        } else if (this.props.userStore.error) {
-            return (
-                <SnackBar message={'User Update Failed'} variant={'error'}
-                    open={this.state.snackBar} onClose={this.snackBarClose} duration={2000}/>
-            );
-        }
-
-        return null;
     };
 
     render () {
         const { classes } = this.props;
-
         return (
-            <div>
-                <Dialog
-                    open={this.state.open}
-                    maxWidth='sm'
-                    fullWidth
-                    onClose={this.handleClose}
-                    aria-labelledby='form-dialog-title'
-                    onClick={() => this.onCloseClicked()}
-                >
-                    <div onClick = {e => e.stopPropagation()}>
-                        <DialogTitle id="title" title={'Edit profile image and/or name'} onClose={() => this.onCloseClicked()} />
-                        <DialogContent
-                            style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}
-                        >
+            <Dialog open={this.state.open} maxWidth='sm' fullWidth onClose={this.onCloseClicked}>
+                <DialogTitle id="title" title={'Edit profile image and/or name'} onClose={this.onCloseClicked} />
+                <div onClick = {e => e.stopPropagation()}>
+                    <DialogContent style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                        <label type="button" id="profileUpload" htmlFor="selectImage" key={this.state.profile}>
                             <Avatar
                                 style={{ height: 100, width: 100, margin: 10 }}
                                 src={this.state.profile}
-                                onClick={() => this.handleFileUpload()}
                             />
                             <input
-                                id='selectImage'
-                                hidden
-                                type='file'
-                                accept='image/png,image/jpeg'
-                                onChange={e => this.onChangeImage(e)}
-                            />
-
-                            <TextField
-                                autoFocus
-                                margin='dense'
-                                id='name'
-                                type='name'
-                                label='Name'
+                                id="selectImage"
+                                name="selectImage"
+                                type="file"
+                                accept="image/*"
+                                onChange={this.onChangeImage}
                                 className={classes.input}
-                                onChange={e => this.onChangeText(e)}
-                                value={this.state.name}
-                                helperText={this.state.smallText}
-                                error={this.state.nameError}
                             />
-                        </DialogContent>
-                        <DialogActions>
-                            <Button onClick={this.onSavePress} color="primary" className={classes.button}>Done</Button>
-                        </DialogActions>
-                    </div>
-                </Dialog>
-                <this.ServerResponse />
-            </div>
+                        </label>
+
+                        <TextField
+                            autoFocus
+                            margin='dense'
+                            id='name'
+                            type='name'
+                            label='Name'
+                            className={classes.name}
+                            onChange={this.onChangeText}
+                            value={this.state.name}
+                            helperText={this.state.smallText}
+                            error={this.state.nameError}
+                        />
+                    </DialogContent>
+                </div>
+                <DialogActions>
+                    <Button onClick={this.onSavePress} color="primary" className={classes.button}>Done</Button>
+                </DialogActions>
+            </Dialog>
         );
     }
 }
@@ -178,8 +144,7 @@ const mapStateToProps = state => ({
 function mapDispatchToProps (dispatch) {
     return bindActionCreators(
         {
-            edit,
-            dispatch
+            edit
         },
         dispatch
     );
