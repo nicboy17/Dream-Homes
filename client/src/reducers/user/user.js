@@ -29,7 +29,9 @@ export default (state = initialState, action) => {
     case GET_TOKEN_SUCCESS:
         return { ...state, authenticated: true, user: action.user, token: action.token };
     case EDIT_USER_SUCCESS:
-        return { ...state, user: { ...state.user, profile: response.user.profile, name: response.user.name } };
+        state.user = { ...state.user, profile: response.user.profile, name: response.user.name };
+        localStorage.setItem('user', JSON.stringify(state.user));
+        return { ...state };
     case LOGIN_ERROR:
     case EDIT_USER_ERROR:
     case SAVE_INTERESTS_ERROR:

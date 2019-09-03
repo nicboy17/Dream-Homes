@@ -73,6 +73,30 @@ router.get ('/:username', [pub, async (req, res) => {
     }
 }]);
 
+// @route    GET users/:id/following
+// @desc     get users who are following specified user
+// @access   Public
+router.get ('/:id/following', async (req, res) => {
+    try {
+        const following = await User.following(req.params.id);
+        return res.status (200).json ({ success: true, following });
+    } catch (err) {
+        return res.status (400).json ({ success: false });
+    }
+});
+
+// @route    GET users/:id/followers
+// @desc     get specified user's followers
+// @access   Public
+router.get ('/:id/followers', async (req, res) => {
+    try {
+        const followers = await User.followers(req.params.id);
+        return res.status (200).json ({ success: true, followers });
+    } catch (err) {
+        return res.status (400).json ({ success: false });
+    }
+});
+
 //authenticated routes below this middleware
 router.use (auth);
 
@@ -129,30 +153,6 @@ router.post ('/unfollow', [UserValidation.unfollowUser, async (req, res) => {
         return res.status (400).json ({ success: false });
     }
 }]);
-
-// @route    GET users/:id/following
-// @desc     get users who are following specified user
-// @access   Private
-router.get ('/:id/following', async (req, res) => {
-    try {
-        const following = await User.following (req.params.id);
-        return res.status (200).json ({ success: true, following });
-    } catch (err) {
-        return res.status (400).json ({ success: false });
-    }
-});
-
-// @route    GET users/:id/followers
-// @desc     get specified user's followers
-// @access   Private
-router.get ('/:id/followers', async (req, res) => {
-    try {
-        const followers = await User.followers (req.params.id);
-        return res.status (200).json ({ success: true, followers });
-    } catch (err) {
-        return res.status (400).json ({ success: false });
-    }
-});
 
 // @route    POST users/:username/board
 // @desc     Create user board

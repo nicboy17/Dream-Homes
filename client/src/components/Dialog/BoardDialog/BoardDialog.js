@@ -4,7 +4,6 @@ import { connect } from 'react-redux';
 import { withStyles } from '@material-ui/styles';
 import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import { DialogTitle } from '../components';
 import TextField from '@material-ui/core/TextField';
@@ -13,7 +12,8 @@ import { addBoard } from '../../../actions/board';
 
 const styles = theme => ({
     button: {
-        margin: '1rem auto'
+        display: 'block',
+        margin: '2rem auto'
     }
 });
 
@@ -36,7 +36,7 @@ class BoardDialog extends Component {
         this.setState({ title: e.target.value });
     };
 
-    onCreatePress = async () => {
+    onCreate = () => {
         if (this.state.title.length < 3 || this.state.title.length > 12) {
             this.setState({
                 smallText: 'Name must at least 3 to 12 characters long',
@@ -64,22 +64,24 @@ class BoardDialog extends Component {
                 <div onClick={e => e.stopPropagation()}>
                     <DialogTitle style={{ textAlign: 'center' }} id='dialog-title' title={'Create a board'} onClose={() => this.onCloseClick()}/>
                     <DialogContent>
-                        <TextField
-                            autoFocus
-                            margin='dense'
-                            id='name'
-                            type='name'
-                            label='Name'
-                            fullWidth
-                            onChange={e => this.onChangeText(e)}
-                            value={this.state.title}
-                            helperText={this.state.smallText}
-                            error={this.state.nameError}
-                        />
+                        <form onSubmit={() => this.onCreate()}>
+                            <TextField
+                                autoFocus
+                                margin='dense'
+                                id='name'
+                                type='name'
+                                label='Name'
+                                fullWidth
+                                onChange={e => this.onChangeText(e)}
+                                value={this.state.title}
+                                helperText={this.state.smallText}
+                                error={this.state.nameError}
+                            />
+                            <div>
+                                <Button color='primary' className={classes.button}>Create</Button>
+                            </div>
+                        </form>
                     </DialogContent>
-                    <DialogActions>
-                        <Button onClick={this.onCreatePress} color='primary' className={classes.button}>Create</Button>
-                    </DialogActions>
                 </div>
             </Dialog>
         );

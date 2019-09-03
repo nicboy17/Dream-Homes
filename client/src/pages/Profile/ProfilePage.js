@@ -63,12 +63,6 @@ class ProfilePage extends Component {
 
         return (
             <div>
-                <Route path="/profile/:username/edit" component={EditPicUserDialog} />
-                <Route path="/profile/:username/interest-quiz" component={InterestQuizDialog} />
-                <Route path="/profile/:username/post/create"
-                    render={props => <PostDialog key={props.match.params.username} {...props} />}
-                />
-                <Route path="/profile/:username/board/create" component={BoardDialog} />
                 <div className={classes.root}>
                     <ProfileHeader user={userStore} profile={this.props.profileStore} history={this.props.history}
                         followHandle={() => this.onFollow()} unFollowHandle={() => this.onUnFollow()} removeVisible={removeVisible}/>

@@ -9,13 +9,14 @@ import './App.css';
 
 import Main from './pages/Main';
 import ProfilePage from './pages/Profile/ProfilePage.js';
+import FollowingPage from './pages/Follow/FollowingPage';
+import FollowersPage from './pages/Follow/FollowersPage';
 
 import PostPage from './pages/Post/PostPage';
 import { getToken } from './actions/user';
 
 import BoardPage from './pages/Profile/BoardPage';
 import NavBar from './components/Navbar/Navbar';
-import FollowingPage from './pages/Following/FollowingPage';
 import Confirm from './components/Dialog/Confirm';
 import SnackBar from './components/SnackBar/SnackBar';
 
@@ -37,12 +38,8 @@ class App extends Component {
                             <Route path='/signup' component={Main} />
                             <Route path='/posts/:id' component={PostPage} />
                             <Route path='/profile/:username/following' component={FollowingPage}/>
-                            <Route
-                                path='/profile/:username'
-                                render={props => (
-                                    <ProfilePage key={props.match.params.username} {...props} />
-                                )}
-                            />
+                            <Route path='/profile/:username/followers' component={FollowersPage}/>
+                            <Route path='/profile/:username' component={ProfilePage}/>
                             <Route path='/board/:id' component={BoardPage}/>
                         </Switch>
                     </div>

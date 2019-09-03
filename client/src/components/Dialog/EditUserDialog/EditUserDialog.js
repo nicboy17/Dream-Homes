@@ -49,7 +49,7 @@ class EditUserDialog extends Component {
         this.onChangeText = this.onChangeText.bind(this);
         this.onChangeImage = this.onChangeImage.bind(this);
         this.onCloseClicked = this.onCloseClicked.bind(this);
-        this.onSavePress = this.onSavePress.bind(this);
+        this.onSave = this.onSave.bind(this);
     }
 
     componentDidMount = () => {
@@ -80,7 +80,7 @@ class EditUserDialog extends Component {
         this.props.history.push(`/profile/${this.state.username}`);
     };
 
-    onSavePress = e => {
+    onSave = e => {
         e.preventDefault();
         if (this.state.name.length < 3 || this.state.name.length > 25) {
             this.setState({
@@ -102,7 +102,7 @@ class EditUserDialog extends Component {
         return (
             <Dialog open={this.state.open} maxWidth='sm' fullWidth onClose={this.onCloseClicked}>
                 <DialogTitle id="title" title={'Edit profile image and/or name'} onClose={this.onCloseClicked} />
-                <div onClick = {e => e.stopPropagation()}>
+                <form onClick = {e => e.stopPropagation()} onSubmit={this.onSave}>
                     <DialogContent style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
                         <label type="button" id="profileUpload" htmlFor="selectImage" key={this.state.profile} className={classes.label}>
                             <Avatar
@@ -132,10 +132,10 @@ class EditUserDialog extends Component {
                             error={this.state.nameError}
                         />
                     </DialogContent>
-                </div>
-                <DialogActions>
-                    <Button onClick={this.onSavePress} color="primary" className={classes.button}>Done</Button>
-                </DialogActions>
+                    <DialogActions>
+                        <Button type="submit" color="primary" className={classes.button}>Done</Button>
+                    </DialogActions>
+                </form>
             </Dialog>
         );
     }

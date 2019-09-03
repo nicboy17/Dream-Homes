@@ -36,7 +36,6 @@ export const userService = {
                 'Content-Type': 'application/json'
             }
         }).then(res => {
-            localStorage.setItem('user', JSON.stringify(res.data.user));
             return res.data;
         }).catch(err => {
             throw err.response.data;

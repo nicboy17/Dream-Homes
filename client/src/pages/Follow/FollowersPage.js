@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators, compose } from 'redux';
-import { getFollowing } from '../../actions/user';
+import { getFollowers } from '../../actions/user';
 import { withStyles } from '@material-ui/styles';
 import Users from '../../components/Users/Users';
 
@@ -14,18 +14,23 @@ const styles = theme => ({
     }
 });
 
-class FollowingPage extends Component {
+class FollowersPage extends Component {
     componentDidMount () {
-        this.props.getFollowing(this.props.userStore.user._id);
+        const { userStore, getFollowers, match } = this.props;
+        if (match.params.username === userStore.user.username) {
+            getFollowers(this.props.userStore.user._id);
+        } else {
+            getFollowers(this.props.profileStore.user._id);
+        }
     }
 
     render () {
-        const { classes, userStore: { following } } = this.props;
+        const { classes, profileStore: { followers } } = this.props;
         return (
             <div className={classes.root}>
-                <h1>You are currently Following:</h1>
+                <h1>Followers:</h1>
                 <div>
-                    <Users users={following} history={this.props.history}/>
+                    <Users users={followers} history={this.props.history}/>
                 </div>
             </div>
         );
@@ -33,13 +38,14 @@ class FollowingPage extends Component {
 }
 
 const mapStateToProps = state => ({
-    userStore: state.UserStore
+    userStore: state.UserStore,
+    profileStore: state.ProfileStore
 });
 
 const mapDispatchToProps = dispatch => {
     return bindActionCreators(
         {
-            getFollowing
+            getFollowers
         },
         dispatch
     );
@@ -51,4 +57,4 @@ export default compose(
         mapStateToProps,
         mapDispatchToProps
     )
-)(FollowingPage);
+)(FollowersPage);

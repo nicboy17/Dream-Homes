@@ -4,7 +4,8 @@ import Grid from '@material-ui/core/Grid';
 import Avatar from '@material-ui/core/Avatar';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
-import { Link } from 'react-router-dom';
+import { Link as RouterLink } from 'react-router-dom';
+import Link from '@material-ui/core/Link';
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -14,8 +15,8 @@ const useStyles = makeStyles(theme => ({
     },
     avatar: {
         marginRight: '1.5rem',
-        width: 80,
-        height: 80
+        width: 100,
+        height: 100
     },
     beside: {
         display: 'inline-block'
@@ -80,7 +81,7 @@ const ProfileHeader = ({ user, profile, history, followHandle, unFollowHandle, r
                         <div className={classes.beside}>
                             {
                                 removeVisible ? (
-                                    <Avatar className={classes.avatar} component={Link} src={profile.user.profile} to={`/profile/${user.user.username}/edit`}/>
+                                    <Avatar className={classes.avatar} component={RouterLink} src={profile.user.profile} to={`/profile/${user.user.username}/edit`}/>
                                 ) : (
                                     <Avatar className={classes.avatar} src={profile.user.profile}/>
                                 )
@@ -92,7 +93,12 @@ const ProfileHeader = ({ user, profile, history, followHandle, unFollowHandle, r
                             </Typography>
                             <div>
                                 <Typography variant="caption" gutterBottom className={classes.beside}>
-                                    {profile.user.followers} followers | {profile.user.following} following
+                                    <Link component={RouterLink} to={`/profile/${profile.user.username}/followers`}>
+                                        {profile.user.followers} followers
+                                    </Link>  |
+                                    <Link component={RouterLink} to={`/profile/${profile.user.username}/following`}>
+                                        {profile.user.following} following
+                                    </Link>
                                 </Typography>
                             </div>
                         </div>

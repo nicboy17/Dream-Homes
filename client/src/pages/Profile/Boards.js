@@ -10,7 +10,7 @@ import DeleteIcon from '@material-ui/icons/Delete';
 const useStyles = makeStyles(theme => ({
     card: {
         height: '33vh',
-        width: '26vw',
+        width: '24vw',
         display: 'inline-block',
         margin: '0.75rem'
     },
