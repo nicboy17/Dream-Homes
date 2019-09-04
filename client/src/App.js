@@ -9,8 +9,6 @@ import './App.css';
 
 import Main from './pages/Main';
 import ProfilePage from './pages/Profile/ProfilePage.js';
-import FollowingPage from './pages/Follow/FollowingPage';
-import FollowersPage from './pages/Follow/FollowersPage';
 
 import PostPage from './pages/Post/PostPage';
 import { getToken } from './actions/user';
@@ -37,8 +35,6 @@ class App extends Component {
                             <Route path='/login' component={Main} />
                             <Route path='/signup' component={Main} />
                             <Route path='/posts/:id' component={PostPage} />
-                            <Route path='/profile/:username/following' component={FollowingPage}/>
-                            <Route path='/profile/:username/followers' component={FollowersPage}/>
                             <Route path='/profile/:username' component={ProfilePage}/>
                             <Route path='/board/:id' component={BoardPage}/>
                         </Switch>

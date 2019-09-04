@@ -8,7 +8,6 @@ export default (state = {}, action) => {
 
     switch (type) {
     case GET_FOLLOWING_SUCCESS:
-        console.log(action);
         return { ...state, following: action.following };
     case GET_FOLLOWERS_SUCCESS:
         return { ...state, followers: action.followers };

@@ -4,6 +4,8 @@ import { bindActionCreators, compose } from 'redux';
 import { getFollowers } from '../../actions/user';
 import { withStyles } from '@material-ui/styles';
 import Users from '../../components/Users/Users';
+import Dialog from '@material-ui/core/Dialog';
+import { DialogTitle, Transition } from '../../components/Dialog/components';
 
 const styles = theme => ({
     root: {
@@ -15,6 +17,16 @@ const styles = theme => ({
 });
 
 class FollowersPage extends Component {
+    constructor (props) {
+        super(props);
+
+        this.handleClose = this.handleClose.bind(this);
+
+        this.state = {
+            open: true
+        };
+    }
+
     componentDidMount () {
         const { userStore, getFollowers, match } = this.props;
         if (match.params.username === userStore.user.username) {
@@ -24,15 +36,19 @@ class FollowersPage extends Component {
         }
     }
 
+    handleClose () {
+        this.setState({ open: false });
+        this.props.history.goBack();
+    };
+
     render () {
-        const { classes, profileStore: { followers } } = this.props;
+        const { profileStore: { followers } } = this.props;
+
         return (
-            <div className={classes.root}>
-                <h1>Followers:</h1>
-                <div>
-                    <Users users={followers} history={this.props.history}/>
-                </div>
-            </div>
+            <Dialog onClose={this.handleClose} TransitionComponent={Transition} open={this.state.open} maxWidth={'md'}>
+                <DialogTitle id="title" title={'Followers:'} onClose={this.handleClose} />
+                <Users users={followers} history={this.props.history}/>
+            </Dialog>
         );
     }
 }

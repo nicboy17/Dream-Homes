@@ -1,15 +1,17 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
+import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemAvatar from '@material-ui/core/ListItemAvatar';
 import Avatar from '@material-ui/core/Avatar';
-import Card from '@material-ui/core/Card';
-import CardActionArea from '@material-ui/core/CardActionArea';
-import CardContent from '@material-ui/core/CardContent';
+import { Link } from 'react-router-dom';
 
 const useStyles = makeStyles(theme => ({
-    card: {
-        maxWidth: 345,
-        paddingBottom: 0,
-        margin: '0 auto'
+    root: {
+        width: 300,
+        maxWidth: 360,
+        backgroundColor: theme.palette.background.paper,
+        padding: '1rem'
     },
     avatar: {
         display: 'inline-block',
@@ -17,43 +19,49 @@ const useStyles = makeStyles(theme => ({
         width: 50
     },
     user: {
-        display: 'inline-block',
-        width: '75%'
+        display: 'block',
+        width: '100%'
     },
     name: {
         float: 'right',
         width: '100%',
         fontSize: 18,
         textAlign: 'center',
-        verticalAlign: 'center'
+        verticalAlign: 'center',
+        textDecoration: 'none',
+        color: 'black'
     }
 }));
 
-const Users = ({ users, history }) => {
+const Users = ({ users }) => {
     const classes = useStyles();
 
     const User = user => {
         return (
-            <Card className={classes.card} key={user._id} onClick={() => history.push(`/profile/${user.username}`)}>
-                <CardActionArea>
-                    <CardContent>
-                        <Avatar src={user.profile} className={classes.avatar}/>
-                        <div className={classes.user}>
-                            <p className={classes.name}>{user.name} - ({user.username})</p>
-                        </div>
-                    </CardContent>
-                </CardActionArea>
-            </Card>
+            <ListItem alignItems="flex-start" key={user._id} component={Link} to={`/profile/${user.username}`} className={classes.item}>
+                <ListItemAvatar>
+                    <Avatar src={user.profile} className={classes.avatar}/>
+                </ListItemAvatar>
+                <div className={classes.user}>
+                    <p className={classes.name}>
+                        {`${user.name} - (${user.username})`}
+                    </p>
+                </div>
+            </ListItem>
         );
     };
 
     if (!users) {
         return null;
     } else if (!users.length) {
-        return <h2>There are no users</h2>;
+        return <h2>No users</h2>;
     }
 
-    return users.map(user => User(user));
+    return (
+        <List className={classes.root}>
+            {users.map(user => User(user))}
+        </List>
+    );
 };
 
 export default Users;

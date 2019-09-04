@@ -58,15 +58,12 @@ const ProfileHeader = ({ user, profile, history, followHandle, unFollowHandle, r
         }
         return (
             <div>
-                <Button variant="outlined" size="medium" color="primary" className={classes.button} onClick={() => {
-                    history.push(`/profile/${user.user.username}/board/create`);
-                }}>
+                <Button variant="outlined" size="medium" color="primary" className={classes.button}
+                    onClick={() => { history.push(`/profile/${user.user.username}/board/create`); }}>
                     Create Board
                 </Button>
                 <Button variant="contained" size="medium" color="primary" className={classes.button}
-                    onClick={() => {
-                        history.push(`/profile/${user.user.username}/post/create`);
-                    }}>
+                    onClick={() => { history.push(`/profile/${user.user.username}/post/create`); }}>
                     Create Post
                 </Button>
             </div>

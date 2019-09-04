@@ -4,6 +4,8 @@ import { bindActionCreators, compose } from 'redux';
 import { getFollowing } from '../../actions/user';
 import { withStyles } from '@material-ui/styles';
 import Users from '../../components/Users/Users';
+import Dialog from '@material-ui/core/Dialog';
+import { DialogTitle, Transition } from '../../components/Dialog/components';
 
 const styles = theme => ({
     root: {
@@ -15,6 +17,16 @@ const styles = theme => ({
 });
 
 class FollowingPage extends Component {
+    constructor (props) {
+        super(props);
+
+        this.handleClose = this.handleClose.bind(this);
+
+        this.state = {
+            open: true
+        };
+    }
+
     componentDidMount () {
         const { userStore, getFollowing, match } = this.props;
         if (match.params.username === userStore.user.username) {
@@ -24,15 +36,19 @@ class FollowingPage extends Component {
         }
     }
 
+    handleClose () {
+        this.setState({ open: false });
+        this.props.history.goBack();
+    };
+
     render () {
-        const { classes, profileStore: { following } } = this.props;
+        const { profileStore: { following } } = this.props;
+
         return (
-            <div className={classes.root}>
-                <h1>Following:</h1>
-                <div>
-                    <Users users={following} history={this.props.history}/>
-                </div>
-            </div>
+            <Dialog onClose={this.handleClose} TransitionComponent={Transition} open={this.state.open} maxWidth={'md'}>
+                <DialogTitle id="title" title={'Following:'} onClose={this.handleClose} />
+                <Users users={following} history={this.props.history}/>
+            </Dialog>
         );
     }
 }

@@ -8,6 +8,8 @@ import InterestQuizDialog from '../../components/Dialog/InterestQuizDialog/QuizD
 import PostDialog from '../../components/Dialog/PostDialog/PostDialog';
 import BoardDialog from '../../components/Dialog/BoardDialog/BoardDialog';
 import EditPicUserDialog from '../../components/Dialog/EditUserDialog/EditUserDialog';
+import FollowingPage from '../Follow/FollowingPage';
+import FollowersPage from '../Follow/FollowersPage';
 import { withRouter, Route } from 'react-router-dom';
 import { bindActionCreators, compose } from 'redux';
 import { connect } from 'react-redux';
@@ -30,7 +32,8 @@ class ProfilePage extends Component {
         super(props);
 
         this.state = {
-            following: false
+            following: false,
+            username: ''
         };
     }
 
@@ -39,6 +42,15 @@ class ProfilePage extends Component {
         getBoardsandPosts(match.params.username);
         if (userStore.authenticated && userStore.user.takeQuiz) {
             history.push(`/profile/${userStore.user.username}/interest-quiz`);
+        }
+        this.setState({ username: match.params.username });
+    }
+
+    componentDidUpdate (prevProps, prevState, snapshot) {
+        const { match, getBoardsandPosts } = this.props;
+        if (match.params.username !== this.state.username) {
+            getBoardsandPosts(match.params.username);
+            this.setState({ username: match.params.username });
         }
     }
 
@@ -75,6 +87,8 @@ class ProfilePage extends Component {
                 <Route path={'/profile/:username/post/create'} component={PostDialog}/>
                 <Route path={'/profile/:username/board/create'} component={BoardDialog}/>
                 <Route path={'/profile/:username/edit'} component={EditPicUserDialog}/>
+                <Route path='/profile/:username/following' component={FollowingPage}/>
+                <Route path='/profile/:username/followers' component={FollowersPage}/>
             </div>
         );
     }
