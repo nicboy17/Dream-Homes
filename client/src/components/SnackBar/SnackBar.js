@@ -56,7 +56,7 @@ function SnackBar ({ snackBarStore, close }) {
         <Snackbar
             anchorOrigin={{
                 vertical: 'bottom',
-                horizontal: 'left'
+                horizontal: 'center'
             }}
             open={snackBarStore.open}
             autoHideDuration={snackBarStore.duration}

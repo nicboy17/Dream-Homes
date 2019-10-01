@@ -23,7 +23,8 @@ const useStyles = makeStyles(theme => ({
         paddingLeft: '1rem'
     },
     cardHeader: {
-        display: 'block'
+        display: 'block',
+        fontWeight: 'light'
     },
     posts: {
         display: 'block',
