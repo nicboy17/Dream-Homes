@@ -2,8 +2,7 @@ import React from 'react';
 import { makeStyles } from '@material-ui/styles';
 import { Link } from 'react-router-dom';
 import Masonry from 'react-masonry-component';
-import DeleteIcon from '@material-ui/icons/Delete';
-import IconButton from '@material-ui/core/IconButton';
+import MoreMenu from '../Menu/Menu';
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -23,7 +22,9 @@ const useStyles = makeStyles(theme => ({
         background: 'inherit',
         backgroundAttachment: 'fixed',
         overflow: 'auto',
-        backgroundColor: 'rgb(0, 0, 0, 0.5)'
+        borderBottomLeftRadius: '1vw',
+        borderBottomRightRadius: '1vw',
+        backgroundColor: 'rgb(0, 0, 0, 0.55)'
     },
     deleteIconContainer: {
         display: 'none',
@@ -31,9 +32,6 @@ const useStyles = makeStyles(theme => ({
         position: 'absolute',
         right: 0,
         top: 10,
-        backgroundColor: 'rgba(0,0,0,0.6)'
-    },
-    deleteIcon: {
         color: 'white'
     },
     imageContainer: {
@@ -77,9 +75,7 @@ const Posts = ({ posts, deleteHandle = false, notFoundMessage = 'Sorry, no posts
         }
 
         return (
-            <IconButton size="medium" style={{ marginRight: '10px' }} onClick={() => deleteHandle(post)} className={classes.deleteIconContainer}>
-                <DeleteIcon style={{ color: 'white' }} />
-            </IconButton>
+            <MoreMenu icon={'vert'} style={{ marginRight: '10px' }} remove={() => deleteHandle(post)} edit={() => deleteHandle(post)} menuStyle={classes.deleteIconContainer}/>
         );
     };
 
