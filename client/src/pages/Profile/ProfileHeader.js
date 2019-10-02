@@ -45,7 +45,7 @@ const ProfileHeader = ({ user, profile, history, followHandle, unFollowHandle, r
                 variant={'contained'}
                 onClick={() => unFollowHandle()}
             >
-                unFollow
+                Stop Following
             </Button>
         );
     };

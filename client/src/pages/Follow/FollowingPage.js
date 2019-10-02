@@ -28,11 +28,11 @@ class FollowingPage extends Component {
     }
 
     componentDidMount () {
-        const { userStore, getFollowing, match } = this.props;
+        const { userStore, profileStore, getFollowing, match } = this.props;
         if (match.params.username === userStore.user.username) {
-            getFollowing(this.props.userStore.user._id);
+            getFollowing(userStore.user._id);
         } else {
-            getFollowing(this.props.profileStore.user._id);
+            getFollowing(profileStore.user._id);
         }
     }
 

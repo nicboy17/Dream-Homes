@@ -26,15 +26,19 @@ const useStyles = makeStyles(theme => ({
         borderRadius: 10
     },
     title: {
-        padding: '1rem 0 1rem 0',
-        fontWeight: 'bold',
-        fontSize: 12,
-        color: '#fafafa',
+        padding: '0.3rem 0 0.3rem 0',
+        fontSize: 15,
+        fontWeight: 'light',
+        color: 'whitesmoke',
         position: 'absolute',
         bottom: -10,
         left: 0,
         width: '100%',
-        textAlign: 'center'
+        textAlign: 'center',
+        background: 'inherit',
+        backgroundAttachment: 'fixed',
+        overflow: 'auto',
+        backgroundColor: 'rgb(0, 0, 0, 0.5)'
     },
     check: {
         position: 'absolute',

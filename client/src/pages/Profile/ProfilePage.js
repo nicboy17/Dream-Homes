@@ -28,29 +28,18 @@ const styles = theme => ({
 });
 
 class ProfilePage extends Component {
-    constructor (props) {
-        super(props);
-
-        this.state = {
-            following: false,
-            username: ''
-        };
-    }
-
     componentDidMount () {
         const { match, getBoardsandPosts, userStore, history } = this.props;
         getBoardsandPosts(match.params.username);
         if (userStore.authenticated && userStore.user.takeQuiz) {
             history.push(`/profile/${userStore.user.username}/interest-quiz`);
         }
-        this.setState({ username: match.params.username });
     }
 
     componentDidUpdate (prevProps, prevState, snapshot) {
         const { match, getBoardsandPosts } = this.props;
-        if (match.params.username !== this.state.username) {
+        if (match.params.username !== prevProps.match.params.username) {
             getBoardsandPosts(match.params.username);
-            this.setState({ username: match.params.username });
         }
     }
 

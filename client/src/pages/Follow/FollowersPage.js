@@ -28,11 +28,11 @@ class FollowersPage extends Component {
     }
 
     componentDidMount () {
-        const { userStore, getFollowers, match } = this.props;
+        const { userStore, profileStore, getFollowers, match } = this.props;
         if (match.params.username === userStore.user.username) {
-            getFollowers(this.props.userStore.user._id);
+            getFollowers(userStore.user._id);
         } else {
-            getFollowers(this.props.profileStore.user._id);
+            getFollowers(profileStore.user._id);
         }
     }
 
