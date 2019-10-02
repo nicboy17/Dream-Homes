@@ -46,6 +46,13 @@ class PostPage extends React.Component {
         }
     }
 
+    componentDidUpdate (prevProps, prevState, snapshot) {
+        const { match } = this.props;
+        if (match.params.id !== prevProps.match.params.id) {
+            this.props.morePosts(this.props.match.params.id);
+        }
+    }
+
     handleChange (e) {
         const value = e.target.value;
         this.setState({ board: value,

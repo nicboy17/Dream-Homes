@@ -15,7 +15,6 @@ export default (state = INITIAL_STATE, action) => {
     case SEARCH_POSTS_SUCCESS:
         return { ...state, loading: false, posts: payload.posts };
     case MORE_POSTS_SUCCESS:
-        console.log(payload.posts);
         return { ...state, loading: false, morePosts: payload.posts };
     case MORE_POSTS_ERROR:
     case SEARCH_POSTS_ERROR:
