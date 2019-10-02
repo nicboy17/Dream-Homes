@@ -18,7 +18,7 @@ class BoardPage extends Component {
     };
 
     render () {
-        const { match, history, removeVisible, removePost } = this.props;
+        const { match, history, isUser, removePost } = this.props;
         const board = this.props.board(match.params.id);
         if (!board) {
             return <CircularProgress className="spinner" />;
@@ -31,14 +31,14 @@ class BoardPage extends Component {
                         <CloseIcon />
                     </IconButton>
                 </div>
-                <Posts posts={board.posts} deleteHandle={removeVisible ? (post) => removePost(this.props.match.params.id, post) : false} board={board._id}/>
+                <Posts posts={board.posts} deleteHandle={isUser ? (post) => removePost(this.props.match.params.id, post) : false} board={board._id}/>
             </div>
         );
     }
 }
 
 const mapStateToProps = state => ({
-    removeVisible: state.UserStore.authenticated && state.ProfileStore.user._id === state.UserStore.user._id,
+    isUser: state.UserStore.authenticated && state.ProfileStore.user._id === state.UserStore.user._id,
     board: (id) => {
         if (state.ProfileStore.boards.length) {
             return state.ProfileStore.boards.find(board => board._id === id);

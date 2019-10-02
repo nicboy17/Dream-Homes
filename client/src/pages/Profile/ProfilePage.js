@@ -43,20 +43,8 @@ class ProfilePage extends Component {
         }
     }
 
-    onFollow = () => {
-        const { follow, profileStore: { user } } = this.props;
-        follow(user._id);
-        this.setState({ following: true });
-    };
-
-    onUnFollow = () => {
-        const { unfollow, profileStore: { user } } = this.props;
-        unfollow(user._id);
-        this.setState({ following: false });
-    };
-
     render () {
-        const { classes, userStore, profileStore: { user }, removeVisible } = this.props;
+        const { classes, userStore, profileStore: { user }, isUser, follow, unfollow, history } = this.props;
 
         if (!user) {
             return <CircularProgress className="spinner" />;
@@ -65,11 +53,11 @@ class ProfilePage extends Component {
         return (
             <div>
                 <div className={classes.root}>
-                    <ProfileHeader user={userStore} profile={this.props.profileStore} history={this.props.history}
-                        followHandle={() => this.onFollow()} unFollowHandle={() => this.onUnFollow()} removeVisible={removeVisible}/>
+                    <ProfileHeader user={userStore} profile={this.props.profileStore} history={history}
+                        followHandle={() => follow(user._id)} unFollowHandle={() => unfollow(user._id)} isUser={isUser}/>
                     <Divider variant={'middle'}/>
                     <div className={classes.body}>
-                        <ProfileTabs removeVisible={removeVisible} />
+                        <ProfileTabs isUser={isUser} />
                     </div>
                 </div>
                 <Route path={'/profile/:username/interest-quiz'} component={InterestQuizDialog}/>
@@ -84,7 +72,7 @@ class ProfilePage extends Component {
 }
 
 const mapStateToProps = state => ({
-    removeVisible: state.UserStore.authenticated && state.ProfileStore.user._id === state.UserStore.user._id,
+    isUser: state.UserStore.authenticated && state.ProfileStore.user._id === state.UserStore.user._id,
     userStore: state.UserStore,
     profileStore: state.ProfileStore
 });

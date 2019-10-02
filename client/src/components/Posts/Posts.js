@@ -61,7 +61,7 @@ const useStyles = makeStyles(theme => ({
     }
 }));
 
-const Posts = ({ posts, deleteHandle = false, notFoundMessage = 'Sorry, no posts found' }) => {
+const Posts = ({ posts, deleteHandle = false, notFoundMessage = 'Sorry, no posts found', menuVisible }) => {
     const classes = useStyles();
     if (!posts.length) {
         return (
@@ -69,8 +69,8 @@ const Posts = ({ posts, deleteHandle = false, notFoundMessage = 'Sorry, no posts
         );
     }
 
-    const deletePost = (post) => {
-        if (!deleteHandle) {
+    const postMenu = (post) => {
+        if (!menuVisible) {
             return null;
         }
 
@@ -86,7 +86,7 @@ const Posts = ({ posts, deleteHandle = false, notFoundMessage = 'Sorry, no posts
                     <img src={post.image} alt={post.title} className={classes.image} />
                     <p className={classes.title}>{post.title}</p>
                 </Link>
-                {deletePost(post._id)}
+                {postMenu(post._id)}
             </div>
         );
     });

@@ -26,7 +26,7 @@ const useStyles = makeStyles(theme => ({
     }
 }));
 
-const ProfileHeader = ({ user, profile, history, followHandle, unFollowHandle, removeVisible }) => {
+const ProfileHeader = ({ user, profile, history, followHandle, unFollowHandle, isUser }) => {
     const classes = useStyles();
 
     const FollowButton = () => {
@@ -70,19 +70,21 @@ const ProfileHeader = ({ user, profile, history, followHandle, unFollowHandle, r
         );
     };
 
+    const UserAvatar = () => {
+        if (isUser) {
+            return <Avatar className={classes.avatar} component={RouterLink} src={profile.user.profile}
+                to={`/profile/${user.user.username}/edit`}/>;
+        }
+        return <Avatar className={classes.avatar} src={profile.user.profile}/>;
+    };
+
     return (
         <div className={classes.root}>
             <Grid container direction="row" justify="space-around" alignItems="center">
                 <div>
                     <Grid container direction="row" justify="center" alignItems="center">
                         <div className={classes.beside}>
-                            {
-                                removeVisible ? (
-                                    <Avatar className={classes.avatar} component={RouterLink} src={profile.user.profile} to={`/profile/${user.user.username}/edit`}/>
-                                ) : (
-                                    <Avatar className={classes.avatar} src={profile.user.profile}/>
-                                )
-                            }
+                            <UserAvatar />
                         </div>
                         <div className={classes.beside}>
                             <Typography variant="h4" gutterBottom>

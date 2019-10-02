@@ -47,17 +47,15 @@ const useStyles = makeStyles(theme => ({
     }
 }));
 
-const Boards = ({ boards, deleteHandle = false }) => {
+const Boards = ({ boards, deleteHandle, menuVisible }) => {
     const classes = useStyles();
 
-    const deleteBoard = (board) => {
-        if (!deleteHandle) {
+    const boardMenu = (board) => {
+        if (!menuVisible) {
             return null;
         }
 
-        return (
-            <MoreMenu icon={'hort'} remove={() => deleteHandle(board)} edit={() => deleteHandle(board)} menuStyle={classes.deleteIconContainer}/>
-        );
+        return <MoreMenu icon={'hort'} remove={() => deleteHandle(board)} edit={() => deleteHandle(board)} menuStyle={classes.deleteIconContainer}/>;
     };
 
     return !boards.length ? (
@@ -76,7 +74,7 @@ const Boards = ({ boards, deleteHandle = false }) => {
                             <Typography variant="h6" className={classes.cardHeader}>{board.title}</Typography>
                             <Typography variant="body1" className={classes.posts}>{board.posts.length} posts</Typography>
                         </div>
-                        {deleteBoard(board._id)}
+                        {boardMenu(board._id)}
                     </div>
                 </Card>
             );

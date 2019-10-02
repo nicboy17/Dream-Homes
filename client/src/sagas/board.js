@@ -23,7 +23,6 @@ function * addBoard (request) {
         yield put({ type: OPEN_SNACKBAR, message: 'Board Addition Success', variant: 'success', duration: 1250 });
         yield put({ type: ADD_BOARD_SUCCESS, response });
     } catch (err) {
-        console.log(err);
         yield put({ type: OPEN_SNACKBAR, message: 'Board Addition Failed', variant: 'error', duration: 1500 });
         yield put({ type: BOARD_ERROR, err });
     }

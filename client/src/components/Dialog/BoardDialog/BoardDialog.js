@@ -78,7 +78,7 @@ class BoardDialog extends Component {
                                 error={this.state.nameError}
                             />
                             <div>
-                                <Button color='primary' className={classes.button}>Create</Button>
+                                <Button type='submit' color='primary' className={classes.button}>Create</Button>
                             </div>
                         </form>
                     </DialogContent>

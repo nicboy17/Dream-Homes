@@ -29,7 +29,7 @@ function TabPanel (props) {
     );
 }
 
-const ProfileTabs = ({ removeVisible, profileStore, tabChange, removeBoard, removePost }) => {
+const ProfileTabs = ({ isUser, profileStore, tabChange, removeBoard, removePost }) => {
     return (
         <div>
             <Grid container direction="row" justify="space-between" alignItems="flex-start">
@@ -40,10 +40,10 @@ const ProfileTabs = ({ removeVisible, profileStore, tabChange, removeBoard, remo
                 </Tabs>
             </Grid>
             <TabPanel value={profileStore.tab} index={0}>
-                <Boards boards={profileStore.boards} deleteHandle={removeVisible ? removeBoard : false} />
+                <Boards boards={profileStore.boards} deleteHandle={removeBoard} menuVisible={isUser} />
             </TabPanel>
             <TabPanel value={profileStore.tab} index={1}>
-                <Posts posts={profileStore.posts} deleteHandle={removeVisible ? removePost : false} />
+                <Posts posts={profileStore.posts} deleteHandle={removePost} menuVisible={isUser} />
             </TabPanel>
             <TabPanel value={profileStore.tab} index={2}>
                 <Posts posts={profileStore.favourites} />
