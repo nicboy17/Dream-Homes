@@ -12,8 +12,9 @@ router.get ('/', [pub, async (req, res) => {
     let query = {};
     let user = { interests:[] };
     if (req.decoded) { user = await User.findById(req.decoded._id).lean(); }
-    if (search) { search = [...search.split(' '), ...user.interests]; }
-    if (filters) { filters = [...filters.split(',')]; }
+    if (!search) { search = user.interests; }
+    else { search = [...search.split(' ')]; }
+    if (filters) { filters = [...filters.split(','), ...user.interests]; }
 
     if (search.length > 0) {
         query.tags = { $in: search };
