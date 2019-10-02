@@ -28,12 +28,8 @@ class FollowingPage extends Component {
     }
 
     componentDidMount () {
-        const { userStore, profileStore, getFollowing, match } = this.props;
-        if (match.params.username === userStore.user.username) {
-            getFollowing(userStore.user._id);
-        } else {
-            getFollowing(profileStore.user._id);
-        }
+        const { profileStore, getFollowing } = this.props;
+        getFollowing(profileStore.user._id);
     }
 
     handleClose () {
