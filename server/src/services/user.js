@@ -52,7 +52,7 @@ class UserClass {
                             { $match: { followee: this._id } },
                             {
                                 $group: {
-                                    _id: 'followee',
+                                    _id: '$followee',
                                     count: { $sum: 1 }
                                 }
                             }
