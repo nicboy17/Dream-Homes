@@ -13,6 +13,9 @@ export const postService = {
             throw err;
         });
     },
+    morePosts: ({ post }) => {
+        return Get(`/posts/${post}/more`);
+    },
     searchPosts: ({ search, filters }) => {
         return Get(`/posts?search=${search}&filters=${filters}`);
     },

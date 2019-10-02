@@ -60,10 +60,10 @@ const interests = [
     { image: modern, title: 'House Style' },
     { image: location, title: 'Location' },
     { image: interior, title: 'Interior Design' },
-    { image: exterior, title: 'Exterior design' },
-    { image: frontyard, title: 'Front yard' },
-    { image: backyard, title: 'Back Yard' },
-    { image: decor, title: 'House decor' },
+    { image: exterior, title: 'Exterior Design' },
+    { image: frontyard, title: 'Frontyard' },
+    { image: backyard, title: 'Backyard' },
+    { image: decor, title: 'House Decor' },
     { image: garden, title: 'Garden' }
 ];
 

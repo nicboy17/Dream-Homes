@@ -4,7 +4,7 @@ const { User, Post, Board } = require('../models');
 const { auth, pub } = require ('../middleware');
 const PostValidation = require ('./validate/post');
 
-// @route    GET users/posts
+// @route    GET posts/
 // @desc     Get all posts based on user's interests or filter
 // @access   Public
 router.get ('/', [pub, async (req, res) => {
@@ -12,8 +12,9 @@ router.get ('/', [pub, async (req, res) => {
     let query = {};
     let user = { interests:[] };
     if (req.decoded) { user = await User.findById(req.decoded._id).lean(); }
-    if (search) { search = [...search.split(' '), ...user.interests]; }
-    if (filters) { filters = [...filters.split(',')]; }
+    if (!search) { search = user.interests; }
+    else { search = [...search.split(' ')]; }
+    if (filters) { filters = [...filters.split(','), ...user.interests]; }
 
     if (search.length > 0) {
         query.tags = { $in: search };
@@ -27,6 +28,21 @@ router.get ('/', [pub, async (req, res) => {
 
     try {
         const posts = await Post.find(query).populate('user', 'username name profile').lean();
+        return res.status(200).json({ success: true, posts });
+    } catch (err) {
+        return res.status(400).json({ err });
+    }
+}]);
+
+// @route    GET posts/:id/more
+// @desc     Get more posts
+// @access   Public
+router.get ('/:id/more', [async (req, res) => {
+    try {
+        const post = await Post.findById(req.params.id).select('title tags').lean();
+        const posts = await Post.find({ $and: [{ tags: { $in: [...post.title.split(' '), ...post.tags] } }, { _id: { $ne: post._id } }] })
+            .populate('user', 'username name profile')
+            .limit(8).lean();
         return res.status(200).json({ success: true, posts });
     } catch (err) {
         return res.status(400).json({ err });
