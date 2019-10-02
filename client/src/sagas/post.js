@@ -5,7 +5,16 @@ import {
     ADD_POST_SUCCESS,
     SEARCH_POSTS,
     SEARCH_POSTS_SUCCESS,
-    SEARCH_POSTS_ERROR, REMOVE_POST, REMOVE_POST_SUCCESS, POST_ERROR, OPEN_SNACKBAR, START_LOADING, STOP_LOADING
+    SEARCH_POSTS_ERROR,
+    REMOVE_POST,
+    REMOVE_POST_SUCCESS,
+    POST_ERROR,
+    OPEN_SNACKBAR,
+    START_LOADING,
+    STOP_LOADING,
+    MORE_POSTS,
+    MORE_POSTS_SUCCESS,
+    MORE_POSTS_ERROR
 } from '../actions/types';
 import { postService } from '../services/post';
 import { confirmSaga } from './confirm';
@@ -38,6 +47,19 @@ function * searchPosts (request) {
 
 export function * searchPostSaga () {
     yield takeLatest(SEARCH_POSTS, searchPosts);
+}
+
+function * morePosts (request) {
+    try {
+        const response = yield call(postService.morePosts, request);
+        yield put({ type: MORE_POSTS_SUCCESS, payload: response });
+    } catch (err) {
+        yield put({ type: MORE_POSTS_ERROR, err });
+    }
+}
+
+export function * morePostSaga () {
+    yield takeLatest(MORE_POSTS, morePosts);
 }
 
 function * removePost (request) {

@@ -7,7 +7,7 @@ import MorePosts from './MorePosts';
 import Divider from '@material-ui/core/Divider';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import { getBoardsandPosts } from '../../actions/profile';
-import { searchPosts } from '../../actions/post';
+import { searchPosts, morePosts } from '../../actions/post';
 import { addBoardPost } from '../../actions/board';
 
 const styles = theme => ({
@@ -31,7 +31,6 @@ class PostPage extends React.Component {
     constructor (props) {
         super(props);
         this.state = {
-            id: '',
             board: '',
             disabled: true
         };
@@ -41,9 +40,8 @@ class PostPage extends React.Component {
     }
 
     componentDidMount () {
-        const id = this.props.match.params.id;
-        this.setState({ id });
-        if (!this.props.post(id)) {
+        this.props.morePosts(this.props.match.params.id);
+        if (!this.props.post(this.props.match.params.id)) {
             this.props.searchPosts('', '');
         }
     }
@@ -57,7 +55,7 @@ class PostPage extends React.Component {
 
     save (e) {
         e.preventDefault();
-        this.props.addBoardPost(this.state.board, this.state.id);
+        this.props.addBoardPost(this.state.board, this.props.match.params.id);
     }
 
     render () {
@@ -65,7 +63,7 @@ class PostPage extends React.Component {
             classes,
             userStore: { authenticated, user },
             post,
-            morePosts,
+            postStore: { morePosts },
             match
         } = this.props;
 
@@ -115,7 +113,7 @@ const mapStateToProps = state => ({
             return state.PostStore.posts.find(post => id === post._id);
         }
     },
-    morePosts: state.PostStore.morePosts
+    postStore: state.PostStore
 });
 
 function mapDispatchToProps (dispatch) {
@@ -123,7 +121,8 @@ function mapDispatchToProps (dispatch) {
         {
             getBoardsandPosts,
             addBoardPost,
-            searchPosts
+            searchPosts,
+            morePosts
         },
         dispatch
     );
